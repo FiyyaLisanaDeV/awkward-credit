@@ -8,19 +8,19 @@
 | Item | Nilai | Diperbarui |
 |---|---|---|
 | Versi dokumen | 2.4 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:41+08:00 | 2026-11-05 |
-| Fase aktif | **09 selesai**; berikutnya 10 (Rules + Scoring) | 2026-11-05 |
+| `updated_at` | 2026-11-05T02:45+08:00 | 2026-11-05 |
+| Fase aktif | **10 selesai**; berikutnya 11 (API) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `1de50be` (Fase 09) | 2026-11-05 |
+| Branch / last commit | main / `7e49459` (Fase 10) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
 | Jumlah migrasi DB aplikasi | 60 (53 + 7 ledger/simulasi/import) | 2026-11-05 |
 | Jumlah route | 20 | 2026-11-05 |
-| Jumlah test | 23 file (66 test) | 2026-11-05 |
+| Jumlah test | 25 file (79 test) | 2026-11-05 |
 | `composer.lock` hash | `c76f6d030170` | 2026-11-05 |
 | `ledger:verify` | tersedia (Fase 08B) | 2026-11-05 |
-| Bukti fase terakhir | `docs/evidence/phase-09-post-20261105-0240.txt` | 2026-11-05 |
+| Bukti fase terakhir | `docs/evidence/phase-10-post-20261105-0245.txt` | 2026-11-05 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -49,7 +49,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 08 | Models (55) + Enum (31) | DONE | 02:48 | 02:55 | `docs/evidence/phase-08-post-20261105-0233.txt` + `docs/evidence/drill-02-20261105-0233.txt` | `7f95fb8` / `phase-08-done` | 55 model, relasi, DTO; drill #2 PASS |
 | 08B | Ledger Service | DONE | 02:55 | 02:59 | `docs/evidence/phase-08b-post-20261105-0235.txt` | `f4428af` / `phase-08b-done` | chain + idempotency |
 | 09 | Calculation + SimulationService | DONE | 02:59 | 03:06 | `docs/evidence/phase-09-post-20261105-0240.txt` | `1de50be` / `phase-09-done` | golden TPP + replay |
-| 10 | Rules + Scoring | TODO | — | — | — | — | band 5C `[H]` |
+| 10 | Rules + Scoring | DONE | 03:06 | 03:14 | `docs/evidence/phase-10-post-20261105-0245.txt` | `7e49459` / `phase-10-done` | 15 BR + 5C + red flag |
 | 11 | API | TODO | — | — | — | — | RouteContract |
 | 12 | Blade UI Forms | TODO | — | — | — | — | drill #3 |
 | 12B | Import & Efisiensi | TODO | — | — | — | — | 8 adapter |
@@ -77,12 +77,12 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 12) | FASE: 09 | STATUS: done
-BERUBAH: 8 calculator, SimulationEngine/Service, golden:extract, simulasi:replay; 4 test; enum StatusKelayakan
-BUKTI: docs/evidence/phase-09-post-20261105-0240.txt (verify.sh --phase, exit 0; 66 test; golden --check OK)
-KEPUTUSAN: golden diambil dari workbook TPP nyata (bukan angka ketik)
+SESI: 2026-11-05 (sesi 13) | FASE: 10 | STATUS: done
+BERUBAH: 15 rule + engine, Scoring5C, RedFlagEvaluator, RekomendasiService; enum RatingKredit/RekomendasiSistem
+BUKTI: docs/evidence/phase-10-post-20261105-0245.txt (verify.sh --phase, exit 0; 79 test)
+KEPUTUSAN: band skor 5C masih DRAFT (Q1); label memakai enum
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 10: 15 business rule + scoring 5C; 2) test per BR; 3) band skor 5C tetap DRAFT
+NEXT: 1) Fase 11: API Sanctum + 15 controller + policy; 2) RouteContractTest; 3) uji 401/403
 ```
 
 ## §5. Log sesi (append-only)
@@ -102,6 +102,7 @@ NEXT: 1) Fase 10: 15 business rule + scoring 5C; 2) test per BR; 3) band skor 5C
 | 2026-11-05 | 10 | 08 | 55 model (generator dari skema) + relasi belongsTo/hasMany + PolicyParameters DTO + resolver; test SchemaInventory & PolicyParameters; drill #2 PASS | `bash scripts/verify.sh --phase` | OK, exit 0 (46 test) | `7f95fb8` / `phase-08-done` |
 | 2026-11-05 | 11 | 08B | LedgerService + ChainHasher (canonical JSON, UTC, advisory lock), ledger:verify; 5 test chain | `bash scripts/verify.sh --phase` | OK, exit 0 (51 test) | `f4428af` / `phase-08b-done` |
 | 2026-11-05 | 12 | 09 | 8 calculator + SimulationEngine/Service + simulasi:replay + golden:extract (TPP: angsuran 2.533.333,33; IDIR 0,8311); 4 test file | `bash scripts/verify.sh --phase` | OK, exit 0 (66 test) | `1de50be` / `phase-09-done` |
+| 2026-11-05 | 13 | 10 | 15 business rule (BR-01..15), engine, Scoring5C (override BR-01), RedFlagEvaluator 7 kategori, RekomendasiService; 10 test | `bash scripts/verify.sh --phase` | OK, exit 0 (79 test) | `7e49459` / `phase-10-done` |
 
 ## §6. Catatan drift
 
@@ -115,6 +116,7 @@ NEXT: 1) Fase 10: 15 business rule + scoring 5C; 2) test per BR; 3) band skor 5C
 | 2026-11-05 | Relasi `analisis_red_flags` memakai `AnalisisRedFlag`, kelas nyata `AnalisisRedFlags` | relasi dikoreksi | selesai |
 | 2026-11-05 | Waktu ledger disimpan tanpa normalisasi zona → rawan beda hash | hash memakai UTC `Y-m-dTH:i:sZ` + skala kanonik dari config | selesai |
 | 2026-11-05 | Rumus PMT memakai tanda Excel (negatif) → angsuran anuitas negatif | PMT dikembalikan positif; bisection suku bunga efektif dibalik arahnya | selesai |
+| 2026-11-05 | Relasi Eloquent tanpa generics → PHPStan buta tipe properti | seluruh relasi diberi `@return BelongsTo<X,$this>`/HasOne/HasMany | selesai |
 
 ## §7. Aturan pengisian
 
