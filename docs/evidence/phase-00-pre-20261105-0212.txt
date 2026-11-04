@@ -1,0 +1,33 @@
+# PRE phase-00 20261105-0212
+## git
+fatal: not a git repository (or any of the parent directories): .git
+## php
+PHP 8.3.7 (cli) (built: May 10 2024 12:47:16) (NTS)
+## extensions
+pdo_pgsql:ada bcmath:ada mbstring:ada intl:ada gd:ada zip:ada dom:ada fileinfo:ada imagick:ada 
+## db
+/tmp:5432 - accepting connections
+fiyyalisanna|16.15 (Homebrew)
+## dbs
+## disk
+/dev/disk3s5   182Gi   101Gi    64Gi    62%    1.6M  668M    0%   /System/Volumes/Data
+## tools
+/Users/fiyyalisanna/Library/Application Support/Herd/bin/composer
+/opt/homebrew/bin/createdb
+/opt/homebrew/bin/psql
+/Users/fiyyalisanna/Library/Application Support/Herd/bin/herd
+/Users/fiyyalisanna/Library/Application Support/Herd/bin/laravel
+/usr/bin/git
+jq: TIDAK
+## forbidden(cek ketiadaan)
+## ports
+port 5432 TERPAKAI
+port 8000 FREE
+## workspace
+total 27992
+drwxr-xr-x@    6 fiyyalisanna  staff       192 Nov  5 02:03 .
+drwx------@ 5254 fiyyalisanna  staff    168128 Nov  5 01:01 ..
+-rw-r--r--@    1 fiyyalisanna  staff  14043661 Nov  5 00:29 ANALISIS EDDIY (ut kredit TPP).xlsx
+-rw-r--r--@    1 fiyyalisanna  staff    147182 Nov  5 00:30 MASTER_Analisa_Kredit_MODAL_KERJA_BPR_V2_POJK2024_FIXED_F4_V12.xlsx
+-rw-r--r--@    1 fiyyalisanna  staff    135940 Nov  5 00:30 MASTER_Analisis_Kredit_Grace_Period_V2_POJK2024_FIXED_F4_V12.xlsx
+drwxr-xr-x@   11 fiyyalisanna  staff       352 Nov  5 02:10 docs

@@ -1,0 +1,10 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - app/Services
+        - app/Enums
+        - app/Domain
+    treatPhpDocTypesAsCertain: false

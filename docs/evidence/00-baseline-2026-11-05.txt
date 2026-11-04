@@ -1,0 +1,130 @@
+# BASELINE REALITY CHECK — Loan Analytic BPR
+# Diambil: 2026-11-05 (Asia/Makassar) | Mesin: MacBook-Air-Fiyya
+# Catatan: berkas ini dihasilkan oleh perintah di bawah, bukan ditulis manual.
+
+## [1] Sistem
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		14.4.1
+BuildVersion:		23E224
+$ uname -m
+arm64
+$ df -h . | tail -1
+/dev/disk3s5   182Gi   101Gi    64Gi    62%    1.6M  668M    0%   /System/Volumes/Data
+
+## [2] PHP (Herd)
+$ php -v
+PHP 8.3.7 (cli) (built: May 10 2024 12:47:16) (NTS)
+Copyright (c) The PHP Group
+$ php --ini
+Configuration File (php.ini) Path: /lib
+Loaded Configuration File:         (none)
+Scan for additional .ini files in: /Users/fiyyalisanna/Library/Application Support/Herd/config/php/83/
+Additional .ini files parsed:      /Users/fiyyalisanna/Library/Application Support/Herd/config/php/83/php.ini
+$ php -m
+[PHP Modules] bcmath bz2 calendar Core ctype curl date dba dom exif FFI fileinfo filter ftp gd gmp hash herd iconv igbinary imagick imap intl json ldap libxml mbstring mysqli mysqlnd openssl pcntl pcre PDO pdo_mysql pdo_pgsql pdo_sqlite pgsql Phar posix random readline redis Reflection session shmop SimpleXML soap sockets sodium SPL sqlite3 standard sysvmsg sysvsem sysvshm tokenizer xml xmlreader xmlwriter xsl Zend OPcache zip zlib zstd  [Zend Modules] Zend OPcache  
+$ php -r "memory_limit"
+128M
+$ php -r "xdebug/pcov/phpdbg"
+xdebug: TIDAK ADA
+pcov: TIDAK ADA
+phpdbg: TIDAK ADA
+$ /opt/homebrew/bin/php -v (PHP Homebrew)
+dyld[2722]: Library not loaded: /opt/homebrew/opt/icu4c/lib/libicuio.74.dylib
+  Referenced from: <477D5CC3-77C7-3410-9D5F-DB7B22DADFEC> /opt/homebrew/Cellar/php/8.3.7/bin/php
+  Reason: tried: '/opt/homebrew/opt/icu4c/lib/libicuio.74.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/opt/icu4c/lib/libicuio.74.dylib' (no such file), '/opt/homebrew/opt/icu4c/lib/libicuio.74.dylib' (no such file), '/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicuio.74.dylib' (no such file), '/System/Volumes/Preboot/Cryptexes/OS/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicuio.74.dylib' (no such file), '/opt/homebrew/Cellar/icu4c@78/78.3/lib/libicuio.74.dylib' (no such file)
+
+## [3] Composer & tool
+$ composer -V
+Composer version 2.10.2 2026-07-01 11:24:45
+$ which herd laravel
+/Users/fiyyalisanna/Library/Application Support/Herd/bin//herd
+/Users/fiyyalisanna/Library/Application Support/Herd/bin//laravel
+$ herd --version
+Herd 1.30.0
+$ node -v; npm -v
+v21.7.3
+10.5.0
+
+## [4] PostgreSQL
+$ pg_isready
+/tmp:5432 - accepting connections
+$ psql -lqt | cut -d"|" -f1
+ postgres
+ scm_job_recap
+ scm_job_recap_test
+ template0
+ template1
+$ psql -c "\du"
+fiyyalisanna|t
+$ pg_available_extensions (subset)
+btree_gin|1.3
+citext|1.6
+pg_trgm|1.6
+pgcrypto|1.3
+uuid-ossp|1.1
+$ psql -c "select version()"
+PostgreSQL 16.15 (Homebrew) on aarch64-apple-darwin23.6.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+
+## [5] Ketergantungan yang TIDAK ada (sesuai rencana tanpa Docker/Redis)
+$ which docker -> TIDAK ADA
+$ which redis-cli -> TIDAK ADA
+$ which redis-server -> TIDAK ADA
+$ which tesseract -> TIDAK ADA
+$ which pdftotext -> TIDAK ADA
+$ which qpdf -> TIDAK ADA
+$ which minio -> TIDAK ADA
+
+## [6] Proyek yang sudah ada
+$ find ~/Herd -maxdepth 3 -name artisan
+/Users/fiyyalisanna/Herd/scm-job-recap/artisan
+$ sed -n "1,20p" ~/Herd/scm-job-recap/composer.json
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^13.17",
+        "laravel/tinker": "^3.0",
+        "livewire/livewire": "^4.4",
+        "maatwebsite/excel": "^4.0",
+        "webklex/laravel-imap": "^6.2"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "laravel/pail": "^1.2.5",
+        "laravel/pao": "^1.0.6",
+        "laravel/pint": "^1.27",
+$ grep -E "^(DB_|CACHE|SESSION|QUEUE)" ~/Herd/scm-job-recap/.env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=scm_job_recap
+DB_USERNAME=fiyyalisanna
+DB_PASSWORD=
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+
+## [7] Workspace
+$ ls -la "APP BPR"
+total 27992
+drwxr-xr-x@    6 fiyyalisanna  staff       192 Nov  5 02:03 .
+drwx------@ 5254 fiyyalisanna  staff    168128 Nov  5 01:01 ..
+-rw-r--r--@    1 fiyyalisanna  staff  14043661 Nov  5 00:29 ANALISIS EDDIY (ut kredit TPP).xlsx
+-rw-r--r--@    1 fiyyalisanna  staff    147182 Nov  5 00:30 MASTER_Analisa_Kredit_MODAL_KERJA_BPR_V2_POJK2024_FIXED_F4_V12.xlsx
+-rw-r--r--@    1 fiyyalisanna  staff    135940 Nov  5 00:30 MASTER_Analisis_Kredit_Grace_Period_V2_POJK2024_FIXED_F4_V12.xlsx
+drwxr-xr-x@    3 fiyyalisanna  staff        96 Nov  5 02:03 docs
+
+## [8] Workbook sumber (jumlah sheet)
+ANALISIS EDDIY (ut kredit TPP).xlsx -> 25 sheet: analisis kredit, hitungan, Sheet1, MEMO CAIR, SPK, Surat Kuasa, Surat Pernyataan, LEMBAR KONFIRMASI, ASS AL AMIN, FORM PENGKINIAN, REGISTRASI, PEMBLOKIRAN TABUNGAN, SUPER ASS, Surat Persetujuan Slik, REK LISTRIK, ASS JIWA, FLAT-ANN-EFF, Scoring-konsumtif, AS. JAMINAN, ANALISA&USULAN, FOTO, BUMIDA, PK, kuasa, apraisal
+MASTER_Analisa_Kredit_MODAL_KERJA_BPR_V2_POJK2024_FIXED_F4_V12.xlsx -> 15 sheet: 0.Cover & Dashboard, 1.Profil Debitur, 2.Data Kredit & Asumsi, 3.Neraca & Laba Rugi, 4.Rasio Keuangan, 5.Modal Kerja, 6.Kapasitas Bayar & DSCR, 7.Sensitivitas, 8.Penilaian 5C, 9.Rekomendasi & Keputusan, 10.Dokumentasi Jaminan, 11.Surat Penyerahan Jaminan, 12.Perjanjian Kredit, 13.Perhitungan Kredit, 14.Checklist Dok & Verifikasi
+MASTER_Analisis_Kredit_Grace_Period_V2_POJK2024_FIXED_F4_V12.xlsx -> 15 sheet: 0.Cover & Dashboard, 1.Profil Debitur, 2.Data Kredit & Asumsi, 3.Neraca & Laba Rugi, 4.Rasio Keuangan, 5.Modal Kerja, 6.Kapasitas Bayar & DSCR, 7.Sensitivitas, 8.Penilaian 5C, 9.Rekomendasi & Keputusan, 10.Dokumentasi Jaminan, 11.Surat Penyerahan Jaminan, 12.Perjanjian Kredit, 13.Perhitungan Kredit, 14.Checklist Dok & Verifikasi
