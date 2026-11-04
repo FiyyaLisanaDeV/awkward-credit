@@ -1,0 +1,14 @@
+# DRILL-02 — cold start (akhir Fase 08) — 20261105-0233
+# Protokol: sesi baru hanya membaca PROGRESS.md + TEKNIS.md; jawaban diverifikasi perintah.
+
+1. Fase berjalan    : 08 selesai; berikutnya 08B (Ledger & Simulation Service)
+2. Commit/tag       : ce6f05e / phase-08-done (sebelum commit bukti)
+3. Migrasi/rute/test: 60 / 20 / 46 passed ; model: 55
+4. Next 3 langkah   : LedgerService + SimulationService; ledger:verify & simulasi:replay; uji chain
+5. Blocker          : Q1–Q7 (PROGRESS §3)
+
+## Verifikasi
+$ psql -tAc 'select count(*) from migrations' -> 60
+$ ls app/Models | wc -l -> 55
+$ php artisan test --compact -> 46 passed
+VERDICT: PASS
