@@ -116,7 +116,7 @@ tests/    Unit, Feature, Arch, Fixtures(golden, import, pdf)
 
 60 tabel bisnis (lihat RENCANA §7) + 9 tabel sistem. Rincian kolom per tabel di [INVENTARIS_DATA.md](INVENTARIS_DATA.md). Aturan skema:
 
-- PK `uuid` (`HasUuids`) untuk entitas bisnis; `jadwal_angsuran` pakai `bigserial`.
+- PK `uuid` (`HasUuids`) untuk entitas bisnis; `users` memakai bigint bawaan Laravel; `jadwal_angsuran` pakai `bigserial`.
 - Semua tabel bisnis punya `cabang_id` (kecuali `ref_*` global) dan `created_at/updated_at`.
 - `softDeletes` untuk entitas yang bisa dibatalkan (debitur, permohonan, kredit, dokumen); **tidak** untuk ledger/audit/pembayaran.
 - Uang `numeric(15,2)`; rasio/persen `numeric(10,4)`; tanggal `date`; waktu peristiwa `timestamptz`.

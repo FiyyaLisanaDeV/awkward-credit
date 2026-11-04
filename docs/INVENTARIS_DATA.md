@@ -11,7 +11,7 @@
 
 ## §0. Konvensi kolom
 
-- `id uuid` PK (`HasUuids`) kecuali `jadwal_angsuran` (`bigserial`) dan `ledger` (`seq bigserial` + `id uuid`).
+- `id uuid` PK (`HasUuids`) kecuali `users` (bigint bawaan Laravel), `jadwal_angsuran` (`bigserial`), dan `ledger` (`seq bigserial` + `id uuid`).
 - Semua tabel bisnis: `created_at`, `updated_at`; soft delete (`deleted_at`) hanya pada entitas yang bisa dibatalkan.
 - `cabang_id uuid NOT NULL` + FK `cabang` pada tabel bisnis (kecuali `ref_*` global dan `users` yang boleh null untuk admin pusat).
 - Uang `numeric(15,2)`; rasio `numeric(10,4)`; persen tarif `numeric(5,4)` (0,18 = 18%); tanggal `date`; waktu peristiwa `timestamptz`.
@@ -58,7 +58,7 @@ catatan         text null
 sumber          varchar(150)  -- "Sheet 2!34-46"
 effective_date  date
 is_active       boolean default true
-approved_by     uuid null fk users
+approved_by     bigint null fk users
 approved_at     timestamptz null
 ```
 
@@ -112,7 +112,7 @@ wajib boolean default true, urutan smallint, is_active boolean default true, sum
 ```
 id, version varchar(20) unique, effective_date date,
 params jsonb, status varchar(20) check in ('DRAFT','ACTIVE','ARCHIVED'),
-created_by uuid fk users, approved_by uuid null, approved_at timestamptz null
+created_by bigint fk users, approved_by bigint null, approved_at timestamptz null
 partial unique index: only one row with status='ACTIVE'
 ```
 Kunci `params` (33): `margin_kapasitas_bayar`, `minimum_dscr`, `dscr_ideal`, `maksimum_ltv`,
@@ -147,7 +147,7 @@ unique (kode, version)
 
 ### users
 ```
-id uuid, cabang_id uuid null, name varchar(100), username varchar(50) unique,
+id bigint pk (bawaan Laravel), cabang_id uuid null fk cabang, name varchar(100), username varchar(50) unique,
 email varchar(100) unique, password varchar(255), jabatan varchar(100) null,
 no_hp varchar(20) null, is_active boolean default true,
 must_change_password boolean default false, last_login_at timestamptz null,
@@ -201,7 +201,7 @@ lama_tinggal_tahun smallint null, koordinat_rumah varchar(50) null
 jumlah_keluarga smallint default 0, jumlah_tanggungan smallint default 0
 tempat_lahir varchar(50), tanggal_lahir date
 sumber_data varchar(10) check in ('MANUAL','IMPORT','OCR') default 'MANUAL'
-verified_by uuid null fk users, verified_at timestamptz null
+verified_by bigint null fk users, verified_at timestamptz null
 foto_ktp_path varchar(500) null, foto_debitur_path varchar(500) null
 catatan text null
 unique (no_ktp) where deleted_at is null
@@ -264,7 +264,7 @@ id, debitur_id fk, cif varchar(20) null, tujuan_penggunaan varchar(100),
 sumber_penghasilan varchar(100), pemasukan_bulanan numeric(15,2),
 frekuensi_setoran smallint, pengeluaran_bulanan numeric(15,2),
 frekuensi_tarikan smallint, tanggal_pengkinian date,
-processed_by uuid null fk users, catatan text null
+processed_by bigint null fk users, catatan text null
 ```
 
 ## §4. Permohonan & SLIK (5)
