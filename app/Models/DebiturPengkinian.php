@@ -48,11 +48,13 @@ class DebiturPengkinian extends Model
         ];
     }
 
+    /** @return BelongsTo<Debitur, $this> */
     public function debitur(): BelongsTo
     {
         return $this->belongsTo(Debitur::class, 'debitur_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function processedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'processed_by');

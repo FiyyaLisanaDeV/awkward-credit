@@ -80,31 +80,37 @@ class SimulasiKredit extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<Debitur, $this> */
     public function debitur(): BelongsTo
     {
         return $this->belongsTo(Debitur::class, 'debitur_id');
     }
 
+    /** @return BelongsTo<Ledger, $this> */
     public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class, 'ledger_id');
     }
 
+    /** @return BelongsTo<RefParameterKebijakan, $this> */
     public function parameterKebijakan(): BelongsTo
     {
         return $this->belongsTo(RefParameterKebijakan::class, 'parameter_kebijakan_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

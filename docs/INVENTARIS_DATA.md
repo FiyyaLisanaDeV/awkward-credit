@@ -4,7 +4,7 @@
 |---|---|
 | Versi | 2.4 |
 | Tanggal | 2026-11-05 |
-| Cakupan | 60 tabel bisnis + 9 tabel sistem, 32 enum domain/teknis, 23 event ledger, 8 adapter import |
+| Cakupan | 60 tabel bisnis + 9 tabel sistem, 34 enum domain/teknis, 23 event ledger, 8 adapter import |
 | Sumber angka | workbook (sheet+baris) / pasal POJK / `[H]` persetujuan manusia — lihat §12 |
 
 > Kolom di dokumen ini adalah **kontrak**. Implementasi wajib sama; perbedaan harus lewat ADR + pembaruan dokumen ini. Dijaga `SchemaInventoryTest`.
@@ -483,7 +483,7 @@ index (permohonan_id, dibuat_pada desc), (debitur_id, ...), (user_id, ...), (cab
 ### pembayaran_angsuran
 `id, cabang_id, kredit_id fk, jadwal_angsuran_id fk null, periode smallint null, tanggal_bayar date, pokok numeric(15,2), bunga numeric(15,2), denda numeric(15,2) default 0, total numeric(15,2), metode varchar(20) check in ('TUNAI','TRANSFER','POTONG_TPP','LAINNYA'), no_bukti varchar(50) null, keterangan text null, sumber varchar(20) default 'MANUAL', dibatalkan_at timestamptz null, reversal_of uuid null fk pembayaran_angsuran`; index `(kredit_id, tanggal_bayar)`.
 
-## §8. Enum (32)
+## §8. Enum (34)
 
 | Enum | Nilai |
 |---|---|
@@ -519,6 +519,8 @@ index (permohonan_id, dibuat_pada desc), (debitur_id, ...), (user_id, ...), (cab
 | SumberSlik | PORTAL, IMPORT, MANUAL |
 | SumberData | MANUAL, IMPORT, OCR |
 | LedgerEvent | 23 nilai, lihat §9 |
+| RatingKredit | SANGAT LAYAK, LAYAK, LAYAK BERSYARAT, TIDAK LAYAK |
+| RekomendasiSistem | DISETUJUI, DISETUJUI DENGAN SYARAT, DITOLAK |
 
 ## §9. Katalog event ledger (23)
 

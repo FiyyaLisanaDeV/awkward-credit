@@ -45,11 +45,13 @@ class Notifikasi extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

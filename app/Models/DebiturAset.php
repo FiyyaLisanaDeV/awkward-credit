@@ -67,11 +67,13 @@ class DebiturAset extends Model
         ];
     }
 
+    /** @return BelongsTo<Debitur, $this> */
     public function debitur(): BelongsTo
     {
         return $this->belongsTo(Debitur::class, 'debitur_id');
     }
 
+    /** @return BelongsTo<RefKategoriAgunanPojk, $this> */
     public function kategoriPojk(): BelongsTo
     {
         return $this->belongsTo(RefKategoriAgunanPojk::class, 'kategori_pojk_id');

@@ -43,6 +43,7 @@ class ImportBaris extends Model
         ];
     }
 
+    /** @return BelongsTo<ImportBatch, $this> */
     public function batch(): BelongsTo
     {
         return $this->belongsTo(ImportBatch::class, 'batch_id');

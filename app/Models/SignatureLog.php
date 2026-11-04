@@ -42,6 +42,7 @@ class SignatureLog extends Model
         ];
     }
 
+    /** @return BelongsTo<Dokumen, $this> */
     public function dokumen(): BelongsTo
     {
         return $this->belongsTo(Dokumen::class, 'dokumen_id');

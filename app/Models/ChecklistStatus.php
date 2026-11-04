@@ -42,16 +42,19 @@ class ChecklistStatus extends Model
         ];
     }
 
+    /** @return BelongsTo<RefChecklistDokumen, $this> */
     public function checklist(): BelongsTo
     {
         return $this->belongsTo(RefChecklistDokumen::class, 'checklist_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function verifiedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');

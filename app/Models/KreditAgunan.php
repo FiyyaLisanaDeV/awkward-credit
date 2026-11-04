@@ -40,11 +40,13 @@ class KreditAgunan extends Model
         ];
     }
 
+    /** @return BelongsTo<DebiturAset, $this> */
     public function debiturAset(): BelongsTo
     {
         return $this->belongsTo(DebiturAset::class, 'debitur_aset_id');
     }
 
+    /** @return BelongsTo<Kredit, $this> */
     public function kredit(): BelongsTo
     {
         return $this->belongsTo(Kredit::class, 'kredit_id');

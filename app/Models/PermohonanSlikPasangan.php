@@ -49,16 +49,19 @@ class PermohonanSlikPasangan extends Model
         ];
     }
 
+    /** @return BelongsTo<RefKolektibilitas, $this> */
     public function kolektibilitas(): BelongsTo
     {
         return $this->belongsTo(RefKolektibilitas::class, 'kolektibilitas_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');
     }
 
+    /** @return BelongsTo<SlikPermintaan, $this> */
     public function slikPermintaan(): BelongsTo
     {
         return $this->belongsTo(SlikPermintaan::class, 'slik_permintaan_id');

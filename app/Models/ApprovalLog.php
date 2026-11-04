@@ -46,21 +46,25 @@ class ApprovalLog extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');
     }
 
+    /** @return BelongsTo<Role, $this> */
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

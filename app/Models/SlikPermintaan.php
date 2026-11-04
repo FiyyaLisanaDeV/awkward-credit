@@ -52,16 +52,19 @@ class SlikPermintaan extends Model
         ];
     }
 
+    /** @return BelongsTo<Debitur, $this> */
     public function debitur(): BelongsTo
     {
         return $this->belongsTo(Debitur::class, 'debitur_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function operator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'operator_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');

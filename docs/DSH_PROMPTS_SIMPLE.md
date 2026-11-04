@@ -311,7 +311,7 @@ command -v redis-cli docker minio tesseract pdftotext || true   # cek KETIADAAN,
 ## FASE 08 — MODELS + ENUM + DTO PARAMETER
 ```
 [A] Fase 07 done. [B] ls app/Models | wc -l
-[C] 55 model (+ Spatie) sesuai INVENTARIS; 32 enum (nilai persis §8); casts; relasi; soft delete;
+[C] 55 model (+ Spatie) sesuai INVENTARIS; 34 enum (nilai persis §8); casts; relasi; soft delete;
     trait Immutable untuk AuditLog/Ledger; PolicyParameters DTO + PolicyParameterKey enum;
     Support: Konstanta, Money, Percentage, NIK, PiiStorage.
 [D] Model + enum + DTO. [E] php artisan test --filter=SchemaInventory; php artisan model:show Debitur;

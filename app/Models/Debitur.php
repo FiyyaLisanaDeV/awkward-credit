@@ -83,41 +83,49 @@ class Debitur extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function verifiedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
     }
 
+    /** @return HasOne<DebiturPasangan, $this> */
     public function pasangan(): HasOne
     {
         return $this->hasOne(DebiturPasangan::class, 'debitur_id');
     }
 
+    /** @return HasOne<DebiturUsaha, $this> */
     public function usaha(): HasOne
     {
         return $this->hasOne(DebiturUsaha::class, 'debitur_id');
     }
 
+    /** @return HasOne<DebiturSiklusUsaha, $this> */
     public function siklusUsaha(): HasOne
     {
         return $this->hasOne(DebiturSiklusUsaha::class, 'debitur_id');
     }
 
+    /** @return HasMany<DebiturAset, $this> */
     public function aset(): HasMany
     {
         return $this->hasMany(DebiturAset::class, 'debitur_id');
     }
 
+    /** @return HasMany<DebiturPengkinian, $this> */
     public function pengkinian(): HasMany
     {
         return $this->hasMany(DebiturPengkinian::class, 'debitur_id');
     }
 
+    /** @return HasMany<PermohonanKredit, $this> */
     public function permohonan(): HasMany
     {
         return $this->hasMany(PermohonanKredit::class, 'debitur_id');

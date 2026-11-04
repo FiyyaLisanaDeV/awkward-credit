@@ -43,6 +43,7 @@ class RefTemplateDokumen extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');

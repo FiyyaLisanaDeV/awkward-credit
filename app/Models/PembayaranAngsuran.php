@@ -54,21 +54,25 @@ class PembayaranAngsuran extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<JadwalAngsuran, $this> */
     public function jadwalAngsuran(): BelongsTo
     {
         return $this->belongsTo(JadwalAngsuran::class, 'jadwal_angsuran_id');
     }
 
+    /** @return BelongsTo<Kredit, $this> */
     public function kredit(): BelongsTo
     {
         return $this->belongsTo(Kredit::class, 'kredit_id');
     }
 
+    /** @return BelongsTo<PembayaranAngsuran, $this> */
     public function reversalOf(): BelongsTo
     {
         return $this->belongsTo(PembayaranAngsuran::class, 'reversal_of');

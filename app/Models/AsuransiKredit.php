@@ -46,6 +46,7 @@ class AsuransiKredit extends Model
         ];
     }
 
+    /** @return BelongsTo<Kredit, $this> */
     public function kredit(): BelongsTo
     {
         return $this->belongsTo(Kredit::class, 'kredit_id');

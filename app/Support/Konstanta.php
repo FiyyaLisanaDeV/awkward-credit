@@ -13,4 +13,10 @@ final class Konstanta
     public const BISECTION_ITERATIONS = 80;
 
     public const MAX_MONTHLY_RATE = 1.0;
+
+    public const PERSEN = 100.0;
+
+    public const SKOR_MIN = 1;
+
+    public const SKOR_MAKS = 5;
 }

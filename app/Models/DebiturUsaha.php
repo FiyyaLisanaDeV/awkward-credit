@@ -56,6 +56,7 @@ class DebiturUsaha extends Model
         ];
     }
 
+    /** @return BelongsTo<Debitur, $this> */
     public function debitur(): BelongsTo
     {
         return $this->belongsTo(Debitur::class, 'debitur_id');

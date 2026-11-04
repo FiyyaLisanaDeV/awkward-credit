@@ -171,7 +171,7 @@
 
 ## ADR-024 — Menerima koreksi angka draf
 - Status: diterima · 2026-11-05
-- Konteks: enumerasi menunjukkan 23 event (bukan 22), 32 enum (bukan 23), 60 tabel bisnis (bukan 50/58), 13 kategori agunan (bukan 14), 28 checklist (bukan 29), fase 06 = 13 migrasi (bukan 11), 22 unit fase (bukan 20).
+- Konteks: enumerasi menunjukkan 23 event (bukan 22), 34 enum (bukan 23), 60 tabel bisnis (bukan 50/58), 13 kategori agunan (bukan 14), 28 checklist (bukan 29), fase 06 = 13 migrasi (bukan 11), 22 unit fase (bukan 20).
 - Keputusan: dokumen A–G memakai angka hasil enumerasi; angka draf hanya dikutip di tabel koreksi.
 - Alternatif ditolak: mempertahankan angka draf agar "konsisten" (melanggar anti-halusinasi).
 - Konsekuensi: setiap angka di dokumen harus punya cara verifikasi; jumlah tabel final tetap dihitung ulang via `\dt` di Fase 06B.

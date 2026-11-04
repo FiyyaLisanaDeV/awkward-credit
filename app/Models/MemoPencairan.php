@@ -45,11 +45,13 @@ class MemoPencairan extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
 
+    /** @return BelongsTo<Kredit, $this> */
     public function kredit(): BelongsTo
     {
         return $this->belongsTo(Kredit::class, 'kredit_id');

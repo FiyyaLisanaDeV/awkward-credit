@@ -42,16 +42,19 @@ class PermohonanRiwayatInternal extends Model
         ];
     }
 
+    /** @return BelongsTo<RefKolektibilitas, $this> */
     public function kolektibilitasTertinggi(): BelongsTo
     {
         return $this->belongsTo(RefKolektibilitas::class, 'kolektibilitas_tertinggi_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');
     }
 
+    /** @return BelongsTo<RefStatusPelunasanInternal, $this> */
     public function statusPelunasan(): BelongsTo
     {
         return $this->belongsTo(RefStatusPelunasanInternal::class, 'status_pelunasan_id');

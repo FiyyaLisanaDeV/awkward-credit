@@ -58,11 +58,13 @@ class AnalisisModalKerja extends Model
         ];
     }
 
+    /** @return BelongsTo<RefParameterKebijakan, $this> */
     public function parameterKebijakan(): BelongsTo
     {
         return $this->belongsTo(RefParameterKebijakan::class, 'parameter_kebijakan_id');
     }
 
+    /** @return BelongsTo<PermohonanKredit, $this> */
     public function permohonan(): BelongsTo
     {
         return $this->belongsTo(PermohonanKredit::class, 'permohonan_id');

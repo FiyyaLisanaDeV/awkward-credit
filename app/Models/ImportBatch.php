@@ -49,21 +49,25 @@ class ImportBatch extends Model
         ];
     }
 
+    /** @return BelongsTo<Cabang, $this> */
     public function cabang(): BelongsTo
     {
         return $this->belongsTo(Cabang::class, 'cabang_id');
     }
 
+    /** @return BelongsTo<Ledger, $this> */
     public function ledger(): BelongsTo
     {
         return $this->belongsTo(Ledger::class, 'ledger_id');
     }
 
+    /** @return BelongsTo<ImportProfil, $this> */
     public function profil(): BelongsTo
     {
         return $this->belongsTo(ImportProfil::class, 'profil_id');
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
