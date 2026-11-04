@@ -26,9 +26,10 @@ return [
 
     'money' => [
         'scale' => 2,
-        'rounding' => PHP_ROUND_HALF_UP,
         'display_decimals' => 0,
         'canonical_scale' => 6,
+        'ratio_scale' => 4,
+        'schedule_scale' => 2,
         'currency' => 'IDR',
     ],
 
@@ -37,6 +38,11 @@ return [
     | Pola nomor dokumen (mekanisme, bukan nilai bisnis)
     |--------------------------------------------------------------------------
     */
+
+    'golden' => [
+        'tpp_path' => env('GOLDEN_TPP_PATH', '../ANALISIS EDDIY (ut kredit TPP).xlsx'),
+        'output_path' => 'tests/fixtures/golden/tpp.json',
+    ],
 
     'nomor' => [
         'permohonan' => '{cabang}/{tahun}/{urut}',

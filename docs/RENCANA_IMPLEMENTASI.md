@@ -189,7 +189,7 @@ Bootstrap (E → B → C sepotong → prompt), handoff wajib, papan status, ADR 
 | 06 | Migrasi kredit+workflow+audit (13) | 13 migrasi + trigger audit | uji UPDATE audit_log gagal |
 | 06B | Migrasi ledger+simulasi+import+pembayaran (7) | 7 migrasi + trigger ledger | `\dt` = 60 tabel bisnis, `ledger:verify` awal |
 | 07 | Seeders (14) | data referensi + admin | semua angka bersumber; `SeedProvenanceTest` |
-| 08 | Models (55) + 31 enum | model, relasi, cast, DTO param | `SchemaInventoryTest` penuh, drill #2 |
+| 08 | Models (55) + 32 enum | model, relasi, cast, DTO param | `SchemaInventoryTest` penuh, drill #2 |
 | 08B | Ledger Service | `LedgerService`, `ChainHasher`, `ledger:verify` | chain utuh, manipulasi terdeteksi |
 | 09 | Calculation engine + SimulationService | 8 service + simulasi/replay + golden test | `golden:extract`, replay identik |
 | 10 | Rules + Scoring | 15 BR, 5C, red flag, rekomendasi | 15 test BR, mutation test |

@@ -35,6 +35,14 @@ final class ChainHasher
         return Carbon::instance($value)->utc()->format('Y-m-d\\TH:i:s\\Z');
     }
 
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    public static function canonicalJson(array $payload): string
+    {
+        return self::canonical($payload);
+    }
+
     public static function genesis(): string
     {
         return str_repeat('0', strlen(hash('sha256', '')));

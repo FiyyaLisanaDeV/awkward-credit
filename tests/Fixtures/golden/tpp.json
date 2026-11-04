@@ -1,0 +1,17 @@
+{
+    "source": "ANALISIS EDDIY (ut kredit TPP).xlsx",
+    "input": {
+        "plafon": 80000000,
+        "rate": 0.18,
+        "tenor": 60,
+        "sistem_suku_bunga": "Flat"
+    },
+    "expected": {
+        "plafon": 80000000,
+        "tenor": 60,
+        "rate": 0.18,
+        "angsuran": 2533333.333333333,
+        "idir": 0.8311242924507667,
+        "penghasilan_bersih": 3048080
+    }
+}

@@ -19,6 +19,9 @@ final class HardcodeAudit extends Command
     /** @var list<int|float> */
     public const ALLOWED_NUMBERS = [0, 1, 2, -1, 200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 500, 503];
 
+    /** @var list<float> */
+    public const ALLOWED_FLOATS = [0.0, 1.0, 2.0, -1.0];
+
     /** @var list<string> */
     public const DENYLIST = [
         'TPP',
@@ -63,6 +66,10 @@ final class HardcodeAudit extends Command
                     continue;
                 }
 
+                if (str_ends_with($file->getPathname(), 'app/Support/Konstanta.php')) {
+                    continue;
+                }
+
                 try {
                     $ast = $parser->parse((string) file_get_contents($file->getPathname()));
                 } catch (Throwable) {
@@ -87,7 +94,10 @@ final class HardcodeAudit extends Command
                         if ($node instanceof Int_ || $node instanceof Float_) {
                             $value = $node->value;
 
-                            if (! in_array($value, HardcodeAudit::ALLOWED_NUMBERS, true)) {
+                            $allowed = in_array($value, HardcodeAudit::ALLOWED_NUMBERS, true)
+                                || in_array((float) $value, HardcodeAudit::ALLOWED_FLOATS, true);
+
+                            if (! $allowed) {
                                 $this->findings[] = [$this->file.':'.$node->getStartLine(), 'angka', (string) $value];
                             }
 
