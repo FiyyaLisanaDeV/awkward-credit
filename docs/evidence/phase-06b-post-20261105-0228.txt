@@ -1,0 +1,82 @@
+# POST phase-06B 20261105-0228
+
+[1;34m▶ Lingkungan[0m
+PHP 8.3.7 (cli) (built: May 10 2024 12:47:16) (NTS)
+Laravel Framework 13.40.0
+## main
+?? app/Enums/JenisEkstraksi.php
+?? app/Enums/JenisImport.php
+
+[1;34m▶ Database[0m
+  2026_01_01_000085_create_ekstraksi_dokumen_table ................... [7] Ran  
+  2026_01_01_000086_create_pembayaran_angsuran_table ................. [8] Ran  
+
+  [1;32mOK[0m koneksi database
+
+[1;34m▶ Rute & test terdaftar[0m
+rute: 20
+file test: 15
+
+[1;34m▶ Gaya kode (Pint)[0m
+
+  ............................................................................
+  ....................................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 128 files  
+
+  [1;32mOK[0m pint --test
+
+[1;34m▶ Analisis statis (PHPStan level 5)[0m
+Warning: Module "herd" is already loaded in Unknown on line 0
+Note: Using configuration file /Users/fiyyalisanna/Downloads/APP BPR/loan-analytic-bpr/phpstan.neon.
+
+ [OK] No errors                                                                 
+
+  [1;32mOK[0m phpstan app
+
+[1;34m▶ Analisis statis (PHPStan level 8: Services/Enums/Domain)[0m
+Warning: Module "herd" is already loaded in Unknown on line 0
+
+ [OK] No errors                                                                 
+
+  [1;32mOK[0m phpstan services
+
+[1;34m▶ Test[0m
+
+  [90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m[90;1m.[39;22m
+
+  [90mTests:[39m    [32;1m37 passed[39;22m[90m (555 assertions)[39m
+  [90mDuration:[39m [39m3.25s[39m
+
+  [1;32mOK[0m pest
+
+[1;34m▶ Penjaga[0m
+hardcode:audit — 0 pelanggaran
+  [1;32mOK[0m hardcode:audit
+temuan: 0 error, 0 peringatan
+  [1;32mOK[0m docs:check
++---------------------------------------+---------------+--------+
+| Item                                  | Nilai         | Status |
++---------------------------------------+---------------+--------+
+| php                                   | 8.3.7         | OK     |
+| laravel                               | 13.40.0       | OK     |
+| timezone                              | Asia/Makassar | OK     |
+| database                              | pgsql         | OK     |
+| migrasi                               | 60            | OK     |
+| rute                                  | 20            | OK     |
+| file test                             | 15            | OK     |
+| composer.lock                         | c76f6d030170  | OK     |
+| git                                   | e1e943b       | OK     |
+| dokumen: docs/RENCANA_IMPLEMENTASI.md | ada           | OK     |
+| dokumen: docs/TEKNIS.md               | ada           | OK     |
+| dokumen: docs/INVENTARIS_DATA.md      | ada           | OK     |
+| dokumen: docs/DSH_PROMPTS_SIMPLE.md   | ada           | OK     |
+| dokumen: docs/PROGRESS.md             | ada           | OK     |
+| dokumen: docs/DECISIONS.md            | ada           | OK     |
+| dokumen: docs/VERIFIKASI.md           | ada           | OK     |
++---------------------------------------+---------------+--------+
+  [1;32mOK[0m state:check
+
+VERIFY: OK (--phase)
+exit=0
