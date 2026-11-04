@@ -78,6 +78,7 @@ return [
         'password_min' => (int) env('PASSWORD_MIN_LENGTH', 8),
         'password_min_production' => (int) env('PASSWORD_MIN_LENGTH_PRODUCTION', 12),
         'slow_query_ms' => (int) env('SLOW_QUERY_MS', 500),
+        'admin_initial_password' => env('ADMIN_INITIAL_PASSWORD'),
     ],
 
 ];

@@ -27,7 +27,7 @@ Indeks paket dokumen v2.4 (2026-11-05). Mulai dari sini, lalu pilih sesuai peran
 
 - PHP 8.3.7 (Herd) · PostgreSQL 16.15 · Laravel 13 (rencana) · Tanpa Docker/Redis/MinIO/partisi/npm.
 - Baseline bukti: [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt).
-- Angka yang dipakai di seluruh dokumen: 60 tabel bisnis, 24 enum, 23 event, 22 fase, 76 endpoint API, 80 rute web, 55 model, 17 seeder, 17 dokumen kredit, 13 kategori agunan, 28 checklist.
+- Angka yang dipakai di seluruh dokumen: 60 tabel bisnis, 31 enum, 23 event, 22 fase, 76 endpoint API, 80 rute web, 55 model, 14 seeder (2 kondisional), 17 dokumen kredit, 13 kategori agunan, 28 checklist.
 
 ## Aturan singkat
 

@@ -45,7 +45,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | DONE | 02:25 | 02:31 | `docs/evidence/phase-05-post-20261105-0225.txt` | `0d85655` / `phase-05-done` | BR-04 CHECK di DB |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | DONE | 02:31 | 02:37 | `docs/evidence/phase-06-post-20261105-0227.txt` | `5e22739` / `phase-06-done` | trigger BR-09 aktif |
 | 06B | Migrasi Ledger + Simulasi + Import + Pembayaran (7) | DONE | 02:37 | 02:41 | `docs/evidence/phase-06b-post-20261105-0228.txt` | `237ce96` / `phase-06b-done` | 68 tabel terverifikasi |
-| 07 | Seeders (17) | TODO | — | — | — | — | provenance wajib |
+| 07 | Seeders (14) | TODO | — | — | — | — | provenance wajib |
 | 08 | Models (55) + Enum (24) | TODO | — | — | — | — | drill #2 |
 | 08B | Ledger & Simulation Service | TODO | — | — | — | — | replay & verify |
 | 09 | Calculation Engine | TODO | — | — | — | — | golden:extract |
@@ -82,7 +82,7 @@ BERUBAH: 7 migrasi + 8 enum baru (LedgerEvent 23, import, ekstraksi, pembayaran)
 BUKTI: docs/evidence/phase-06b-post-20261105-0228.txt (verify.sh --phase, exit 0; 37 test; 68 tabel)
 KEPUTUSAN: FK self-reference pembayaran dipasang setelah CREATE (keterbatasan PostgreSQL)
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 07: 17 seeder dengan provenance; 2) db:seed; 3) SeedProvenanceTest
+NEXT: 1) Fase 07: 14 seeder dengan provenance; 2) db:seed; 3) SeedProvenanceTest
 ```
 
 ## §5. Log sesi (append-only)

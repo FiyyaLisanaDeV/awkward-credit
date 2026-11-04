@@ -97,7 +97,7 @@ app/
 ├── Http/{Requests,Resources,Controllers/Api/V1,Controllers/Web,Middleware}/
 ├── Livewire/{Debitur,Permohonan,Analisis,Simulasi,Import,Notifikasi}/
 ├── Models/            ±55 model
-├── Enums/             24 enum
+├── Enums/             31 enum
 ├── Support/           Money, Percentage, Terbilang, Konstanta, NIK, PiiStorage
 ├── Policies/          Debitur, Permohonan, Kredit, Dokumen, Ledger
 └── Providers/         AppServiceProvider, LedgerServiceProvider

@@ -299,11 +299,11 @@ command -v redis-cli docker minio tesseract pdftotext || true   # cek KETIADAAN,
 [C] Seeder: Cabang(3), Produk(9), KategoriAgunan(13, sumber Sheet2!34-46),
     Kolektibilitas(5), StatusPelunasan(5), RateJiwa/Jasindo, RateKebakaran(Bumida),
     RateKendaraan(TLO/ALLRISK), KonversiSukuBunga, Checklist(28, sumber Sheet14),
-    ParameterKebijakan v1.0 (33 kunci, 4 DRAFT), ApprovalMatrix v1.0, TemplateDokumen(17),
+    ParameterKebijakan v1.0 (34 kunci, 4 DRAFT), ApprovalMatrix v1.0, TemplateDokumen(17),
     RolePermission(8), AdminUser (password dari ADMIN_INITIAL_PASSWORD / generate + must_change_password),
     ImportProfil (3 contoh), RefProvinsi.
     Setiap baris ref_* wajib kolom sumber. Jangan mengarang rate/checklist.
-[D] 17 seeder + data. [E] php artisan db:seed; hitung per tabel; php artisan test --filter=SeedProvenance
+[D] 14 seeder referensi (2 kondisional) + data. [E] php artisan db:seed; hitung per tabel; php artisan test --filter=Seed
 [F] migrate:fresh --seed=false (DESTRUKTIF, lokal saja)
 [G] Handoff + APPROVED to FASE-08.
 ```
@@ -311,7 +311,7 @@ command -v redis-cli docker minio tesseract pdftotext || true   # cek KETIADAAN,
 ## FASE 08 — MODELS + ENUM + DTO PARAMETER
 ```
 [A] Fase 07 done. [B] ls app/Models | wc -l
-[C] 55 model (+ Spatie) sesuai INVENTARIS; 24 enum (nilai persis §8); casts; relasi; soft delete;
+[C] 55 model (+ Spatie) sesuai INVENTARIS; 31 enum (nilai persis §8); casts; relasi; soft delete;
     trait Immutable untuk AuditLog/Ledger; PolicyParameters DTO + PolicyParameterKey enum;
     Support: Konstanta, Money, Percentage, NIK, PiiStorage.
 [D] Model + enum + DTO. [E] php artisan test --filter=SchemaInventory; php artisan model:show Debitur;

@@ -4,24 +4,41 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\Reference\AdminUserSeeder;
+use Database\Seeders\Reference\ApprovalMatrixSeeder;
+use Database\Seeders\Reference\CabangSeeder;
+use Database\Seeders\Reference\ChecklistDokumenSeeder;
+use Database\Seeders\Reference\ImportProfilSeeder;
+use Database\Seeders\Reference\KategoriAgunanPojkSeeder;
+use Database\Seeders\Reference\KolektibilitasSeeder;
+use Database\Seeders\Reference\KonversiSukuBungaSeeder;
+use Database\Seeders\Reference\ParameterKebijakanSeeder;
+use Database\Seeders\Reference\ProdukSeeder;
+use Database\Seeders\Reference\RateAsuransiSeeder;
+use Database\Seeders\Reference\RolePermissionSeeder;
+use Database\Seeders\Reference\StatusPelunasanSeeder;
+use Database\Seeders\Reference\TemplateDokumenSeeder;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+final class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            CabangSeeder::class,
+            ProdukSeeder::class,
+            KategoriAgunanPojkSeeder::class,
+            KolektibilitasSeeder::class,
+            StatusPelunasanSeeder::class,
+            ChecklistDokumenSeeder::class,
+            RolePermissionSeeder::class,
+            AdminUserSeeder::class,
+            ParameterKebijakanSeeder::class,
+            ApprovalMatrixSeeder::class,
+            TemplateDokumenSeeder::class,
+            ImportProfilSeeder::class,
+            RateAsuransiSeeder::class,
+            KonversiSukuBungaSeeder::class,
         ]);
     }
 }

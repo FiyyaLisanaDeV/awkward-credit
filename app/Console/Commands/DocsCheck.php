@@ -83,7 +83,7 @@ final class DocsCheck extends Command
 
         $enums = $this->section($inventaris, '## §8. Enum', '## §9.');
         $enumRows = preg_match_all('/^\| [A-Za-z]+ \|/m', $enums) ?: 0;
-        $this->expect('enum (INVENTARIS)', max(0, $enumRows - 1), 24);
+        $this->expect('enum (INVENTARIS)', max(0, $enumRows - 1), 31);
 
         $tables = $this->section($inventaris, '## §1. Master', '## §8.');
         $this->expect('tabel bisnis (INVENTARIS)', preg_match_all('/^### /m', $tables) ?: 0, 60);

@@ -4,7 +4,7 @@
 |---|---|
 | Versi | 2.4 |
 | Tanggal | 2026-11-05 |
-| Cakupan | 60 tabel bisnis + 9 tabel sistem, 24 enum domain/teknis, 23 event ledger, 8 adapter import |
+| Cakupan | 60 tabel bisnis + 9 tabel sistem, 31 enum domain/teknis, 23 event ledger, 8 adapter import |
 | Sumber angka | workbook (sheet+baris) / pasal POJK / `[H]` persetujuan manusia — lihat §12 |
 
 > Kolom di dokumen ini adalah **kontrak**. Implementasi wajib sama; perbedaan harus lewat ADR + pembaruan dokumen ini. Dijaga `SchemaInventoryTest`.
@@ -115,7 +115,7 @@ params jsonb, status varchar(20) check in ('DRAFT','ACTIVE','ARCHIVED'),
 created_by bigint fk users, approved_by bigint null, approved_at timestamptz null
 partial unique index: only one row with status='ACTIVE'
 ```
-Kunci `params` (33): `margin_kapasitas_bayar`, `minimum_dscr`, `dscr_ideal`, `maksimum_ltv`,
+Kunci `params` (34): `margin_kapasitas_bayar`, `minimum_dscr`, `dscr_ideal`, `maksimum_ltv`,
 `hari_kerja_per_tahun`, `sensitivitas_omzet_ringan`, `sensitivitas_omzet_berat`, `sensitivitas_biaya`,
 `bobot_character`, `bobot_capacity`, `bobot_capital`, `bobot_collateral`, `bobot_condition`,
 `rating_sangat_layak_min`, `rating_layak_min`, `rating_bersyarat_min`,
@@ -483,7 +483,7 @@ index (permohonan_id, dibuat_pada desc), (debitur_id, ...), (user_id, ...), (cab
 ### pembayaran_angsuran
 `id, cabang_id, kredit_id fk, jadwal_angsuran_id fk null, periode smallint null, tanggal_bayar date, pokok numeric(15,2), bunga numeric(15,2), denda numeric(15,2) default 0, total numeric(15,2), metode varchar(20) check in ('TUNAI','TRANSFER','POTONG_TPP','LAINNYA'), no_bukti varchar(50) null, keterangan text null, sumber varchar(20) default 'MANUAL', dibatalkan_at timestamptz null, reversal_of uuid null fk pembayaran_angsuran`; index `(kredit_id, tanggal_bayar)`.
 
-## §8. Enum (24)
+## §8. Enum (31)
 
 | Enum | Nilai |
 |---|---|
@@ -501,14 +501,21 @@ index (permohonan_id, dibuat_pada desc), (debitur_id, ...), (user_id, ...), (cab
 | StatusTtd | DRAFT, MENUNGGU, DITANDATANGANI, DIBATALKAN |
 | AksiApproval | APPROVE, REJECT, RETURN, HOLD |
 | PihakSignature | DEBITUR, BPR, SAKSI |
-| KomponenBiaya | PROVISI, ADMINISTRASI, SURVEY, NOTARIS, MATERAI, ASURANSI, LAINNYA |
 | JenisAsuransi | JIWA_AL_AMIN, JIWA_JASINDO, KEBAKARAN_BUMIDA, KENDARAAN_JASINDO, LAINNYA |
 | TipeBiaya | PERSEN, NOMINAL |
-| Role | AO, MGR_PEMASARAN, KOORDINATOR, DIRUT, KOMITE, ADMIN, LEGAL, AUDITOR |
 | JenisDokumen | DOC-01 … DOC-17, LAINNYA |
 | KategoriChecklist | PEMOHON, JAMINAN, VERIFIKASI |
+| StatusChecklist | ADA, TIDAK_ADA, NA, TIDAK_WAJIB |
 | JenisImport | SLIK_XLSX, SLIK_PDF, SLIK_TEKS, KTP, DEBITUR_XLSX, DOKUMEN_ZIP, WORKBOOK_LAMA, PEMBAYARAN_CSV |
 | StatusImport | PREVIEW, COMMITTED, FAILED, REVERTED |
+| StatusImportBaris | VALID, INVALID, COMMITTED, SKIPPED |
+| JenisEkstraksi | KTP, KK, NPWP |
+| StatusEkstraksi | DRAFT, VERIFIED, REJECTED |
+| MetodePembayaran | TUNAI, TRANSFER, POTONG_TPP, LAINNYA |
+| StatusVersi | DRAFT, ACTIVE, ARCHIVED |
+| StatusTemplate | DRAFT, REVIEW, APPROVED, DEPRECATED |
+| JenisPermintaanSlik | INDIVIDU, BADAN |
+| SumberSlik | PORTAL, IMPORT, MANUAL |
 | SumberData | MANUAL, IMPORT, OCR |
 | LedgerEvent | 23 nilai, lihat §9 |
 
