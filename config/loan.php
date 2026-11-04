@@ -39,6 +39,15 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    'pagination' => [
+        'per_page' => (int) env('PAGINATION_PER_PAGE', 20),
+        'ledger_per_page' => (int) env('PAGINATION_LEDGER_PER_PAGE', 50),
+    ],
+
+    'ui' => [
+        'dashboard_recent' => 10,
+    ],
+
     'golden' => [
         'tpp_path' => env('GOLDEN_TPP_PATH', '../ANALISIS EDDIY (ut kredit TPP).xlsx'),
         'output_path' => 'tests/fixtures/golden/tpp.json',

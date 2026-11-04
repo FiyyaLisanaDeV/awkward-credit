@@ -1,0 +1,32 @@
+
+  ............................................................................
+  ............................................................................
+  ............................................................................
+  .........................................
+
+  ──────────────────────────────────────────────────────────────────── Laravel  
+    PASS   ......................................................... 269 files  
+
+=== phpstan app (L5) ===
+Warning: Module "herd" is already loaded in Unknown on line 0
+Note: Using configuration file /Users/fiyyalisanna/Downloads/APP BPR/loan-analytic-bpr/phpstan.neon.
+
+ [OK] No errors                                                                 
+
+=== phpstan services (L8) ===
+Warning: Module "herd" is already loaded in Unknown on line 0
+
+ [OK] No errors                                                                 
+
+=== tests ===
+  [32;1m✓[39;22m[90m [39m[90mit mendeteksi output simulasi yang berubah[39m[90m                          [39m [90m0.28s[39m  
+
+  [90mTests:[39m    [32;1m87 passed[39;22m[90m (1534 assertions)[39m
+  [90mDuration:[39m [39m12.83s[39m
+
+=== hardcode ===
+hardcode:audit — 0 pelanggaran
+=== docs ===
+temuan: 0 error, 0 peringatan
+=== ledger ===
+ledger:verify OK — 0 baris, rantai utuh

@@ -19,4 +19,6 @@ final class Konstanta
     public const SKOR_MIN = 1;
 
     public const SKOR_MAKS = 5;
+
+    public const MILI_PER_DETIK = 1000;
 }
