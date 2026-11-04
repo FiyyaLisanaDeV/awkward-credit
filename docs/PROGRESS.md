@@ -8,19 +8,19 @@
 | Item | Nilai | Diperbarui |
 |---|---|---|
 | Versi dokumen | 2.4 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:28+08:00 | 2026-11-05 |
-| Fase aktif | **06B selesai**; berikutnya 07 (Seeders) | 2026-11-05 |
+| `updated_at` | 2026-11-05T02:32+08:00 | 2026-11-05 |
+| Fase aktif | **07 selesai**; berikutnya 08 (Models + Enum + DTO) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `237ce96` (Fase 06B) | 2026-11-05 |
+| Branch / last commit | main / `b65b05c` (Fase 07) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
 | Jumlah migrasi DB aplikasi | 60 (53 + 7 ledger/simulasi/import) | 2026-11-05 |
 | Jumlah route | 20 | 2026-11-05 |
-| Jumlah test | 15 file (37 test) | 2026-11-05 |
+| Jumlah test | 16 file (41 test) | 2026-11-05 |
 | `composer.lock` hash | `c76f6d030170` | 2026-11-05 |
 | `ledger:verify` | belum ada (Fase 08B) | 2026-11-05 |
-| Bukti fase terakhir | `docs/evidence/phase-06b-post-20261105-0228.txt` | 2026-11-05 |
+| Bukti fase terakhir | `docs/evidence/phase-07-post-20261105-0231.txt` | 2026-11-05 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -45,7 +45,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | DONE | 02:25 | 02:31 | `docs/evidence/phase-05-post-20261105-0225.txt` | `0d85655` / `phase-05-done` | BR-04 CHECK di DB |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | DONE | 02:31 | 02:37 | `docs/evidence/phase-06-post-20261105-0227.txt` | `5e22739` / `phase-06-done` | trigger BR-09 aktif |
 | 06B | Migrasi Ledger + Simulasi + Import + Pembayaran (7) | DONE | 02:37 | 02:41 | `docs/evidence/phase-06b-post-20261105-0228.txt` | `237ce96` / `phase-06b-done` | 68 tabel terverifikasi |
-| 07 | Seeders (14) | TODO | — | — | — | — | provenance wajib |
+| 07 | Seeders (14) | DONE | 02:41 | 02:48 | `docs/evidence/phase-07-post-20261105-0231.txt` | `b65b05c` / `phase-07-done` | 12 aktif + 2 kondisional |
 | 08 | Models (55) + Enum (24) | TODO | — | — | — | — | drill #2 |
 | 08B | Ledger & Simulation Service | TODO | — | — | — | — | replay & verify |
 | 09 | Calculation Engine | TODO | — | — | — | — | golden:extract |
@@ -77,12 +77,12 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 8) | FASE: 06B | STATUS: done
-BERUBAH: 7 migrasi + 8 enum baru (LedgerEvent 23, import, ekstraksi, pembayaran); trigger ledger
-BUKTI: docs/evidence/phase-06b-post-20261105-0228.txt (verify.sh --phase, exit 0; 37 test; 68 tabel)
-KEPUTUSAN: FK self-reference pembayaran dipasang setelah CREATE (keterbatasan PostgreSQL)
+SESI: 2026-11-05 (sesi 9) | FASE: 07 | STATUS: done
+BERUBAH: 14 seeder + data; test SeedProvenance; koreksi parameter 34 kunci & enum 31
+BUKTI: docs/evidence/phase-07-post-20261105-0231.txt (verify.sh --phase, exit 0; 41 test)
+KEPUTUSAN: ADR-025 (14 seeder; rate/konversi kondisional; ref_provinsi ditunda)
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 07: 14 seeder dengan provenance; 2) db:seed; 3) SeedProvenanceTest
+NEXT: 1) Fase 08: 55 model + enum tersisa + PolicyParameters; 2) SchemaInventoryTest; 3) drill #2
 ```
 
 ## §5. Log sesi (append-only)
@@ -98,6 +98,7 @@ NEXT: 1) Fase 07: 14 seeder dengan provenance; 2) db:seed; 3) SeedProvenanceTest
 | 2026-11-05 | 6 | 05 | 15 migrasi: permohonan (BR-04 CHECK), slik_permintaan, SLIK debitur/pasangan, riwayat internal, 10 analisis (parameter NOT NULL = BR-08) | `bash scripts/verify.sh --phase` | OK, exit 0 (30 test) | `0d85655` / `phase-05-done` |
 | 2026-11-05 | 7 | 06 | 13 migrasi kredit/workflow/audit; trigger audit_log immutable; test UPDATE/DELETE ditolak; Spatie migration dipindah ke 000010 | `bash scripts/verify.sh --phase` | OK, exit 0 (34 test) | `5e22739` / `phase-06-done` |
 | 2026-11-05 | 8 | 06B | 7 migrasi (ledger, simulasi_kredit, import_profil/batch/baris, ekstraksi_dokumen, pembayaran_angsuran) + trigger ledger; 68 tabel total | `bash scripts/verify.sh --phase` | OK, exit 0 (37 test) | `237ce96` / `phase-06b-done` |
+| 2026-11-05 | 9 | 07 | 14 seeder referensi (cabang 3, produk 9, kategori 13, kolektibilitas 5, status 5, checklist 28, parameter 34 kunci, matrix 1, template 17, role 8, admin 1, profil import 8); rate/konversi kondisional (Q3) | `bash scripts/verify.sh --phase` | OK, exit 0 (41 test) | `b65b05c` / `phase-07-done` |
 
 ## §6. Catatan drift
 
@@ -107,6 +108,7 @@ NEXT: 1) Fase 07: 14 seeder dengan provenance; 2) db:seed; 3) SeedProvenanceTest
 | 2026-11-05 | Model `User` baru mengembalikan `is_active = null` (default DB belum termuat) | tambah `$attributes` default di model | selesai |
 | 2026-11-05 | Skrip pembaruan PROGRESS menimpa baris fase 03 (placeholder `—` tertangkap) | baris dipulihkan manual; skrip berikutnya memakai penanda eksplisit | selesai |
 | 2026-11-05 | Migrasi Spatie bertimestamp 2026_11_05 berjalan setelah `approval_log` → FK ke `roles` gagal di DB segar | dipindah ke `2026_01_01_000010`; baris `migrations` DB dev disesuaikan | selesai |
+| 2026-11-05 | Parameter v1.0 berisi 34 kunci (dokumen menyebut 33); enum nyata 31 (dokumen 24) | dokumen & `docs:check` disesuaikan dengan hasil hitung | selesai |
 
 ## §7. Aturan pengisian
 
