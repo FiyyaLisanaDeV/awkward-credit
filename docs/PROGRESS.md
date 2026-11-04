@@ -7,20 +7,20 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 2.4 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:45+08:00 | 2026-11-05 |
-| Fase aktif | **10 selesai**; berikutnya 11 (API) | 2026-11-05 |
+| Versi dokumen | 2.5 | 2026-11-05 |
+| `updated_at` | 2026-11-05T02:52+08:00 | 2026-11-05 |
+| Fase aktif | **11 selesai**; berikutnya 12 (Blade UI) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `7e49459` (Fase 10) | 2026-11-05 |
+| Branch / last commit | main / `7e11e8e` (Fase 11) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
-| Jumlah migrasi DB aplikasi | 60 (53 + 7 ledger/simulasi/import) | 2026-11-05 |
-| Jumlah route | 20 | 2026-11-05 |
-| Jumlah test | 25 file (79 test) | 2026-11-05 |
-| `composer.lock` hash | `c76f6d030170` | 2026-11-05 |
+| Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-05 |
+| Jumlah route | 63 (42 API v1) | 2026-11-05 |
+| Jumlah test | 26 file (87 test) | 2026-11-05 |
+| `composer.lock` hash | `76cd829130f7` | 2026-11-05 |
 | `ledger:verify` | tersedia (Fase 08B) | 2026-11-05 |
-| Bukti fase terakhir | `docs/evidence/phase-10-post-20261105-0245.txt` | 2026-11-05 |
+| Bukti fase terakhir | `docs/evidence/phase-11-post-20261105-024945.txt` | 2026-11-05 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -50,7 +50,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 08B | Ledger Service | DONE | 02:55 | 02:59 | `docs/evidence/phase-08b-post-20261105-0235.txt` | `f4428af` / `phase-08b-done` | chain + idempotency |
 | 09 | Calculation + SimulationService | DONE | 02:59 | 03:06 | `docs/evidence/phase-09-post-20261105-0240.txt` | `1de50be` / `phase-09-done` | golden TPP + replay |
 | 10 | Rules + Scoring | DONE | 03:06 | 03:14 | `docs/evidence/phase-10-post-20261105-0245.txt` | `7e49459` / `phase-10-done` | 15 BR + 5C + red flag |
-| 11 | API | TODO | — | — | — | — | RouteContract |
+| 11 | API | DONE | 03:14 | 03:22 | `docs/evidence/phase-11-post-20261105-024945.txt` | `7e11e8e` / `phase-11-done` | 42 endpoint, scoping cabang |
 | 12 | Blade UI Forms | TODO | — | — | — | — | drill #3 |
 | 12B | Import & Efisiensi | TODO | — | — | — | — | 8 adapter |
 | 13 | Dashboard + Workflow | TODO | — | — | — | — | pembayaran |
@@ -77,12 +77,12 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 13) | FASE: 10 | STATUS: done
-BERUBAH: 15 rule + engine, Scoring5C, RedFlagEvaluator, RekomendasiService; enum RatingKredit/RekomendasiSistem
-BUKTI: docs/evidence/phase-10-post-20261105-0245.txt (verify.sh --phase, exit 0; 79 test)
-KEPUTUSAN: band skor 5C masih DRAFT (Q1); label memakai enum
+SESI: 2026-11-05 (sesi 14) | FASE: 11 | STATUS: done
+BERUBAH: routes/api.php v1 (42 endpoint), 12 controller API, 2 FormRequest, ScopesByCabang, LoginController; 17 test API
+BUKTI: docs/evidence/phase-11-post-20261105-024945.txt (verify.sh --phase, exit 0; 87 test; phpstan L5+L8 OK)
+KEPUTUSAN: otorisasi via Sanctum + Spatie; scoping cabang lewat trait; tanpa hardcode label
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 11: API Sanctum + 15 controller + policy; 2) RouteContractTest; 3) uji 401/403
+NEXT: 1) Fase 12: Blade UI + Livewire form wizard; 2) pakai API contract sebagai acuan; 3) jaga hardcode:audit 0
 ```
 
 ## §5. Log sesi (append-only)
@@ -103,6 +103,7 @@ NEXT: 1) Fase 11: API Sanctum + 15 controller + policy; 2) RouteContractTest; 3)
 | 2026-11-05 | 11 | 08B | LedgerService + ChainHasher (canonical JSON, UTC, advisory lock), ledger:verify; 5 test chain | `bash scripts/verify.sh --phase` | OK, exit 0 (51 test) | `f4428af` / `phase-08b-done` |
 | 2026-11-05 | 12 | 09 | 8 calculator + SimulationEngine/Service + simulasi:replay + golden:extract (TPP: angsuran 2.533.333,33; IDIR 0,8311); 4 test file | `bash scripts/verify.sh --phase` | OK, exit 0 (66 test) | `1de50be` / `phase-09-done` |
 | 2026-11-05 | 13 | 10 | 15 business rule (BR-01..15), engine, Scoring5C (override BR-01), RedFlagEvaluator 7 kategori, RekomendasiService; 10 test | `bash scripts/verify.sh --phase` | OK, exit 0 (79 test) | `7e49459` / `phase-10-done` |
+| 2026-11-05 | 14 | 11 | API Sanctum v1: login/logout/me, debitur+aset, permohonan+submit, slik, analisis (neraca, laba-rugi, kapasitas, scoring, red flag, rekomendasi), simulasi+replay, approval inbox/approve/reject/return, kredit/jadwal, ledger/verify, dashboard; scoping cabang; 17 test API | `bash scripts/verify.sh --phase` | OK, exit 0 (87 test) | `7e11e8e` / `phase-11-done` |
 
 ## §6. Catatan drift
 
