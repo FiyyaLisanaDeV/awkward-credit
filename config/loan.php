@@ -66,4 +66,18 @@ return [
         'cipher' => 'aes-256-gcm',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Keamanan sesi & sandi (mekanisme)
+    |--------------------------------------------------------------------------
+    */
+
+    'security' => [
+        'login_max_attempts' => (int) env('LOGIN_MAX_ATTEMPTS', 5),
+        'login_decay_seconds' => (int) env('LOGIN_DECAY_SECONDS', 60),
+        'password_min' => (int) env('PASSWORD_MIN_LENGTH', 8),
+        'password_min_production' => (int) env('PASSWORD_MIN_LENGTH_PRODUCTION', 12),
+        'slow_query_ms' => (int) env('SLOW_QUERY_MS', 500),
+    ],
+
 ];

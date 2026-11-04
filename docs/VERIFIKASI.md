@@ -125,7 +125,7 @@ Nilai di bawah **diuji pada 2026-11-05**; bukti: [`evidence/00-baseline-2026-11-
 **Lokasi yang boleh memuat nilai bisnis:** `database/seeders/**`, `config/*.php`, `lang/id.php`, `app/Enums/**`, `tests/Fixtures/**`, dokumen.
 **Lokasi terlarang:** `app/Services/**`, `app/Http/**`, `app/Models/**`, `app/Livewire/**`, `resources/views/**`, `routes/**`.
 
-**Whitelist angka:** `0`, `1`, `2`, `-1` (indeks/awal). Angka lain wajib `Konstanta::*` (struktural) atau parameter/DB (bisnis).
+**Whitelist angka:** `0`, `1`, `2`, `-1` (indeks/awal) dan kode status HTTP (200/201/204/4xx/5xx — mekanisme). Angka lain wajib `Konstanta::*` (struktural) atau parameter/DB (bisnis).
 
 **Denylist string/angka:** `'TPP'`, `'MODAL_KERJA'`, `'GRACE_PERIOD'`, `'Flat'`, `'Anuitas'`, `'Grace Period'`, `'Layak'`, `'TIDAK LAYAK'`, `'KDI'`, `'ChangeMe'`, `'BPR Bahteramas'`, `0.18`, `0.35`, `1.25`, `1.10`, `1.00`, `0.70`, `0.5`, `360`, `80_000_000`.
 

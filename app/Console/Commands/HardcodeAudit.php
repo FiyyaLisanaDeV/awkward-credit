@@ -17,7 +17,7 @@ use Throwable;
 final class HardcodeAudit extends Command
 {
     /** @var list<int|float> */
-    public const ALLOWED_NUMBERS = [0, 1, 2, -1];
+    public const ALLOWED_NUMBERS = [0, 1, 2, -1, 200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 500, 503];
 
     /** @var list<string> */
     public const DENYLIST = [

@@ -345,9 +345,14 @@ OCR_LANG=ind
 TESSERACT_PATH=
 PII_STORAGE=encrypted
 ADMIN_INITIAL_PASSWORD=
+LOGIN_MAX_ATTEMPTS=5
+LOGIN_DECAY_SECONDS=60
+PASSWORD_MIN_LENGTH=8
+PASSWORD_MIN_LENGTH_PRODUCTION=12
+SLOW_QUERY_MS=500
 ```
 
-`config/loan.php`: `engine_version`, `timezone`, `money` (skala 2, HALF_UP), `nomor` (pola permohonan/kredit/dokumen), `upload` (mime, maks MB), `dokumen` (disk, path), `pii` (disk, path, cipher).
+`config/loan.php`: `engine_version`, `timezone`, `money` (skala 2, HALF_UP), `nomor` (pola permohonan/kredit/dokumen), `upload` (mime, maks MB), `dokumen` (disk, path), `pii` (disk, path, cipher), `security` (batas login, panjang sandi, ambang slow query).
 `config/import.php`: `max_rows`, `max_file_mb`, `allowed_mimes`, `staging_ttl_hours`, kode profil default.
 `config/ledger.php`: `enabled`, `chain`, `lock_key`, `verify_schedule`.
 Tanpa kunci Redis. `.env.example` memakai placeholder dan **tidak** berisi kredensial nyata.

@@ -8,18 +8,19 @@
 | Item | Nilai | Diperbarui |
 |---|---|---|
 | Versi dokumen | 2.4 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:18+08:00 | 2026-11-05 |
-| Fase aktif | **01 selesai**; berikutnya 02 (Auth + Health) | 2026-11-05 |
+| `updated_at` | 2026-11-05T02:20+08:00 | 2026-11-05 |
+| Fase aktif | **02 selesai**; berikutnya 03 (Migrasi Master) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `3504a6f` (scaffold) + commit dokumen ini | 2026-11-05 |
+| Branch / last commit | main / `7be6549` (Fase 02) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
-| Jumlah migrasi DB aplikasi | 3 (tabel sistem) | 2026-11-05 |
-| Jumlah route | 13 | 2026-11-05 |
-| Jumlah test | 5 file (7 test) | 2026-11-05 |
+| Jumlah migrasi DB aplikasi | 4 (sistem + field auth) | 2026-11-05 |
+| Jumlah route | 20 | 2026-11-05 |
+| Jumlah test | 9 file (20 test) | 2026-11-05 |
 | `composer.lock` hash | `c76f6d030170` | 2026-11-05 |
 | `ledger:verify` | belum ada (Fase 08B) | 2026-11-05 |
+| Bukti fase terakhir | `docs/evidence/phase-02-post-20261105-0220.txt` | 2026-11-05 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -38,8 +39,9 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 |---|---|---|---|---|---|---|---|
 | 00 | Reconnaissance | DONE | 02:12 | 02:16 | `PHASE_00_RECON.md`, `evidence/phase-00-pre-20261105-0212.txt` | — | read-only |
 | 01 | Scaffold Laravel 13 | DONE | 02:13 | 02:17 | `evidence/phase-01-post-20261105-0217.txt` | `3504a6f` / `phase-01-done` | 82 file; tanpa npm |
-| 02 | Auth + Health | TODO | — | — | — | — | tanpa Breeze |
-| 03 | Migrasi Master (13) | TODO | — | — | — | — | kolom `sumber` |
+| 02 | Auth + Health | DONE | 02:18 | 02:22 | `docs/evidence/phase-02-post-20261105-0220.txt` | `7be6549` / `phase-02-done` | auth tulis sendiri; UserAdmin ditunda ke Fase 13 |
+| 03 | Migrasi Master (13) | TODO | 2026-11-05 | `Password::defaults` dipanggil di `register()` → `auth.password` belum terikat | dipindah ke `boot()` + memakai `Validation\Rules\Password` (bukan facade) | selesai |
+| 2026-11-05 | Model `User` baru mengembalikan `is_active = null` (default DB belum termuat) | tambah `$attributes` default di model | selesai | kolom `sumber` |
 | 04 | Migrasi Auth + Debitur (11) | TODO | — | — | — | — | drill #1 |
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | TODO | — | — | — | — | — |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | TODO | — | — | — | — | trigger audit |
@@ -76,13 +78,13 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 2) | FASE: 00–01 | STATUS: done
-BERUBAH: scaffold `loan-analytic-bpr` (82 file), docs/evidence, config/loan|import|ledger, scripts/*.sh,
-         app/Console/Commands/{StateCheck,DocsCheck,HardcodeAudit}, tests/Unit/Guard/*
-BUKTI: docs/evidence/phase-01-post-20261105-0217.txt (verify.sh --phase, exit 0)
-KEPUTUSAN: ADR-024 tetap; AGENTS.md/CLAUDE.md bawaan Laravel dihapus (arahan Boost tidak dipakai)
+SESI: 2026-11-05 (sesi 3) | FASE: 02 | STATUS: done
+BERUBAH: Auth controllers+middleware+views, HealthController, lang/id.php, config security+logging,
+         migration field auth users, phpunit pgsql test, 4 test file
+BUKTI: docs/evidence/phase-02-post-20261105-0220.txt (verify.sh --phase, exit 0; 20 test)
+KEPUTUSAN: UserAdminController ditunda ke Fase 13 (butuh role Spatie fase 07)
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 02 auth + /health; 2) phpunit.xml → pgsql `loan_analytic_bpr_test`; 3) commit+tag phase-02-done
+NEXT: 1) Fase 03: 13 migrasi master/referensi; 2) CHECK dari enum; 3) commit+tag phase-03-done
 ```
 
 ## §5. Log sesi (append-only)
@@ -92,6 +94,7 @@ NEXT: 1) Fase 02 auth + /health; 2) phpunit.xml → pgsql `loan_analytic_bpr_tes
 | 2026-11-05 | perencanaan | — | Menyusun paket dokumen A–G: rencana v2.4, teknis 22 bab, inventaris 60 tabel/23 event/8 adapter, 22 prompt, ADR, protokol verifikasi; baseline lingkungan direkam | `sw_vers`, `php -v`, `pg_isready`, `psql`, `composer -V`, `ls` (lihat evidence) | baseline lengkap, exit 0 | — (workspace belum repo) |
 | 2026-11-05 | 2 | 00 | Recon read-only: health matrix, tripwire, target path, risiko | `php -m`, `pg_isready`, `command -v` (lihat evidence) | exit 0 | — |
 | 2026-11-05 | 2 | 01 | Scaffold Laravel 13.40.0; paket runtime/dev; struktur domain; config tanpa redis/s3; scripts; 3 command penjaga; 3 test guard; docs disalin; DB dev+test dibuat | `bash scripts/verify.sh --phase` | OK, exit 0 | `3504a6f` / `phase-01-done` |
+| 2026-11-05 | 3 | 02 | Auth (login/logout/ganti sandi, rate limit, middleware aktif & wajib ganti), `/health`, layout guest/app, lang id, phpunit → pgsql test, 4 test file auth/health | `bash scripts/verify.sh --phase` | OK, exit 0 (20 test) | `7be6549` / `phase-02-done` |
 
 ## §6. Catatan drift
 
