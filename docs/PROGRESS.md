@@ -41,7 +41,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 01 | Scaffold Laravel 13 | DONE | 02:13 | 02:17 | `evidence/phase-01-post-20261105-0217.txt` | `3504a6f` / `phase-01-done` | 82 file; tanpa npm |
 | 02 | Auth + Health | DONE | 02:18 | 02:22 | `docs/evidence/phase-02-post-20261105-0220.txt` | `7be6549` / `phase-02-done` | auth tulis sendiri; UserAdmin ditunda ke Fase 13 |
 | 03 | Migrasi Master (13) | DONE | 02:22 | 02:28 | `docs/evidence/phase-03-post-20261105-0222.txt` | `6bd13d2` / `phase-03-done` | CHECK dari enum; 9 enum dibuat |
-| 04 | Migrasi Auth + Debitur (11) | DONE | 02:22 | 02:25 | `docs/evidence/phase-04-post-20261105-0224.txt` + `docs/evidence/drill-01-20261105-0223.txt` | `c16b575` / `phase-04-done` | drill #1 PASS |
+| 04 | Migrasi Auth + Debitur (11) | DONE | 02:22 | 02:25 | `docs/evidence/phase-04-post-20261105-0224.txt` + `docs/evidence/drill-01-20261105-0223.txt` | `e02b78d` / `phase-04-done` | drill #1 PASS |
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | TODO | — | — | — | — | — |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | TODO | — | — | — | — | trigger audit |
 | 06B | Migrasi Ledger + Simulasi + Import + Pembayaran (7) | TODO | — | — | — | — | hitung `\dt` |
@@ -94,7 +94,7 @@ NEXT: 1) Fase 05: 15 migrasi (4 permohonan + slik_permintaan + 10 analisis); 2) 
 | 2026-11-05 | 2 | 01 | Scaffold Laravel 13.40.0; paket runtime/dev; struktur domain; config tanpa redis/s3; scripts; 3 command penjaga; 3 test guard; docs disalin; DB dev+test dibuat | `bash scripts/verify.sh --phase` | OK, exit 0 | `3504a6f` / `phase-01-done` |
 | 2026-11-05 | 3 | 02 | Auth (login/logout/ganti sandi, rate limit, middleware aktif & wajib ganti), `/health`, layout guest/app, lang id, phpunit → pgsql test, 4 test file auth/health | `bash scripts/verify.sh --phase` | OK, exit 0 (20 test) | `7be6549` / `phase-02-done` |
 | 2026-11-05 | 4 | 03 | 13 migrasi master/referensi + 9 enum + `CheckConstraint` (CHECK dari enum), index parsial ACTIVE, kolom sumber/approval; test constraint enum | `bash scripts/verify.sh --phase` | OK, exit 0 (22 test) | `cbbdb00` / `phase-03-done` |
-| 2026-11-05 | 5 | 04 | Users profile (cabang/username/jabatan/no_hp), 6 tabel debitur, Spatie publish; 2 test schema/constraint; drill #1 PASS | `bash scripts/verify.sh --phase` | OK, exit 0 (27 test) | `c16b575` / `phase-04-done` |
+| 2026-11-05 | 5 | 04 | Users profile (cabang/username/jabatan/no_hp), 6 tabel debitur, Spatie publish; 2 test schema/constraint; drill #1 PASS | `bash scripts/verify.sh --phase` | OK, exit 0 (27 test) | `e02b78d` / `phase-04-done` |
 
 ## §6. Catatan drift
 
