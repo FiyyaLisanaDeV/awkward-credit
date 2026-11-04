@@ -183,6 +183,13 @@
 - Alternatif ditolak: menyemai tarif 0/karangan; membuat tabel `ref_provinsi` tanpa data resmi.
 - Konsekuensi: angka seeder di dokumen dikoreksi 17 → 14; Q3 tetap terbuka; fixture tarif menyusul.
 
+## ADR-026 — SimulationService & replay di Fase 09
+- Status: diterima · 2026-11-05 · Pemilik: IT
+- Konteks: `SimulationService` membutuhkan 8 calculator yang baru dibangun di Fase 09. Membangunnya di 08B akan memaksa stub/kalkulasi ganda.
+- Keputusan: Fase 08B hanya LedgerService + ChainHasher + `ledger:verify`. SimulationService, `simulasi:replay`, dan integrasi event `SIMULASI_DIJALANKAN` dikerjakan di Fase 09 bersama calculator.
+- Alternatif ditolak: membuat calculator di 08B (melanggar urutan fase); membuat SimulationService tanpa kalkulasi (tidak dapat direplay).
+- Konsekuensi: judul fase 08B di dokumen disesuaikan; tidak ada perubahan skema.
+
 ---
 
 ## Aturan penambahan ADR

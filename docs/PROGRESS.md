@@ -47,8 +47,8 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 06B | Migrasi Ledger + Simulasi + Import + Pembayaran (7) | DONE | 02:37 | 02:41 | `docs/evidence/phase-06b-post-20261105-0228.txt` | `237ce96` / `phase-06b-done` | 68 tabel terverifikasi |
 | 07 | Seeders (14) | DONE | 02:41 | 02:48 | `docs/evidence/phase-07-post-20261105-0231.txt` | `b65b05c` / `phase-07-done` | 12 aktif + 2 kondisional |
 | 08 | Models (55) + Enum (31) | DONE | 02:48 | 02:55 | `docs/evidence/phase-08-post-20261105-0233.txt` + `docs/evidence/drill-02-20261105-0233.txt` | `7f95fb8` / `phase-08-done` | 55 model, relasi, DTO; drill #2 PASS |
-| 08B | Ledger & Simulation Service | TODO | — | — | — | — | replay & verify |
-| 09 | Calculation Engine | TODO | — | — | — | — | golden:extract |
+| 08B | Ledger Service | TODO | — | — | — | — | ledger:verify |
+| 09 | Calculation + SimulationService | TODO | — | — | — | — | golden + replay |
 | 10 | Rules + Scoring | TODO | — | — | — | — | band 5C `[H]` |
 | 11 | API | TODO | — | — | — | — | RouteContract |
 | 12 | Blade UI Forms | TODO | — | — | — | — | drill #3 |

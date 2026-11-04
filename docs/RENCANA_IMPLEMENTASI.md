@@ -190,8 +190,8 @@ Bootstrap (E → B → C sepotong → prompt), handoff wajib, papan status, ADR 
 | 06B | Migrasi ledger+simulasi+import+pembayaran (7) | 7 migrasi + trigger ledger | `\dt` = 60 tabel bisnis, `ledger:verify` awal |
 | 07 | Seeders (14) | data referensi + admin | semua angka bersumber; `SeedProvenanceTest` |
 | 08 | Models (55) + 31 enum | model, relasi, cast, DTO param | `SchemaInventoryTest` penuh, drill #2 |
-| 08B | Ledger & Simulation Service | `LedgerService`, `SimulationService`, perintah verify/replay | replay identik, chain 1.000 event |
-| 09 | Calculation engine | 8 service + golden test | `golden:extract`, `FormulaGoldenTest` |
+| 08B | Ledger Service | `LedgerService`, `ChainHasher`, `ledger:verify` | chain utuh, manipulasi terdeteksi |
+| 09 | Calculation engine + SimulationService | 8 service + simulasi/replay + golden test | `golden:extract`, replay identik |
 | 10 | Rules + Scoring | 15 BR, 5C, red flag, rekomendasi | 15 test BR, mutation test |
 | 11 | API | 15 controller, 15 request, 10 resource, 3 policy | `RouteContractTest`, 401 tanpa token |
 | 12 | Blade UI forms | layout, komponen, wizard, simulator, riwayat, diff | render test, drill #3 |

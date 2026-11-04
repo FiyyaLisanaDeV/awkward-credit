@@ -320,24 +320,25 @@ command -v redis-cli docker minio tesseract pdftotext || true   # cek KETIADAAN,
 [G] Handoff + APPROVED to FASE-08B.
 ```
 
-## FASE 08B — LEDGER & SIMULATION SERVICE
+## FASE 08B — LEDGER SERVICE
 ```
 [A] Fase 08 done. [B] ls app/Services/Ledger (kosong)
-[C] LedgerService (advisory lock, prev_hash, canonical json, idempotency), ChainHasher,
-    LedgerEvent enum (23), SimulationService (normalisasi input, input_hash, engine_version),
-    commands ledger:verify + simulasi:replay, schedule harian 01:00.
-    Tidak ada nilai bisnis di service (parameter via DTO).
-[D] Service + command. [E] seed 1.000 event uji → ledger:verify exit 0; ubah 1 payload → verify mendeteksi;
-    replay simulasi identik; php artisan test --filter=Ledger
+[C] LedgerService (advisory lock, prev_hash, canonical JSON, idempotency), ChainHasher,
+    commands ledger:verify (+ schedule harian 01:00). SimulationService & replay dipindah ke Fase 09
+    karena bergantung pada calculator (ADR-026).
+[D] Service + command. [E] 5 event uji → ledger:verify exit 0; baris hash salah → verify gagal;
+    insert/update/delete diuji; php artisan test --filter=Ledger
 [F] git reset --hard HEAD~1
 [G] Handoff + APPROVED to FASE-09.
 ```
 
-## FASE 09 — CALCULATION ENGINE
+## FASE 09 — CALCULATION ENGINE + SIMULATION SERVICE
 ```
 [A] Fase 08B done. [B] ls app/Services/Calculation (kosong)
 [C] 8 service: Angsuran, Dscr, PlafonMax, Ltv, RasioKeuangan, ModalKerja, Idir, SukuBungaEfektif.
     Semua membaca PolicyParameters; pembulatan HALF_UP 2 desimal + true-up.
+    SimulationService (normalisasi input → input_hash → output → simulasi_kredit + ledger event)
+    dan command simulasi:replay (membandingkan output kanonik).
     Command golden:extract membaca 3 workbook → tests/fixtures/golden/*.json.
     Test: flat/anuitas/grace × tenor 12/24/60, 360 periode, saldo akhir 0, Σpokok=plafon,
     toleransi Rp0,01 vs golden, MissingParameterTest, ParameterMutationTest (≥3).

@@ -28,6 +28,7 @@ return [
         'scale' => 2,
         'rounding' => PHP_ROUND_HALF_UP,
         'display_decimals' => 0,
+        'canonical_scale' => 6,
         'currency' => 'IDR',
     ],
 
