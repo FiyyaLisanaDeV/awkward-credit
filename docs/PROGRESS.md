@@ -11,7 +11,7 @@
 | `updated_at` | 2026-11-05T02:22+08:00 | 2026-11-05 |
 | Fase aktif | **03 selesai**; berikutnya 04 (Migrasi Auth + Debitur) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `cbbdb00` (Fase 03) | 2026-11-05 |
+| Branch / last commit | main / `6bd13d2` (Fase 03) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
@@ -40,8 +40,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 00 | Reconnaissance | DONE | 02:12 | 02:16 | `PHASE_00_RECON.md`, `evidence/phase-00-pre-20261105-0212.txt` | — | read-only |
 | 01 | Scaffold Laravel 13 | DONE | 02:13 | 02:17 | `evidence/phase-01-post-20261105-0217.txt` | `3504a6f` / `phase-01-done` | 82 file; tanpa npm |
 | 02 | Auth + Health | DONE | 02:18 | 02:22 | `docs/evidence/phase-02-post-20261105-0220.txt` | `7be6549` / `phase-02-done` | auth tulis sendiri; UserAdmin ditunda ke Fase 13 |
-| 03 | Migrasi Master (13) | TODO | 2026-11-05 | `Password::defaults` dipanggil di `register()` → `auth.password` belum terikat | dipindah ke `boot()` + memakai `Validation\Rules\Password` (bukan facade) | selesai |
-| 2026-11-05 | Model `User` baru mengembalikan `is_active = null` (default DB belum termuat) | tambah `$attributes` default di model | selesai | kolom `sumber` |
+| 03 | Migrasi Master (13) | DONE | 02:22 | 02:28 | `docs/evidence/phase-03-post-20261105-0222.txt` | `6bd13d2` / `phase-03-done` | CHECK dari enum; 9 enum dibuat |
 | 04 | Migrasi Auth + Debitur (11) | TODO | — | — | — | — | drill #1 |
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | TODO | — | — | — | — | — |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | TODO | — | — | — | — | trigger audit |
@@ -100,7 +99,9 @@ NEXT: 1) Fase 04: users fields + 6 tabel debitur + Spatie; 2) migrate; 3) drill 
 
 | Tanggal | Drift | Tindakan | Status |
 |---|---|---|---|
-| — | — | — | — |
+| 2026-11-05 | `Password::defaults` dipanggil di `register()` → `auth.password` belum terikat | dipindah ke `boot()` + memakai `Validation\Rules\Password` (bukan facade) | selesai |
+| 2026-11-05 | Model `User` baru mengembalikan `is_active = null` (default DB belum termuat) | tambah `$attributes` default di model | selesai |
+| 2026-11-05 | Skrip pembaruan PROGRESS menimpa baris fase 03 (placeholder `—` tertangkap) | baris dipulihkan manual; skrip berikutnya memakai penanda eksplisit | selesai |
 
 ## §7. Aturan pengisian
 
