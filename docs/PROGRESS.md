@@ -8,19 +8,19 @@
 | Item | Nilai | Diperbarui |
 |---|---|---|
 | Versi dokumen | 2.4 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:22+08:00 | 2026-11-05 |
-| Fase aktif | **03 selesai**; berikutnya 04 (Migrasi Auth + Debitur) | 2026-11-05 |
+| `updated_at` | 2026-11-05T02:24+08:00 | 2026-11-05 |
+| Fase aktif | **04 selesai**; berikutnya 05 (Permohonan + Analisis + SLIK) | 2026-11-05 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `6bd13d2` (Fase 03) | 2026-11-05 |
+| Branch / last commit | main / `413d00b` (Fase 04) | 2026-11-05 |
 | PHP | 8.3.7 (Herd) | 2026-11-05 |
 | Laravel | 13.40.0 | 2026-11-05 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
-| Jumlah migrasi DB aplikasi | 17 (4 sistem/auth + 13 master) | 2026-11-05 |
+| Jumlah migrasi DB aplikasi | 25 (4 inti + 13 master + 8 auth/debitur) | 2026-11-05 |
 | Jumlah route | 20 | 2026-11-05 |
-| Jumlah test | 10 file (22 test) | 2026-11-05 |
+| Jumlah test | 12 file (27 test) | 2026-11-05 |
 | `composer.lock` hash | `c76f6d030170` | 2026-11-05 |
 | `ledger:verify` | belum ada (Fase 08B) | 2026-11-05 |
-| Bukti fase terakhir | `docs/evidence/phase-03-post-20261105-0222.txt` | 2026-11-05 |
+| Bukti fase terakhir | `docs/evidence/phase-04-post-20261105-0224.txt` | 2026-11-05 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -41,7 +41,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 01 | Scaffold Laravel 13 | DONE | 02:13 | 02:17 | `evidence/phase-01-post-20261105-0217.txt` | `3504a6f` / `phase-01-done` | 82 file; tanpa npm |
 | 02 | Auth + Health | DONE | 02:18 | 02:22 | `docs/evidence/phase-02-post-20261105-0220.txt` | `7be6549` / `phase-02-done` | auth tulis sendiri; UserAdmin ditunda ke Fase 13 |
 | 03 | Migrasi Master (13) | DONE | 02:22 | 02:28 | `docs/evidence/phase-03-post-20261105-0222.txt` | `6bd13d2` / `phase-03-done` | CHECK dari enum; 9 enum dibuat |
-| 04 | Migrasi Auth + Debitur (11) | TODO | — | — | — | — | drill #1 |
+| 04 | Migrasi Auth + Debitur (11) | DONE | 02:22 | 02:25 | `docs/evidence/phase-04-post-20261105-0224.txt` + `docs/evidence/drill-01-20261105-0223.txt` | `c16b575` / `phase-04-done` | drill #1 PASS |
 | 05 | Migrasi Permohonan + Analisis + SLIK (15) | TODO | — | — | — | — | — |
 | 06 | Migrasi Kredit + Workflow + Audit (13) | TODO | — | — | — | — | trigger audit |
 | 06B | Migrasi Ledger + Simulasi + Import + Pembayaran (7) | TODO | — | — | — | — | hitung `\dt` |
@@ -77,12 +77,12 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 4) | FASE: 03 | STATUS: done
-BERUBAH: 13 migrasi master + 9 enum + app/Support/Database/CheckConstraint.php + test constraint
-BUKTI: docs/evidence/phase-03-post-20261105-0222.txt (verify.sh --phase, exit 0; 22 test; 13 tabel ref)
-KEPUTUSAN: users tetap bigint bawaan Laravel (dokumen INVENTARIS dikoreksi)
+SESI: 2026-11-05 (sesi 5) | FASE: 04 | STATUS: done
+BERUBAH: migration users+cabang/username/jabatan/no_hp; 6 migrasi debitur; Spatie publish; 3 enum baru; 2 test
+BUKTI: docs/evidence/phase-04-post-20261105-0224.txt (verify.sh --phase, exit 0; 27 test); docs/evidence/drill-01-20261105-0223.txt (drill PASS)
+KEPUTUSAN: users bigint (dokumen INVENTARIS dikoreksi); drill #1 dijalankan
 BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 04: users fields + 6 tabel debitur + Spatie; 2) migrate; 3) drill #1
+NEXT: 1) Fase 05: 15 migrasi (4 permohonan + slik_permintaan + 10 analisis); 2) migrate; 3) test schema
 ```
 
 ## §5. Log sesi (append-only)
@@ -94,6 +94,7 @@ NEXT: 1) Fase 04: users fields + 6 tabel debitur + Spatie; 2) migrate; 3) drill 
 | 2026-11-05 | 2 | 01 | Scaffold Laravel 13.40.0; paket runtime/dev; struktur domain; config tanpa redis/s3; scripts; 3 command penjaga; 3 test guard; docs disalin; DB dev+test dibuat | `bash scripts/verify.sh --phase` | OK, exit 0 | `3504a6f` / `phase-01-done` |
 | 2026-11-05 | 3 | 02 | Auth (login/logout/ganti sandi, rate limit, middleware aktif & wajib ganti), `/health`, layout guest/app, lang id, phpunit → pgsql test, 4 test file auth/health | `bash scripts/verify.sh --phase` | OK, exit 0 (20 test) | `7be6549` / `phase-02-done` |
 | 2026-11-05 | 4 | 03 | 13 migrasi master/referensi + 9 enum + `CheckConstraint` (CHECK dari enum), index parsial ACTIVE, kolom sumber/approval; test constraint enum | `bash scripts/verify.sh --phase` | OK, exit 0 (22 test) | `cbbdb00` / `phase-03-done` |
+| 2026-11-05 | 5 | 04 | Users profile (cabang/username/jabatan/no_hp), 6 tabel debitur, Spatie publish; 2 test schema/constraint; drill #1 PASS | `bash scripts/verify.sh --phase` | OK, exit 0 (27 test) | `c16b575` / `phase-04-done` |
 
 ## §6. Catatan drift
 

@@ -1,0 +1,18 @@
+# DRILL-01 — cold start (akhir Fase 04) — 20261105-0223
+# Protokol: sesi baru hanya membaca PROGRESS.md + TEKNIS.md, lalu jawaban diverifikasi dengan perintah.
+
+## Jawaban yang harus benar
+1. Fase berjalan    : 04 selesai; berikutnya 05 (Migrasi Permohonan + Analisis + SLIK)
+2. Commit/tag       : c16b575 / phase-04-done (sebelum commit bukti)
+3. Migrasi/rute/test: 25 / 20 / 27 passed
+4. Next 3 langkah   : 15 migrasi permohonan+analisis+SLIK; php artisan migrate; SchemaInventoryTest
+5. Blocker          : Q1–Q7 (PROGRESS §3)
+
+## Verifikasi terhadap state nyata
+$ psql -tAc 'select count(*) from migrations' -> 25
+$ php artisan route:list --json | count -> 20
+$ php artisan test --compact -> 27 passed
+$ git rev-parse --short HEAD -> c16b575
+
+## Kesimpulan
+PROGRESS + TEKNIS cukup untuk menjawab kelima pertanyaan tanpa membaca seluruh kode. VERDICT: PASS.
