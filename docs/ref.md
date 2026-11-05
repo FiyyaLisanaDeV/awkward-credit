@@ -106,7 +106,7 @@ Catatan koreksi: rencana lama menulis IDIR ~83% / net ~3,05 jt; angka pegangan (
 
 ### 4.5 APU-PPT untuk BPR
 - **Status klaim:** kerangka `[V]`, pedoman teknis `[K]` → repo: **`[V*]`/`[K]`**
-- **KOREKSI PENTING:** kerangka utama saat ini masih berbasis **PBI 12/20/PBI/2010** + **SE BI 13/14/DKBU/2011**, bukan POJK tersendiri. Konfirmasi apakah ada yang lebih baru (JDIH). Klaim "POJK APU-PPT untuk BPR" tidak akurat.
+- **KOREKSI PENTING:** kerangka yang berlaku saat ini adalah **POJK Nomor 8 Tahun 2023** tentang Penerapan Program APU-PPT dan PPPSPM di Sektor Jasa Keuangan (menggantikan acuan lama PBI 12/20/PBI/2010 + SE BI 13/14/DKBU/2011 yang sebelumnya dicatat). Konfirmasi pasal teknis ke salinan resmi `[K]`.
 - Selaras risiko repo: `docs/questions.md` V7 masih "APU-PPT/PPATK … `[K klaim independen]`".
 
 ### 4.6 SEOJK 21/SEOJK.03/2024 — Pedoman Akuntansi BPR (PA BPR)
