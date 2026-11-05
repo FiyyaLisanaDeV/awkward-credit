@@ -36,3 +36,10 @@ Semua perubahan manual dicatat di sini (append-oriented). Format: tanggal, versi
 - **Golden:** 29 kasus `recomputed` (Decimal) — **0 verified**. TPP-01: IDIR 85,93%, rate×12 28,88%, effective annual 33,02%; tanpa 1,81x.
 - **Remote:** repo app dipush ke GitHub `FiyyaLisanaDeV/awkward-credit` **branch `app`** (+tags `phase-01-done`..`phase-15-done`); `main` remote tetap `commandcode bpr` (tidak ditimpa).
 - **Manual:** Bab 10/11/14/20 disinkronkan dengan implementasi; Bab 20 mencatat sisa gap (Fase 16–18, 12B, template DRAFT, policy divergence).
+
+## 0.1.6 — 2026-11-06 (Bab 7 interaktif, Bab 24 workflow/peran, nomor bab, user auditor)
+- **Bab 7 ditulis ulang**: peta alur analisis, rumus + contoh dummy (IDIR 85,93%, DSCR, LTV, modal kerja, plafon max, 5C 3,40), blok `<details>` interaktif, rujukan file/uji, batas & gap.
+- **Bab 24 baru**: state machine, `ApprovalService` (level per band, permission ganda, SoD, BR-06), matriks approval, peran & permission, wewenang per plafon, auditor read-only, aksi/efek, UI, uji.
+- **Nomor bab** ditampilkan di Home, Indeks, dan Sidebar (`Bab 01` … `Bab 24`).
+- **User auditor**: seeder `AuditorUserSeeder` (role AUDITOR, read-only), config `AUDITOR_INITIAL_PASSWORD`, tes; jumlah user uji 1→2.
+- **Wiki**: 36 halaman, tautan internal 0 putus.

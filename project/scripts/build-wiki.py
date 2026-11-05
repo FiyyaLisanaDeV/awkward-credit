@@ -46,6 +46,7 @@ CHAPTERS = [
     ("21-operasional-backup-rilis.md", "Bab-21-Operasional-Backup-Rilis", "Operasional, Backup & Rilis"),
     ("22-mekanisme-update-manual-book.md", "Bab-22-Mekanisme-Update-Manual-Book", "Mekanisme Update Manual Book"),
     ("23-glosarium-indeks.md", "Bab-23-Glosarium-Indeks", "Glosarium & Indeks"),
+    ("24-workflow-peran-wewenang.md", "Bab-24-Workflow-Peran-Wewenang", "Workflow, Peran & Wewenang"),
 ]
 
 EXTRA = [
@@ -65,6 +66,7 @@ ROOT = [
 ROOT_SLUG = {f: s for f, s, _ in ROOT}
 
 TITLE = {s: t for _f, s, t in CHAPTERS}
+NUMBER = {s: i + 1 for i, (_f, s, _t) in enumerate(CHAPTERS)}
 
 GROUPS = [
     ("Ringkasan", CHAPTERS[0:1]),
@@ -76,6 +78,7 @@ GROUPS = [
     ("Data, Import & Keamanan", CHAPTERS[15:18]),
     ("Struktur Data & Gap", CHAPTERS[18:20]),
     ("Operasional & Pemeliharaan", CHAPTERS[20:23]),
+    ("Tata Kelola & Peran", CHAPTERS[23:24]),
 ]
 
 # target relatif (dari manual/) -> slug wiki
@@ -106,6 +109,7 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-02-Arsitektur-Stack", "arsitektur"),
         ("Bab-18-Keamanan-PII-PDP", "PII & PDP"),
         ("Bab-10-Approval-Dokumen-Workflow", "kewenangan approval"),
+        ("Bab-24-Workflow-Peran-Wewenang", "peran & wewenang"),
     ],
     "Bab-05-Debitur-dan-Data-Nasabah": [
         ("Bab-06-Permohonan-Produk-SLIK", "permohonan & SLIK"),
@@ -136,6 +140,7 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-04-Auth-RBAC-Keamanan", "RBAC & permission"),
         ("Bab-09-Business-Rules-Validasi", "BR-05/06/07"),
         ("Bab-11-Kredit-Fasilitas-Pembayaran", "setelah approved"),
+        ("Bab-24-Workflow-Peran-Wewenang", "peran & wewenang approval"),
     ],
     "Bab-11-Kredit-Fasilitas-Pembayaran": [
         ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "jadwal & EIR"),
@@ -201,6 +206,11 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-01-Ringkasan-Ruang-Lingkup", "ringkasan"),
         ("Bab-20-Known-Issues-Gap-Rencana", "gap"),
         ("Bab-22-Mekanisme-Update-Manual-Book", "pemeliharaan manual"),
+    ],
+    "Bab-24-Workflow-Peran-Wewenang": [
+        ("Bab-04-Auth-RBAC-Keamanan", "RBAC & permission"),
+        ("Bab-10-Approval-Dokumen-Workflow", "alur approval & dokumen"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "keputusan D-12"),
     ],
 }
 
@@ -375,10 +385,10 @@ def build() -> None:
         "",
     ]
     for _f, slug, title in CHAPTERS:
-        idx.append(f"- [{title}]({slug}) — *{group_of(slug)}*")
+        idx.append(f"- **Bab {NUMBER[slug]:02d}** — [{title}]({slug}) — *{group_of(slug)}*")
     idx += ["", "## Bagian per bab", ""]
     for _f, slug, title in CHAPTERS:
-        idx.append(f"### [{title}]({slug})")
+        idx.append(f"### Bab {NUMBER[slug]:02d} — [{title}]({slug})")
         idx.append("")
         for sec in sections.get(slug, []):
             idx.append(f"- {sec}")
@@ -386,7 +396,7 @@ def build() -> None:
     write("Indeks", "\n".join(idx))
 
     # 4) Home
-    toc = "\n".join(f"{i+1}. [{t}]({s})" for i, (_f, s, t) in enumerate(CHAPTERS))
+    toc = "\n".join(f"{i+1}. **Bab {i+1:02d}** — [{t}]({s})" for i, (_f, s, t) in enumerate(CHAPTERS))
     status_rows = [
         ("Debitur & data nasabah", "Terimplementasi", "Bab-05-Debitur-dan-Data-Nasabah"),
         ("Permohonan & SLIK", "Terimplementasi", "Bab-06-Permohonan-Produk-SLIK"),
@@ -398,6 +408,7 @@ def build() -> None:
         ("API v1 (42 endpoint)", "Terimplementasi", "Bab-13-API-v1"),
         ("UI web (Blade + Livewire)", "Terimplementasi (Fase 12–14)", "Bab-14-UI-Web-Livewire"),
         ("Dokumen (17 generator)", "Terimplementasi (Fase 14)", "Bab-10-Approval-Dokumen-Workflow"),
+        ("Peran & wewenang (termasuk auditor)", "Terimplementasi", "Bab-24-Workflow-Peran-Wewenang"),
         ("Import & ekstraksi", "Belum (Fase 12B)", "Bab-17-Import-Ekstraksi-Data-Quality"),
         ("Hardening, UAT & go-live", "Belum (Fase 16–18)", "Bab-21-Operasional-Backup-Rilis"),
         ("Golden terverifikasi", "0/29 — menunggu sumber & tanda tangan", "Bab-20-Known-Issues-Gap-Rencana"),
@@ -478,7 +489,7 @@ _Perbarui manual setiap kali fitur/fungsi menjadi **final** — lihat [Bab 22](B
     for gname, items in GROUPS:
         lines.append(f"**{gname}**")
         for _f, s, t in items:
-            lines.append(f"- [{t}]({s})")
+            lines.append(f"- Bab {NUMBER[s]:02d} · [{t}]({s})")
         lines.append("")
     lines.append("**Dokumen Produk**")
     for _f, s, t in ROOT:

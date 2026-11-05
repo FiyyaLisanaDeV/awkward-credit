@@ -1,64 +1,137 @@
 # Bab 7 — Analisis Kredit: Neraca, Laba Rugi, Rasio, Modal Kerja, Kapasitas, Sensitivitas, 5C, Red Flag, Rekomendasi
 
-Modul analisis menyimpan hasil analisis per permohonan di tabel `analisis_*`, dengan `parameter_kebijakan_id` sebagai referensi versi (memenuhi BR-08). Sebagian penghitungan dilakukan engine (kapasitas, scoring), sebagian diisi manual (neraca, laba rugi, 7 aspek).
+> **Ringkas:** modul ini mengubah data permohonan menjadi **bukti kelayakan** (rasio, kapasitas, skor, red flag) lalu **rekomendasi**. Satu permohonan = satu rangkaian baris `analisis_*` dengan `parameter_kebijakan_id` berversi (BR-08). Angka contoh di bab ini **dummy**; ambang/band final berstatus `[K]` sampai D-02/D-11 diputuskan.
 
-## 7.1 Neraca `[E]` — `analisis_neraca`
-Tabel `analisis_neraca` (satu baris per permohonan, unique). Kolom `decimal(15,2) default 0`: `kas_inventaris, bank_simpanan, piutang, persediaan, sewa_dibayar_dimuka, biaya_dibayar_dimuka, pajak_dibayar_dimuka, investasi_jangka_panjang, tanah_bangunan, kebun, kendaraan, aset_lain, jumlah_aktiva_lancar, jumlah_aktiva_tetap, total_aktiva, hutang_pendek, hutang_pajak, hutang_gaji, hutang_panjang, pinjaman_bank, pinjaman_lain, prive, jumlah_hutang, rugi_laba_ditahan, ekuitas_modal_disetor, jumlah_modal, total_pasiva, selisih_cek` + `catatan`.
+<details>
+<summary><b>Cara membaca bab ini (klik)</b></summary>
 
-**API** `GET/PUT /api/v1/permohonan/{id}/analisis/neraca`:
-- `neracaShow` → kembalikan `permohonan->neraca`.
-- `neracaUpdate` → validasi semua kolom `nullable numeric`; `updateOrCreate` dengan `parameter_kebijakan_id` dari permohonan.
-Klasifikasi aset **eksplisit per kolom** (menghindari double-count `SUMIF *Tanah*/*Kebun*` pada Excel — T6).
+- Tabel dan rumus adalah **kontrak** yang dipakai engine; rujukan file ada di tiap bagian.
+- Blok **“Contoh”** memakai angka dummy yang bisa dihitung ulang.
+- Label `[E]` = terverifikasi dari kode/test; `[K]` = perlu keputusan/verifikasi; `[Rencana]` = belum ada.
+- Untuk status & gap terkini, lihat [Bab 20](Bab-20-Known-Issues-Gap-Rencana).
+</details>
 
-## 7.2 Laba Rugi `[E]` — `analisis_laba_rugi`
-Kolom `decimal(15,2)`: `penghasilan_pemohon, penghasilan_pasangan_gaji, penghasilan_lain_pemohon, penghasilan_pasangan_tpp, hpp, biaya_listrik_air, biaya_transport, biaya_sewa, biaya_gaji, biaya_pendidikan, biaya_kesehatan, biaya_konsumsi, biaya_cicilan_lain, biaya_telepon, biaya_kebersihan, biaya_lain, total_pendapatan, total_pengeluaran, laba_kotor, penyusutan, pajak, laba_bersih, angsuran_kredit_berjalan, surplus_per_bulan, surplus_6_bulan` + `jumlah_bulan_berjalan(default 6)`.
+## 7.1 Peta alur analisis (permohonan → rekomendasi)
+| # | Langkah | Input utama | Engine / tabel | Output | Aturan |
+|---|---|---|---|---|---|
+| 1 | Neraca & Laba Rugi | saldo akun, pendapatan, biaya | `analisis_neraca`, `analisis_laba_rugi` | total aktiva/pasiva, surplus | BR-08 |
+| 2 | Rasio keuangan | neraca & LR | `RasioKeuanganCalculator` → `analisis_rasio` | current/quick/cash, D/A, D/E, E/A, NPM, ROA, ROE | — |
+| 3 | Modal kerja | biaya operasional, perputaran, persediaan | `ModalKerjaCalculator` → `analisis_modal_kerja` | kebutuhan MK, gap | BR-10 |
+| 4 | Kapasitas bayar | surplus, angsuran, plafon, jaminan | `Idir/Dscr/PlafonMax/Ltv` → `analisis_kapasitas_bayar` | RPC, DSCR, IDIR, LTV, plafon max, balloon | BR-02/03/11/13 |
+| 5 | Sensitivitas | delta omzet/biaya | `analisis_sensitivitas` | surplus/RPC/DSCR per skenario | BR-12 |
+| 6 | Scoring 5C | SLIK, DSCR, E/A, LTV, condition | `Scoring5CService` → `analisis_scoring_5c` | skor aspek, total, rating | BR-01 |
+| 7 | Red flag | seluruh hasil | `RedFlagEvaluator` → `analisis_red_flags` | daftar CRITICAL/WARNING | — |
+| 8 | Rekomendasi | rating + plafon max | `RekomendasiService` → `analisis_rekomendasi` | plafon/tenor/rate final + narasi | — |
+| 9 | Approval | dokumen & hasil | `ApprovalService` (Bab 10/24) | status permohonan | BR-05/06/07 |
 
-**API** `GET/PUT .../laba-rugi`: validasi `jumlah_bulan_berjalan` 1–12; `updateOrCreate`. `surplus_per_bulan` menjadi input kapasitas bayar.
+## 7.2 Neraca & Laba Rugi `[E]`
+**Neraca** (`analisis_neraca`, satu baris per permohonan): `kas_inventaris, bank_simpanan, piutang, persediaan, sewa_dibayar_dimuka, biaya_dibayar_dimuka, pajak_dibayar_dimuka, investasi_jangka_panjang, tanah_bangunan, kebun, kendaraan, aset_lain, jumlah_aktiva_lancar, jumlah_aktiva_tetap, total_aktiva, hutang_pendek, hutang_pajak, hutang_gaji, hutang_panjang, pinjaman_bank, pinjaman_lain, prive, jumlah_hutang, rugi_laba_ditahan, ekuitas_modal_disetor, jumlah_modal, total_pasiva, selisih_cek, catatan`.
 
-## 7.3 Rasio Keuangan `[E]`
-Tabel `analisis_rasio` menyimpan: `current_ratio, quick_ratio, cash_ratio, debt_to_asset, debt_to_equity, equity_to_asset, net_profit_margin, roa_annualized, roe_annualized` (decimal(10,4) nullable).
-**Kalkulator** `RasioKeuanganCalculator` menyediakan `currentRatio, quickRatio, cashRatio, debtToAsset, debtToEquity, equityToAsset, netProfitMargin, roa, roe`, dan `semua(array)`. Pembagi ≤0 → hasil `0.0` (aman). Pembulatan `Rounding::ratio` (4 desimal).
-> `equity_to_asset` dipakai sebagai `capital` pada scoring 5C (Bab 9).
+**Laba rugi** (`analisis_laba_rugi`): `penghasilan_pemohon, penghasilan_pasangan_gaji, penghasilan_lain_pemohon, penghasilan_pasangan_tpp, hpp, biaya_listrik_air, biaya_transport, biaya_sewa, biaya_gaji, biaya_pendidikan, biaya_kesehatan, biaya_konsumsi, biaya_cicilan_lain, biaya_telepon, biaya_kebersihan, biaya_lain, total_pendapatan, total_pengeluaran, laba_kotor, penyusutan, pajak, laba_bersih, angsuran_kredit_berjalan, surplus_per_bulan, surplus_6_bulan, jumlah_bulan_berjalan`.
 
-## 7.4 Modal Kerja `[E]` — `analisis_modal_kerja`
-Kolom: `periode_perputaran_hari, biaya_operasional_tahunan, perputaran_kas_per_tahun, kebutuhan_mk_cash_turnover, pembelian_bulanan, hari_persediaan, kebutuhan_mk_wcd, mk_tersedia, rata_rata_kebutuhan_mk, gap_mk, omzet_bulanan, kebutuhan_mk_persen_omzet`.
+<details>
+<summary><b>Kenapa kolom eksplisit, bukan SUMIF? (T6)</b></summary>
 
-**Kalkulator** `ModalKerjaCalculator::hitung(biayaOperasionalTahunan, periodePerputaranHari, pembelianBulanan, hariPersediaan, mkTersedia, hariKerjaPerTahun)` menghasilkan:
-- `perputaran_kas_per_tahun = hariKerjaPerTahun / periodePerputaranHari` (0 bila periode 0).
-- `kebutuhan_cash_turnover = biayaOperasionalTahunan / perputaran` (perputaran 0 → 0).
-- `kebutuhan_wcd = (pembelianBulanan / 30) * hariPersediaan`.
-- `rata_rata = (cash_turnover + wcd) / 2`.
-- `gap = max(0, rata_rata − mkTersedia)`.
-`hariKerjaPerTahun` diambil dari policy `hari_kerja_per_tahun` (default 360).
+Excel lama memakai `SUMIF *Tanah*` dan `*Kebun*` sehingga aset bisa **terhitung ganda** dan ekuitas menjadi “plug”. Di aplikasi, setiap komponen punya kolom sendiri; total dijumlah eksplisit. `selisih_cek` menyimpan selisih neraca (tidak di-plug) agar analis melihat ketidakseimbangan.
+</details>
 
-## 7.5 Kapasitas Bayar `[E]` — `analisis_kapasitas_bayar`
-Menghitung RPC, DSCR (diajukan & rekomendasi), plafon maksimum (flat/anuitas/grace), LTV, IDIR, balloon, status kelayakan. **API** `POST /api/v1/permohonan/{id}/analisis/kapasitas/compute` (lihat Bab 8 §8.3 untuk rumus & alur). Parameter: `margin_kapasitas_bayar` (0.5), `minimum_dscr` (1.0), `maksimum_ltv` (0.7), `rasio_balloon_layak` (1.10), `rasio_balloon_perhatian` (1.00).
+**API:** `GET/PUT /api/v1/permohonan/{id}/analisis/neraca` dan `.../laba-rugi` (`updateOrCreate`; validasi `jumlah_bulan_berjalan` 1–12). **`surplus_per_bulan`** menjadi input kapasitas.
 
-## 7.6 Sensitivitas `[E]` — `analisis_sensitivitas`
-Baris per skenario: `urutan`, `nama_skenario`, `delta_omzet(5,4)`, `delta_biaya(5,4)`, `total_pendapatan`, `total_pengeluaran_non_angsuran`, `surplus_baru`, `rpc_baru`, `dscr`, `status_layak`. Unique `(permohonan_id, urutan)`.
-Parameter policy terkait: `sensitivitas_omzet_ringan` (0.10), `sensitivitas_omzet_berat` (0.20), `sensitivitas_biaya` (0.10).
-Dipakai BR-12 (SOFT, skenario terburuk tidak layak) dan red flag `STRESS_TIDAK_LAYAK`.
+## 7.3 Rasio keuangan `[E]`
+`RasioKeuanganCalculator` (pembagi ≤ 0 → `0.0`, pembulatan `Rounding::ratio` 4 desimal):
+| Rasio | Rumus |
+|---|---|
+| `current_ratio` | aktiva lancar / hutang pendek |
+| `quick_ratio` | (aktiva lancar − persediaan) / hutang pendek |
+| `cash_ratio` | kas & bank / hutang pendek |
+| `debt_to_asset` | total hutang / total aktiva |
+| `debt_to_equity` | total hutang / ekuitas |
+| `equity_to_asset` | ekuitas / total aktiva |
+| `net_profit_margin` | laba bersih / pendapatan |
+| `roa` / `roe` | laba bersih / total aktiva · laba bersih / ekuitas (annualized) |
 
-## 7.7 Scoring 5C `[E]` — `analisis_scoring_5c` + `Scoring5CService`
-Kolom: `skor_character/capacity/capital/collateral/condition` (3,2), `bobot_*` (5,4), `skor_tertimbang`, `skor_total` (5,4), `rating(50)`, `overridden(bool)`, `override_reason`, `justifikasi_*`.
-**Algoritma** (`Scoring5CService::hitung(permohonan, skorCondition)`), `skorCondition` wajib 1–5:
-1. Hitung `kol3` (SLIK kode ≥3) & `macet` (kode = 5).
+`equity_to_asset` dipakai sebagai **Capital** pada 5C (Bab 9/24).
+
+## 7.4 Modal kerja `[E]`
+`ModalKerjaCalculator::hitung(...)`:
+- `perputaran_kas_per_tahun = hari_kerja / periode_perputaran` (0 bila periode 0)
+- `kebutuhan_cash_turnover = biaya_operasional_tahunan / perputaran`
+- `kebutuhan_wcd = (pembelian_bulanan / 30) × hari_persediaan`
+- `rata_rata = (cash_turnover + wcd) / 2`
+- `gap = max(0, rata_rata − mk_tersedia)`
+
+<details>
+<summary><b>Contoh perhitungan modal kerja (dummy)</b></summary>
+
+Biaya operasional Rp120.000.000/tahun · periode perputaran 60 hari · hari kerja 360 · pembelian Rp10.000.000/bulan · persediaan 15 hari · MK tersedia Rp10.000.000.
+
+- perputaran = 360/60 = **6×/tahun**
+- cash turnover = 120.000.000/6 = **Rp20.000.000**
+- WCD = (10.000.000/30)×15 = **Rp5.000.000**
+- rata-rata kebutuhan = (20.000.000+5.000.000)/2 = **Rp12.500.000**
+- gap = 12.500.000 − 10.000.000 = **Rp2.500.000**
+
+Hasil ini yang dibandingkan BR-10 (kewajaran plafon) dan menjadi bahan mitigasi.
+</details>
+
+## 7.5 Kapasitas bayar: RPC, DSCR, IDIR, LTV, plafon maksimum `[E]`
+| Istilah | Rumus / kode | Catatan |
+|---|---|---|
+| **RPC** | `surplus_bulanan × margin_kapasitas_bayar` (`DscrCalculator::rpc`) | margin ACTIVE seeder = 0,5 `[K D-11]` |
+| **DSCR** | `RPC / angsuran_bulanan` (`DscrCalculator::dscr`) | minimum ACTIVE = 1,0; `≥` layak |
+| **IDIR** | `angsuran_bulanan / penghasilan_bersih` (`IdirCalculator`) | ambang ACTIVE `idir_threshold_tpp` = 0,35 `[K D-11]`; `≤` layak |
+| **LTV** | `plafon / nilai_jaminan` (`LtvCalculator`) | maksimum ACTIVE = 0,7; `>` melanggar |
+| **Plafon max flat** | `RPC / (1/n + r/12)` (`PlafonMaxCalculator::flat`) | n=tenor, r=rate/tahun |
+| **Plafon max anuitas** | `RPC × (1 − (1+i)^−n) / i` (`PlafonMaxCalculator::anuitas`) | `i = r/12` |
+| **Plafon max grace** | `RPC / (r/12)` (`PlafonMaxCalculator::grace`) | batas bunga periodik; balloon terpisah |
+
+<details>
+<summary><b>Contoh A — kasus C-002 (dummy): IDIR tinggi</b></summary>
+
+Net income Rp2.948.080 · angsuran Rp2.533.333 (flat 80jt/18%/60).
+- IDIR = 2.533.333 / 2.948.080 = **0,8593 → 85,93%**.
+- Ambang ACTIVE 0,35 → **BR-11 (SOFT) gagal**; dengan DRAFT 0,80 pun tetap di atas.
+- RPC (margin 0,5) = 2.948.080 × 0,5 = **Rp1.474.040**; DSCR = 1.474.040 / 2.533.333 = **0,582 → BR-02 (HARD) gagal**.
+- Kesimpulan: kasus ini **tidak layak**; IDIR/DSR adalah **hard/soft gate**, bukan sekadar angka.
+</details>
+
+<details>
+<summary><b>Contoh B — kasus aman (dummy)</b></summary>
+
+Net income Rp5.000.000 · angsuran Rp1.500.000 · margin 0,5 · plafon 80jt · jaminan 120jt.
+- RPC = **Rp2.500.000**; DSCR = 2.500.000/1.500.000 = **1,667** (≥1,0 layak).
+- IDIR = 1.500.000/5.000.000 = **30%** (≤0,35 layak).
+- LTV = 80.000.000/120.000.000 = **0,6667** (≤0,7 layak).
+- Plafon max flat (n=60, r=18%, RPC 2,5jt) = **Rp78.947.368**; anuitas = **Rp98.450.672**.
+</details>
+
+**API:** `GET .../analisis/kapasitas`, `POST .../analisis/kapasitas/compute`. **UI:** Bab 14.
+
+## 7.6 Sensitivitas `[E]`
+Baris per skenario (`urutan`, `nama_skenario`, `delta_omzet`, `delta_biaya`, `surplus_baru`, `rpc_baru`, `dscr`, `status_layak`). Policy ACTIVE: omzet ringan 0,10 · berat 0,20 · biaya 0,10. Dipakai **BR-12 (SOFT)** dan red flag `STRESS_TIDAK_LAYAK`.
+
+## 7.7 Scoring 5C `[E]`
+`Scoring5CService::hitung(permohonan, skorCondition 1–5)`:
+1. Hitung `kol3` (SLIK kode ≥3) dan `macet` (kode =5).
 2. `bermasalah` = `kol3 ≥ threshold_slik_kol3` **atau** `macet ≥ threshold_slik_macet`.
-3. Skor aspek dari **band policy**:
-   - `character` = `bandSlik(skor_band_slik, kol3)`.
-   - `capacity` = `bandMin(skor_band_dscr, dscr)`.
-   - `capital` = `bandMin(skor_band_equity_asset, equity_to_asset)`.
-   - `collateral` = `bandMax(skor_band_ltv, ltv)`.
-   - `condition` = input manual (1–5).
-4. `skor_tertimbang = Σ(skor × bobot)`; `bobot` dari policy (`bobot_character` 0.25, `capacity` 0.30, `capital` 0.15, `collateral` 0.20, `condition` 0.10).
-5. **`skor_total = bermasalah ? 1.0 : skor_tertimbang`** (BR-01 override).
-6. **Rating**: bila `bermasalah` → `TIDAK LAYAK`; selain itu bandingkan `skor_total` dengan `rating_sangat_layak_min`(4.0)/`rating_layak_min`(3.0)/`rating_bersyarat_min`(2.0) → `SANGAT LAYAK/LAYAK/LAYAK BERSYARAT/TIDAK LAYAK`.
-7. `overridden` = `bermasalah`, `override_reason` = `BR-01: riwayat SLIK bermasalah`.
+3. Skor aspek dari band policy: Character (`skor_band_slik`), Capacity (`skor_band_dscr`), Capital (`skor_band_equity_asset`), Collateral (`skor_band_ltv`), Condition (input).
+4. `skor_tertimbang = Σ(skor × bobot)`; bobot ACTIVE 0,25/0,30/0,15/0,20/0,10.
+5. `skor_total = bermasalah ? 1,0 : skor_tertimbang` (**BR-01 override**).
+6. Rating: `bermasalah → TIDAK LAYAK`; selain itu bandingkan dengan `rating_sangat_layak_min` 4,0 · `rating_layak_min` 3,0 · `rating_bersyarat_min` 2,0.
 
-**API** `POST .../scoring/compute` (validasi `skor_condition` 1–5, + justifikasi opsional) → simpan + ledger `ANALISIS_DISIMPAN` (bagian `scoring`).
+<details>
+<summary><b>Contoh scoring (dummy)</b></summary>
 
-## 7.8 Red Flags `[E]` — `RedFlagEvaluator` + `analisis_red_flags`
-`RedFlagEvaluator::evaluate(permohonan)` menghasilkan daftar:
+Skor: Character 4 · Capacity 3 · Capital 4 · Collateral 3 · Condition 3.
+Bobot: 0,25/0,30/0,15/0,20/0,10.
+`skor_tertimbang = 4(0,25)+3(0,30)+4(0,15)+3(0,20)+3(0,10) = 1,00+0,90+0,60+0,60+0,30 = **3,40**` → **LAYAK** (≥3,0 dan <4,0).
+
+Jika SLIK bermasalah (kol3 ≥ threshold), `skor_total` dipaksa **1,0** → **TIDAK LAYAK** walau skor aspek lain tinggi (BR-01).
+</details>
+
+**API:** `GET .../analisis/scoring`, `POST .../analisis/scoring/compute` (validasi `skor_condition` 1–5; simpan + ledger `ANALISIS_DISIMPAN`).
+
+## 7.8 Red flag `[E]` — `RedFlagEvaluator`
 | Kode | Level | Kondisi |
 |---|---|---|
 | `SLIK_BERMASALAH` | CRITICAL | kol3/macet ≥ threshold |
@@ -67,27 +140,24 @@ Kolom: `skor_character/capacity/capital/collateral/condition` (3,2), `bobot_*` (
 | `BALLOON_KURANG` | CRITICAL | `rasio_kecukupan_balloon < rasio_balloon_perhatian` |
 | `STRESS_TIDAK_LAYAK` | WARNING | ada sensitivitas `status_layak=false` |
 | `CHECKLIST_KURANG` | WARNING | checklist wajib belum lengkap |
-| `IDENTITAS_KURANG` | WARNING | debitur null / tanpa tanggal lahir / tanpa no_ktp |
+| `IDENTITAS_KURANG` | WARNING | debitur null/tanpa tanggal lahir/tanpa no_ktp |
 
-Tabel `analisis_red_flags`: `kode`, `level` (enum `LevelRedFlag` CRITICAL/WARNING/INFO), `pesan`, `sumber(default SISTEM)`, `teratasi`, `mitigasi`, `pemilik_mitigasi`, `tenggat`. Unique `(permohonan_id, kode)`; index parsial CRITICAL.
-**API** `GET .../red-flags`.
+Tabel: `kode`, `level` (`CRITICAL/WARNING/INFO`), `pesan`, `sumber`, `teratasi`, `mitigasi`, `pemilik_mitigasi`, `tenggat`; unique `(permohonan_id, kode)`; index parsial CRITICAL.
 
-## 7.9 Rekomendasi `[E]` — `RekomendasiService` + `analisis_rekomendasi`
-`generate(permohonan, scoring)`:
-1. `rating` → `rekomendasi`: SANGAT LAYAK/LAYAK → `DISETUJUI`; LAYAK BERSYARAT → `DISETUJUI DENGAN SYARAT`; TIDAK LAYAK → `DITOLAK`.
+## 7.9 Rekomendasi `[E]` — `RekomendasiService`
+1. `rating → rekomendasi`: SANGAT LAYAK/LAYAK → `DISETUJUI`; LAYAK BERSYARAT → `DISETUJUI DENGAN SYARAT`; TIDAK LAYAK → `DITOLAK`.
 2. `plafon_kandidat = min(plafon_rekomendasi|plafon_diajukan, plafon_max_flat)`.
-3. `plafon_final = (DITOLAK ? 0 : Rounding::money(kandidat))`.
-4. `tenor_final`, `rate_final`; `angsuran_final` dihitung `AngsuranCalculator` (total) bila plafon&tenor>0.
-5. `narasi` menyertakan rating, skor, plafon, tenor, rate.
-**API** `POST .../rekomendasi` (butuh scoring 5C; jika belum → 422). Mengisi `analisis_rekomendasi` (`rekomendasi_sistem, narasi, plafon_final, tenor_final, rate_final, angsuran_final, syarat, covenant, catatan`).
+3. `plafon_final = DITOLAK ? 0 : Rounding::money(kandidat)`; `tenor_final`, `rate_final`, `angsuran_final`.
+4. `narasi` memuat rating, skor, plafon, tenor, rate.
+**API:** `POST .../analisis/rekomendasi` (butuh scoring; jika belum → 422).
 
 ## 7.10 7 Aspek `[E]` — `analisis_7aspek`
-Kolom teks: `aspek_manfaat, aspek_teknis, aspek_manajemen, aspek_pemasaran, aspek_keuangan, aspek_jaminan, kesimpulan, usul`. (Naratif analis.)
+Naratif analis: `aspek_manfaat, aspek_teknis, aspek_manajemen, aspek_pemasaran, aspek_keuangan, aspek_jaminan, kesimpulan, usul`.
 
-## 7.11 Ringkasan endpoint analisis `[E]`
+## 7.11 Endpoint & UI
 | Method | Endpoint | Bagian |
 |---|---|---|
-| GET/PUT | `.../analisis/neraca` | Neraca |
+| GET/PUT | `/api/v1/permohonan/{id}/analisis/neraca` | Neraca |
 | GET/PUT | `.../analisis/laba-rugi` | Laba rugi |
 | GET | `.../analisis/kapasitas` | Kapasitas (baca) |
 | POST | `.../analisis/kapasitas/compute` | Kapasitas (hitung & simpan) |
@@ -96,8 +166,30 @@ Kolom teks: `aspek_manfaat, aspek_teknis, aspek_manajemen, aspek_pemasaran, aspe
 | GET | `.../analisis/red-flags` | Red flags |
 | POST | `.../analisis/rekomendasi` | Rekomendasi |
 
-## 7.12 Catatan & gap
-- **Definisi IDIR/DSR & komponen penghasilan** = `[K]` (D-11); golden C-002 konflik (Bab 20).
-- Band & bobot 5C seeder bertanda **`skor_band_draft=true`** → DRAFT `[K]` (D-02).
-- DSR total (angsuran eksisting SLIK otomatis) belum `[Rencana]` (T2).
-- Presisi: kolom `decimal` di DB, tetapi kalkulasi PHP di `float` `[E]`; target Money/BIGINT `[K]`.
+**UI:** workbench analisis + simulator ada di [Bab 14](Bab-14-UI-Web-Livewire) dan [Bab 8](Bab-08-Perhitungan-Jadwal-EIR-Simulasi).
+
+## 7.12 Uji cepat & bukti (jalankan sendiri)
+<details>
+<summary><b>Perintah verifikasi</b></summary>
+
+```bash
+# kalkulator & golden
+php artisan test --filter=Calculation
+php artisan test --filter=GoldenRecomputedParityTest
+
+# aturan & scoring
+php artisan test --filter=BusinessRuleTest
+php artisan test --filter=Scoring5CTest
+
+# seluruh gate
+bash scripts/verify.sh --full
+```
+Berkas kunci: `app/Services/Calculation/*`, `app/Services/Scoring/*`, `app/Services/Rules/Rules/BR0*.php`, `tests/Feature/Calculation/*`.
+</details>
+
+## 7.13 Batas & gap `[K]`
+- Definisi **IDIR/DSR** dan komponen penghasilan bersih = `[K]` (D-11); golden C-002 konflik (Bab 20).
+- **DSR total** (angsuran eksisting SLIK otomatis) belum diimplementasikan `[Rencana/T2]`.
+- Band & bobot 5C seeder bertanda `skor_band_draft=true` → **DRAFT** `[K D-02]`.
+- Presisi: kolom DB `decimal`, kalkulasi PHP `float`; target Money/BIGINT `[K D-05]`.
+- Ambang policy ACTIVE (0,35/0,5/0,7) vs rekomendasi DRAFT (0,80/0,80/0,80) → putuskan lewat D-11/D-07.
