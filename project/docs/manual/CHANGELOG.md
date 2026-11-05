@@ -14,3 +14,9 @@ Semua perubahan manual dicatat di sini (append-oriented). Format: tanggal, versi
 - **Wiki:** mekanisme publikasi manual → GitHub Wiki ditambahkan (`project/scripts/build-wiki.py`, `scripts/publish-wiki.sh`); 32 halaman (Home, _Sidebar, _Footer, Bab 1–23, + lampiran). Bab 22 §22.7b diperbarui.
 - **Keamanan:** `.gitignore` mengecualikan `*token*`, `.env*`, `*.key/*.pem`, `.DS_Store`; file token ditemukan di 2 lokasi (`/` dan `project/docs/spec/`) — **tidak dipublikasikan**.
 - **Master Excel (KRITIS):** 3 workbook (kasus TPP, MASTER Modal Kerja, MASTER Grace Period) di workspace lokal **tidak** masuk repo (terverifikasi 404 di remote). **Nama/ukuran/lokasi berkas tidak didokumentasikan** (hanya pola generik `*.xlsx/*.xls/*.xlsm` di `.gitignore`).
+
+## 0.1.2 — 2026-11-05 (PRD + ERD → wiki)
+- **Dokumen produk baru (root repo):** `PRD.md` — Product Requirements (ringkasan, persona, ruang lingkup & non-goal, FR-01..FR-11, koreksi wajib T1–T14, NFR, keputusan D-01..D-12, milestone F0–F9); `ERD.md` — Entity Relationship (konvensi skema, peta domain, ERD Mermaid inti + per domain, relasi/kardinalitas, kolom kunci & invariant, enum, entitas target `[Rencana]`, gap skema).
+- **Bukti `[E]`:** 61 migrasi · 55 model · 35 enum pada repo `loan-analytic-bpr` (nama tabel aktual: `debitur`, `permohonan_kredit`, `analisis_*`, `kredit`, `jadwal_angsuran`, `ledger`, dll).
+- **Wiki:** `project/scripts/build-wiki.py` diperluas → publikasi dokumen root sebagai halaman `PRD` & `ERD`; Home + `_Sidebar` menambah bagian **Dokumen Produk**. Wiki kini **34 halaman**.
+- **Guardrail:** tautan internal diverifikasi ke berkas nyata; tanpa nama/ukuran/lokasi workbook Excel maupun path absolut.

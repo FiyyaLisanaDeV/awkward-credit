@@ -57,6 +57,13 @@ EXTRA = [
     ("MANIFEST.md", "Manual-MANIFEST", "Manual MANIFEST"),
 ]
 
+# dokumen root repo -> halaman wiki (nama berkas di repo root)
+ROOT = [
+    ("PRD.md", "PRD", "PRD — Product Requirements"),
+    ("ERD.md", "ERD", "ERD — Entity Relationship"),
+]
+ROOT_SLUG = {f: s for f, s, _ in ROOT}
+
 # target relatif (dari manual/) -> slug wiki
 SLUG = {
     "chapters/" + f: s for f, s, _ in CHAPTERS
@@ -107,6 +114,26 @@ def convert_links(text: str, src_rel: str) -> str:
     return LINK_RE.sub(repl, text)
 
 
+def convert_root_links(text: str, src_rel: str) -> str:
+    """Tautan pada dokumen root (PRD/ERD): PRD/ERD -> slug wiki, sisanya -> blob repo."""
+
+    def repl(m: re.Match) -> str:
+        target = m.group(1).strip()
+        if target.startswith(("http://", "https://", "mailto:", "#")):
+            return m.group(0)
+        frag = ""
+        if "#" in target:
+            target, frag = target.split("#", 1)
+            frag = "#" + frag
+        if target in ROOT_SLUG:
+            return "](" + ROOT_SLUG[target] + frag + ")"
+        clean = os.path.normpath(os.path.join(os.path.dirname(src_rel), target))
+        clean = clean.replace(os.sep, "/").lstrip("./")
+        return "](" + BLOB + "/" + clean + frag + ")"
+
+    return LINK_RE.sub(repl, text)
+
+
 def read(path: str) -> str:
     with open(path, encoding="utf-8") as fh:
         return fh.read()
@@ -145,6 +172,15 @@ def build() -> None:
         body += nav(None, None, None, None)
         write(slug, body)
 
+    # 2b) Dokumen root (PRD/ERD)
+    for fname, slug, _title in ROOT:
+        src = os.path.join(REPO, fname)
+        if not os.path.isfile(src):
+            continue
+        body = convert_root_links(read(src), fname)
+        body += nav(None, None, None, None)
+        write(slug, body)
+
     # 3) Home
     toc = "\n".join(f"{i+1}. [{t}]({s})" for i, (_f, s, t) in enumerate(CHAPTERS))
     home = f"""# Manual Book — Loan Analytic BPR
@@ -163,6 +199,10 @@ Manual lengkap yang mencakup seluruh fungsi aplikasi, disusun dari bukti kode/ro
 | `[K]` | Perlu verifikasi (angka/pasal/kebijakan/golden). |
 | `[H]` | Keputusan bertanda tangan. |
 | `[Rencana]` | Belum terimplementasi. |
+
+## Dokumen produk
+- [PRD — Product Requirements](PRD) — ruang lingkup, kebutuhan, koreksi wajib, NFR, milestone
+- [ERD — Entity Relationship](ERD) — skema data (tabel/model/enum), relasi, invariant, gap
 
 ## Daftar isi
 {toc}
@@ -198,6 +238,10 @@ _Perbarui manual setiap kali fitur/fungsi menjadi **final** — lihat [Bab 22](B
         for _f, s, t in items:
             lines.append(f"- [{t}]({s})")
         lines.append("")
+    lines.append("**Dokumen Produk**")
+    for _f, s, t in ROOT:
+        lines.append(f"- [{t}]({s})")
+    lines.append("")
     lines.append("**Lampiran**")
     for _f, s, t in EXTRA:
         lines.append(f"- [{t}]({s})")

@@ -37,6 +37,8 @@
 | `templates/fitur-final-entry.md` | Template entri fitur final |
 | `templates/checklist-pr.md` | Checklist PR update manual |
 | `templates/evidence-note.md` | Catatan bukti |
+| `PRD.md` (root repo) | Product Requirements → wiki `PRD` |
+| `ERD.md` (root repo) | Entity Relationship (skema data) → wiki `ERD` |
 
 ## Prosedur singkat pembaruan
 1. `bash scripts/manual-snapshot.sh` → bandingkan dengan tabel Snapshot di atas.
@@ -48,3 +50,5 @@
 | Versi | Tanggal | Ringkasan |
 |---|---|---|
 | 0.1 | 2026-11-05 | Inisialisasi 23 bab + mekanisme update (templates, CHANGELOG, MANIFEST, snapshot script) |
+| 0.1.1 | 2026-11-05 | Publikasi repo + wiki (32 halaman) |
+| 0.1.2 | 2026-11-05 | Tambah dokumen produk `PRD.md` + `ERD.md` → wiki (34 halaman) |

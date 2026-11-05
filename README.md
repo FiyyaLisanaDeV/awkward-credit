@@ -18,6 +18,10 @@ Nama berkas, ukuran, dan lokasi workbook **tidak didokumentasikan di repo ini** 
 
 > Semua fakta struktur bersumber dari enumerasi file + ekstraksi struktural (ZIP/XML) `[E]`. Nilai sel identitas **tidak dicatat**. Data input workbook bersifat **dummy** `[E user]`; fixture/golden diberi label sumber tanpa memuat PII.
 
+## Dokumen produk
+- [PRD.md](PRD.md) — Product Requirements: ruang lingkup, kebutuhan fungsional/non-fungsional, koreksi wajib, keputusan terbuka, milestone.
+- [ERD.md](ERD.md) — Entity Relationship: skema data (tabel/model/enum), relasi & kardinalitas, invariant, gap skema.
+
 ## Daftar dokumen perencanaan
 1. [01-inventaris-excel.md](01-inventaris-excel.md) — inventaris struktur 3 workbook: sheet, rumus kunci, input/label/dropdown, output, dependency, delta X2↔X3.
 2. [02-pemetaan-excel-ke-aplikasi.md](02-pemetaan-excel-ke-aplikasi.md) — pemetaan sheet→modul/domain, field→tabel/DTO, dokumen→template, import→adapter.
