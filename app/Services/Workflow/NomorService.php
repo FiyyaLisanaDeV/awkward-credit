@@ -14,9 +14,11 @@ final class NomorService
         $tahun = now()->format('Y');
         $prefix = $cabang->kode.'/'.$tahun.'/';
 
+        /** @phpstan-ignore larastan.noUnnecessaryCollectionCall (PostgreSQL: FOR UPDATE not allowed with aggregate count; rows locked then counted) */
         $terakhir = DB::table('permohonan_kredit')
             ->where('no_permohonan', 'like', $prefix.'%')
             ->lockForUpdate()
+            ->pluck('id')
             ->count();
 
         $padding = (int) config('loan.nomor.urut_padding');

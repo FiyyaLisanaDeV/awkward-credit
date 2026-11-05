@@ -12,10 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Models\RefParameterKebijakan;
 use App\Models\SimulasiKredit;
 use App\Services\Ledger\ChainHasher;
-use App\Services\Policy\PolicyParameterResolver;
 use App\Services\Simulation\SimulationEngine;
-use App\Services\Simulation\SimulationService;
-use App\Support\Konstanta;
+use App\Services\Simulation\SimulationRunner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -56,23 +54,7 @@ final class SimulasiController extends Controller
             'debitur_id' => ['nullable', 'uuid', 'exists:debitur,id'],
         ]);
 
-        $parameters = app(PolicyParameterResolver::class)->active();
-        $engine = app(SimulationEngine::class);
-
-        $mulai = microtime(true);
-        $output = $engine->run($data, $parameters);
-        $durasi = (int) round((microtime(true) - $mulai) * Konstanta::MILI_PER_DETIK);
-
-        $simulasi = app(SimulationService::class)->record(
-            $request->user(),
-            (string) $data['label'],
-            ProdukTipe::from((string) $data['produk_tipe']),
-            SistemSukuBunga::from((string) $data['sistem_suku_bunga']),
-            $parameters,
-            $data,
-            $output,
-            $durasi,
-        );
+        $simulasi = app(SimulationRunner::class)->execute($data, $request->user());
 
         return response()->json($simulasi, 201);
     }

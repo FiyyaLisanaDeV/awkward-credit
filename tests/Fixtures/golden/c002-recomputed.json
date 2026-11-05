@@ -1,0 +1,43 @@
+{
+  "source": "reference-calculator-v1 (recomputed DRAFT, best judgment)",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "note": "Koreksi C-002 (net 2.948.080 / IDIR 85.93% / RATE x12 28.88%). Bukan verified. Human sign-off (RAT-02/D-05/D-11) masih diperlukan.",
+  "input": {
+    "plafon": 80000000,
+    "rate": 0.18,
+    "tenor": 60,
+    "sistem_suku_bunga": "Flat"
+  },
+  "expected": {
+    "angsuran": 2533333.33,
+    "idir": 0.8593,
+    "penghasilan_bersih": 2948080,
+    "eir_irr_pa": 0.2888,
+    "eir_effective_annual": 0.3302,
+    "sum_pokok": 80000000,
+    "saldo_akhir": 0
+  },
+  "capacity": {
+    "surplus_bulanan": 5000000,
+    "margin_kapasitas": 0.8,
+    "rpc": 4000000,
+    "rate": 0.18,
+    "tenor": 60,
+    "max_plafon_flat": 126315789,
+    "max_plafon_anuitas": 157521076
+  },
+  "modal_kerja": {
+    "biaya_operasional_tahunan": 120000000,
+    "periode_perputaran_hari": 60,
+    "hari_kerja_per_tahun": 360,
+    "kebutuhan_cash_turnover": 20000000
+  },
+  "ltv": {
+    "exposure": 50000000,
+    "nilai_ppka": 70000000,
+    "ltv": 0.7143,
+    "ltv_basis": "PPKA_SINGLE_BASIS_DRAFT"
+  }
+}

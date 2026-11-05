@@ -4,32 +4,20 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\LedgerEvent;
-use App\Enums\StatusPermohonan;
 use App\Http\Controllers\Concerns\ScopesByCabang;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Permohonan\StorePermohonanRequest;
-use App\Models\Cabang;
 use App\Models\Debitur;
 use App\Models\PermohonanKredit;
-use App\Services\Ledger\LedgerService;
-use App\Services\Policy\PolicyParameterResolver;
-use App\Services\Rules\Rules\BR04BalloonWajib;
-use App\Services\Rules\Rules\BR08ParameterTersimpan;
-use App\Services\Workflow\NomorService;
+use App\Services\Permohonan\PermohonanService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 final class PermohonanController extends Controller
 {
     use ScopesByCabang;
 
-    public function __construct(
-        private readonly NomorService $nomor,
-        private readonly PolicyParameterResolver $parameters,
-        private readonly LedgerService $ledger,
-    ) {}
+    public function __construct(private readonly PermohonanService $service) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -46,39 +34,10 @@ final class PermohonanController extends Controller
 
     public function store(StorePermohonanRequest $request): JsonResponse
     {
-        $data = $request->validated();
-        $debitur = Debitur::query()->findOrFail($data['debitur_id']);
+        $debitur = Debitur::query()->findOrFail($request->validated('debitur_id'));
         $this->ensureSameCabang($debitur, $request->user());
 
-        $cabang = Cabang::query()->findOrFail($debitur->cabang_id);
-        $parameter = $this->parameters->active();
-
-        $permohonan = DB::transaction(function () use ($data, $cabang, $parameter, $request): PermohonanKredit {
-            $permohonan = PermohonanKredit::query()->create(array_merge($data, [
-                'cabang_id' => $cabang->id,
-                'no_permohonan' => $this->nomor->permohonan($cabang),
-                'parameter_kebijakan_id' => $parameter->id,
-                'ao_id' => $request->user()->id,
-                'status' => StatusPermohonan::DRAFT->value,
-                'prioritas' => $data['prioritas'] ?? 'NORMAL',
-                'pinjaman_ke' => $data['pinjaman_ke'] ?? 1,
-            ]));
-
-            $this->ledger->record(
-                LedgerEvent::PermohonanDibuat,
-                'permohonan_kredit',
-                (string) $permohonan->id,
-                [
-                    'no_permohonan' => $permohonan->no_permohonan,
-                    'debitur_id' => $permohonan->debitur_id,
-                    'produk_id' => $permohonan->produk_id,
-                    'plafon_diajukan' => (float) $permohonan->plafon_diajukan,
-                ],
-                $request->user(),
-            );
-
-            return $permohonan;
-        });
+        $permohonan = $this->service->create($request->validated(), $request->user());
 
         return response()->json($permohonan, 201);
     }
@@ -96,40 +55,13 @@ final class PermohonanController extends Controller
     {
         $this->ensureSameCabang($permohonan, $request->user());
 
-        abort_unless($permohonan->status === StatusPermohonan::DRAFT->value, 409, 'Hanya draft yang dapat diubah.');
-
-        $permohonan->update($request->validated());
-
-        return response()->json($permohonan->fresh());
+        return response()->json($this->service->update($permohonan, $request->validated()));
     }
 
     public function submit(Request $request, PermohonanKredit $permohonan): JsonResponse
     {
         $this->ensureSameCabang($permohonan, $request->user());
 
-        abort_unless($permohonan->status === StatusPermohonan::DRAFT->value, 409, 'Permohonan bukan draft.');
-
-        $balloon = app(BR04BalloonWajib::class)->validate($permohonan);
-        $parameter = app(BR08ParameterTersimpan::class)->validate($permohonan);
-
-        if (! $balloon->passed) {
-            return response()->json(['message' => $balloon->message, 'kode' => 'BR-04'], 422);
-        }
-
-        if (! $parameter->passed) {
-            return response()->json(['message' => $parameter->message, 'kode' => 'BR-08'], 422);
-        }
-
-        $permohonan->update(['status' => StatusPermohonan::SUBMITTED->value]);
-
-        $this->ledger->record(
-            LedgerEvent::PermohonanDiajukan,
-            'permohonan_kredit',
-            (string) $permohonan->id,
-            ['status' => $permohonan->status],
-            $request->user(),
-        );
-
-        return response()->json($permohonan->fresh());
+        return response()->json($this->service->submit($permohonan, $request->user()));
     }
 }

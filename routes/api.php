@@ -21,12 +21,12 @@ Route::prefix('v1')->group(function (): void {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
 
-        Route::apiResource('debitur', DebiturController::class)->except(['destroy']);
+        Route::apiResource('debitur', DebiturController::class)->except(['destroy'])->names('api.debitur');
         Route::post('debitur/{debitur}/aset', [DebiturController::class, 'storeAset']);
         Route::patch('aset/{aset}', [DebiturController::class, 'updateAset']);
         Route::delete('aset/{aset}', [DebiturController::class, 'destroyAset']);
 
-        Route::apiResource('permohonan', PermohonanController::class)->except(['destroy']);
+        Route::apiResource('permohonan', PermohonanController::class)->except(['destroy'])->names('api.permohonan');
         Route::post('permohonan/{permohonan}/submit', [PermohonanController::class, 'submit']);
 
         Route::get('permohonan/{permohonan}/slik', [SlikController::class, 'index']);
@@ -46,17 +46,17 @@ Route::prefix('v1')->group(function (): void {
             Route::post('rekomendasi', [AnalisisController::class, 'rekomendasiGenerate']);
         });
 
-        Route::get('simulasi', [SimulasiController::class, 'index']);
-        Route::post('simulasi', [SimulasiController::class, 'store']);
-        Route::get('simulasi/{simulasi}', [SimulasiController::class, 'show']);
-        Route::post('simulasi/{simulasi}/replay', [SimulasiController::class, 'replay']);
+        Route::get('simulasi', [SimulasiController::class, 'index'])->name('api.simulasi.index');
+        Route::post('simulasi', [SimulasiController::class, 'store'])->name('api.simulasi.store');
+        Route::get('simulasi/{simulasi}', [SimulasiController::class, 'show'])->name('api.simulasi.show');
+        Route::post('simulasi/{simulasi}/replay', [SimulasiController::class, 'replay'])->name('api.simulasi.replay');
 
         Route::get('approvals/inbox', [ApprovalController::class, 'inbox']);
         Route::post('permohonan/{permohonan}/approve', [ApprovalController::class, 'approve']);
         Route::post('permohonan/{permohonan}/reject', [ApprovalController::class, 'reject']);
         Route::post('permohonan/{permohonan}/return', [ApprovalController::class, 'returnToAo']);
 
-        Route::get('kredit', [KreditController::class, 'index']);
+        Route::get('kredit', [KreditController::class, 'index'])->name('api.kredit.index');
         Route::get('kredit/{kredit}', [KreditController::class, 'show']);
         Route::get('kredit/{kredit}/jadwal', [KreditController::class, 'jadwal']);
 

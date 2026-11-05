@@ -9,12 +9,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Debitur\StoreDebiturRequest;
 use App\Models\Debitur;
 use App\Models\DebiturAset;
+use App\Services\Debitur\DebiturService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 final class DebiturController extends Controller
 {
     use ScopesByCabang;
+
+    public function __construct(private readonly DebiturService $debiturService) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -29,13 +32,7 @@ final class DebiturController extends Controller
 
     public function store(StoreDebiturRequest $request): JsonResponse
     {
-        $debitur = Debitur::query()->create(array_merge(
-            $request->validated(),
-            [
-                'cabang_id' => $request->user()->cabang_id,
-                'sumber_data' => 'MANUAL',
-            ]
-        ));
+        $debitur = $this->debiturService->create($request->validated(), $request->user());
 
         return response()->json($debitur, 201);
     }
@@ -51,9 +48,7 @@ final class DebiturController extends Controller
     {
         $this->ensureSameCabang($debitur, $request->user());
 
-        $debitur->update($request->validated());
-
-        return response()->json($debitur->fresh());
+        return response()->json($this->debiturService->update($debitur, $request->validated()));
     }
 
     public function storeAset(Request $request, Debitur $debitur): JsonResponse

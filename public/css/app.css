@@ -181,3 +181,69 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* Progress kelengkapan */
 .progress { height: 8px; background: #e6eaef; border-radius: 999px; overflow: hidden; }
 .progress > span { display: block; height: 100%; background: var(--bpr-primary); }
+
+/* Halaman & kepala */
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.page-head h1 { margin: 0; }
+.card-tight { padding: .75rem; }
+.inline-form { display: flex; gap: .5rem; }
+.inline-form .input { flex: 1; }
+
+/* Wizard */
+.wizard-steps { display: flex; gap: .5rem; list-style: none; padding: 0; margin: 0 0 1rem; flex-wrap: wrap; }
+.wizard-steps li {
+    display: flex; align-items: center; gap: .4rem;
+    padding: .35rem .7rem; border-radius: 999px;
+    background: #eef2f6; color: var(--bpr-muted); font-size: .85rem;
+}
+.wizard-steps li.active { background: var(--bpr-primary); color: #fff; }
+.wizard-steps li.done { background: #e7f6ee; color: var(--bpr-success); }
+.step-no {
+    display: inline-grid; place-items: center;
+    width: 1.35rem; height: 1.35rem; border-radius: 50%;
+    background: rgba(0, 0, 0, .08); font-size: .75rem; font-weight: 700;
+}
+.wizard-steps li.active .step-no { background: rgba(255, 255, 255, .2); }
+.wizard-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1rem; border-top: 1px solid var(--bpr-border); padding-top: .85rem; }
+
+/* Uang */
+.money-wrap { position: relative; }
+.money-prefix {
+    position: absolute; left: .6rem; top: 50%; transform: translateY(-50%);
+    color: var(--bpr-muted); font-size: .85rem; pointer-events: none;
+}
+.input.money { padding-left: 2.1rem; font-variant-numeric: tabular-nums; }
+
+/* Review list */
+.review-list { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: .35rem .8rem; margin: 0; }
+.review-list dt { color: var(--bpr-muted); font-size: .85rem; }
+.review-list dd { margin: 0; font-weight: 500; }
+
+/* Kelengkapan */
+.kelengkapan { margin-top: 1rem; }
+.kelengkapan-head { display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: .3rem; }
+.bar { height: 8px; background: #e6eaef; border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--bpr-primary); }
+
+/* DSCR */
+.dscr { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.dscr-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dscr-meta { display: flex; flex-direction: column; gap: .15rem; }
+
+/* Paste grid */
+.paste-grid { border: 1px dashed var(--bpr-border); border-radius: var(--bpr-radius); padding: .8rem; background: #fbfcfd; }
+.paste-grid h4 { margin-top: 0; }
+
+/* Tabel & kode */
+.table-scroll { overflow-x: auto; max-height: 420px; }
+.code { background: #0f172a; color: #e2e8f0; padding: .75rem; border-radius: 6px; overflow: auto; font-size: .75rem; max-height: 320px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; }
+.span-2 { grid-column: span 2; }
+@media (max-width: 900px) { .span-2 { grid-column: span 1; } }
+
+/* Pagination */
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .75rem; }
+.btn.disabled { opacity: .5; pointer-events: none; }
+.negatif { color: var(--bpr-danger); }
+.positif { color: var(--bpr-success); }
+.req { color: var(--bpr-danger); margin-left: .15rem; }

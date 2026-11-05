@@ -29,3 +29,8 @@ Thumbs.db
 /backups
 /storage/app/private/*
 !/storage/app/private/.gitignore
+
+# Master Excel bisnis (KRITIS) — JANGAN pernah commit/publish
+*.xlsx
+*.xls
+*.xlsm
