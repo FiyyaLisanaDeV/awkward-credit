@@ -7,20 +7,20 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 2.8 | 2026-11-06 |
-| `updated_at` | 2026-11-06T03:10+08:00 | 2026-11-06 |
-| Fase aktif | **14 selesai**; berikutnya **15** (Testing & Quality Gate) | 2026-11-06 |
+| Versi dokumen | 2.9 | 2026-11-06 |
+| `updated_at` | 2026-11-06T03:15+08:00 | 2026-11-06 |
+| Fase aktif | **15 selesai**; berikutnya **16** (Hardening) | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
-| Branch / last commit | main / `phase-14-done` (`c84c1ec`, Fase 14) | 2026-11-06 |
+| Branch / last commit | main / `phase-15-done` (`850051c` + Fase 15) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
 | Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-06 |
 | Jumlah route | 77 (42 API v1) | 2026-11-06 |
-| Jumlah test | 39 file (**127 test**, 1735 assertions) | 2026-11-06 |
+| Jumlah test | 43 file (**138 test**, 1779 assertions) | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | tersedia (Fase 08B); chain **OK** | 2026-11-06 |
-| Bukti fase terakhir | `docs/evidence/phase-14-post-20261106-030450.txt` (verify --phase exit 0) | 2026-11-06 |
+| Bukti fase terakhir | `docs/evidence/phase-15-post-20261106-030741.txt` (verify --full exit 0) + `drill-04-20261106-030835.txt` + `verifier-pass-20261106-030954.txt` | 2026-11-06 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -55,7 +55,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 12B | Import & Efisiensi | TODO | — | — | — | — | 8 adapter |
 | 13 | Dashboard + Workflow | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-13-post-20261106-025541.txt` | `feat(phase-13)` / `phase-13-done` | ApprovalService + UI approval + notifikasi bell + DashboardService + pencairan/jadwal/pembayaran ber-ledger; 124 test |
 | 14 | Documents (17) | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-14-post-20261106-030450.txt` | `feat(phase-14)` / `phase-14-done` | 17 generator + 17 template, DocumentService (BR-07, hash HTML idempoten, disk privat), sign + ledger; 127 test |
-| 15 | Testing & Quality Gate | TODO | — | — | — | — | drill #4 |
+| 15 | Testing & Quality Gate | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-15-post-20261106-030741.txt` + `drill-04-20261106-030835.txt` + `verifier-pass-20261106-030954.txt` | `feat(phase-15)` / `phase-15-done` | arch + guard (Route/EventCatalog) + performance; verify --full exit 0; docs:check --strict; 138 test |
 | 16 | Hardening | TODO | — | — | — | — | role DB + restore |
 | 17 | Dokumentasi Pengguna & SOP | TODO | — | — | — | — | — |
 | 18 | UAT, Go-Live & Serah Terima | TODO | — | — | — | — | — |
@@ -118,6 +118,7 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | 16 | 12 | Tutup gate Fase 12: pindahkan literal bisnis UI ke `Konstanta` (step wizard, indeks paste SLIK) + enum `SistemSukuBunga`/`ProdukTipe` (hardcode:audit 0); rapikan pint & phpstan L8 (PermohonanService, SimulationRunner.diff, imports); evidence phase-12 + drill #3 | `bash scripts/verify.sh --phase`, `php artisan hardcode:audit`, `vendor/bin/pint --test` | OK, exit 0 (104 test, hardcode 0) | `feat(phase-12)` / `phase-12-done` |
 | 2026-11-06 | 17 | 13 | Fase 13: `ApprovalService` (matriks band + permission double + SoD + BR-06), UI approval (inbox/detail/timeline/aksi Livewire), `NotifikasiService` + bell poll 30s, `DashboardService` (cache 300 dtk) + web dashboard, `KreditService` (pencairan→kredit+jadwal+memo, ledger AKAD/PENCAIRAN), `PembayaranService` (catat/reversal, ledger ANGSURAN_DIBAYAR/REVERSAL) + UI kredit/jadwal/pembayaran; permission `approve_level_1` | `bash scripts/verify.sh --phase` | OK, exit 0; **124 test**, hardcode 0, pint/phpstan bersih | `feat(phase-13)` / `phase-13-done` |
 | 2026-11-06 | 18 | 14 | Fase 14: `DocumentGenerator` + 17 generator + 17 template Blade, `DocumentService` (BR-07 template APPROVED, hash HTML idempoten, disk privat), nomor dokumen via `NomorService`, tanda tangan (`signature_log`) + ledger `DOKUMEN_DIBUAT`/`DITANDATANGANI`; template seeder DRAFT→APPROVED di test | `bash scripts/verify.sh --phase` | OK, exit 0; **127 test**, hardcode 0, pint/phpstan bersih | `feat(phase-14)` / `phase-14-done` |
+| 2026-11-06 | 19 | 15 | Fase 15: arch test (strict types/no debug/no env), guard Route (nama unik, API sanctum, route utama), guard EventCatalog (semua event di INVENTARIS), performance smoke (health/list/jadwal/PDF); drill #4 + verifier pass 3 klaim | `bash scripts/verify.sh --full` | OK, exit 0; **138 test**, docs:check --strict 0 temuan | `feat(phase-15)` / `phase-15-done` |
 
 ## §6. Catatan drift
 
@@ -141,6 +142,7 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | DomPDF 17 render + suite penuh melebihi `memory_limit` 128M | `phpunit.xml` menetapkan `memory_limit=512M` (kebutuhan resource, bukan pelonggaran tes) + `gc_collect_cycles()` | selesai |
 | 2026-11-06 | Hash dokumen dari byte PDF tidak stabil (DomPDF menyematkan timestamp/ID) | hash = SHA-256 **konten HTML/snapshot**; idempotensi dicek sebelum render PDF | selesai |
 | 2026-11-06 | Template dokumen seeder berstatus DRAFT sehingga generate selalu ditolak BR-07 | test men-set template APPROVED lebih dulu; produksi menunggu pengesahan template `[K]` | terbuka |
+| 2026-11-06 | Guard test Route/EventCatalog belum ada | ditambahkan `tests/Feature/Guard/*` + `tests/Unit/ArchTest.php` | selesai |
 
 ## §7. Aturan pengisian
 

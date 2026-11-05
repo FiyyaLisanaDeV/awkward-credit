@@ -1,0 +1,45 @@
+DRILL #4 — Cold-start (akhir Fase 15) | 20261106-030835
+Sumber: docs/PROGRESS.md + docs/TEKNIS.md (tanpa konteks percakapan)
+
+Q1) Fase apa yang sedang berjalan?
+    Fase 15 — Testing & Quality Gate (suite lengkap, arch/guard/perf, docs:check --strict).
+
+Q2) Commit terakhir & tag apa?
+    HEAD sebelum fase-15: 850051c docs(phase-14): header menunjuk phase-14-done
+    Tag fase: phase-15-done (dibuat pada commit feat(phase-15)).
+
+Q3) Jumlah migrasi, route, test?
+    migrasi=61 rute=77 file_test=43
+    test:   Tests:    138 passed (1779 assertions)
+
+Q4) 3 langkah berikutnya (perintah konkret)?
+    1) Fase 16 Hardening: role DB non-superuser + GRANT terbatas; uji restore (scripts/backup.sh, restore.sh).
+    2) Fase 17 Dokumentasi Pengguna & SOP: manual AO/admin/komite + SOP + materi pelatihan.
+    3) Fase 18 UAT/go-live; sisa 12B Import & Efisiensi tetap terbuka.
+
+Q5) Blocker apa yang terbuka?
+    - D-01..D-20 DRAFT/UNKNOWN; RAT-01/RAT-03 terbuka.
+    - Golden 0/29 verified (RAT-02 sheet/sel + tanda tangan).
+    - V1/V3/V4 pasal/ayat PENDING; divergensi policy ACTIVE vs DRAFT; template dokumen seeder DRAFT.
+
+Konfirmasi live (state:check):
++---------------------------------------+---------------+--------+
+| Item                                  | Nilai         | Status |
++---------------------------------------+---------------+--------+
+| php                                   | 8.3.7         | OK     |
+| laravel                               | 13.40.0       | OK     |
+| timezone                              | Asia/Makassar | OK     |
+| database                              | pgsql         | OK     |
+| migrasi                               | 61            | OK     |
+| rute                                  | 77            | OK     |
+| file test                             | 43            | OK     |
+| composer.lock                         | 76cd829130f7  | OK     |
+| git                                   | 850051c       | OK     |
+| dokumen: docs/RENCANA_IMPLEMENTASI.md | ada           | OK     |
+| dokumen: docs/TEKNIS.md               | ada           | OK     |
+| dokumen: docs/INVENTARIS_DATA.md      | ada           | OK     |
+| dokumen: docs/DSH_PROMPTS_SIMPLE.md   | ada           | OK     |
+| dokumen: docs/PROGRESS.md             | ada           | OK     |
+| dokumen: docs/DECISIONS.md            | ada           | OK     |
+| dokumen: docs/VERIFIKASI.md           | ada           | OK     |
++---------------------------------------+---------------+--------+
