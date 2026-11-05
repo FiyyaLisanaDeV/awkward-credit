@@ -325,7 +325,7 @@ def related_block(slug: str) -> str:
 def nav(prev_slug: str | None, prev_title: str | None, nxt_slug: str | None, nxt_title: str | None) -> str:
     left = f"← [{prev_title}]({prev_slug})" if prev_slug else "← *(awal)*"
     right = f"[{nxt_title}]({nxt_slug}) →" if nxt_slug else "*(akhir)* →"
-    return f"\n---\n\n{left} &nbsp;·&nbsp; [🏠 Home](Home) &nbsp;·&nbsp; {right}\n"
+    return f"\n---\n\n{left} &nbsp;·&nbsp; [🏠 Home](Home) &nbsp;·&nbsp; [Indeks](Indeks) &nbsp;·&nbsp; {right}\n"
 
 
 def build() -> None:
@@ -419,6 +419,8 @@ def build() -> None:
 **Aplikasi Analisis Kredit, Dokumen & Ledger BPR** (PT BPR Bahteramas Kendari).
 
 Manual lengkap yang mencakup seluruh fungsi aplikasi, disusun dari bukti kode/route/migrasi/config/test (`[E]`) plus rencana lapis risiko (`[K]`/`[Rencana]`).
+
+**Snapshot teknis (2026-11-06):** 61 migrasi · 77 route · 138 test · `verify.sh --full` exit 0 · golden **29 recomputed / 0 verified**.
 
 > Repo: [{REPO_URL}]({REPO_URL}) · Sumber manual: [`project/docs/manual/`]({BLOB}/project/docs/manual/README.md) · [Indeks lengkap](Indeks)
 
