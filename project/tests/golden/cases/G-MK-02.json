@@ -1,0 +1,58 @@
+{
+  "id": "G-MK-02",
+  "group": "CAPACITY",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "-",
+  "focus": "WCD/gap; klasifikasi aset enum, ekuitas riil (fix T6)",
+  "source": {
+    "workbook": "X2",
+    "sheet": "3/4/5",
+    "cells": "TBD"
+  },
+  "policy_refs": [],
+  "corrections": [],
+  "input": {
+    "current_assets_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "current_liabilities_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "wc_need_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "asset_classes_enum": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "wc_available_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "gap_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "balance_flag": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

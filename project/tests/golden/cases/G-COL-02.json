@@ -1,0 +1,50 @@
+{
+  "id": "G-COL-02",
+  "group": "COLLATERAL",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "ALL",
+  "method": "-",
+  "focus": "Boundary LTV max",
+  "source": {
+    "workbook": "X2/X3",
+    "sheet": "2/8",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-07"
+  ],
+  "corrections": [],
+  "input": {
+    "ltv": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "ltv_max": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    }
+  },
+  "expected": {
+    "at_or_below_max": {
+      "status": "K",
+      "value": null
+    },
+    "hard_stop_or_mitigation": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

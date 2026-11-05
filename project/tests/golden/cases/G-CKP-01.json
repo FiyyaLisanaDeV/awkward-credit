@@ -1,0 +1,46 @@
+{
+  "id": "G-CKP-01",
+  "group": "CKPN",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": true,
+  "product": "ALL",
+  "method": "-",
+  "focus": "Arah PPKA↔CKPN benar; CKPN<PPKA ditolak (negatif)",
+  "source": {
+    "workbook": "-",
+    "sheet": "-",
+    "cells": "-"
+  },
+  "policy_refs": [
+    "D-16"
+  ],
+  "corrections": [],
+  "input": {
+    "ppka_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "ckpn_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "scenario": "PPKA_GT_CKPN|PPKA_LT_CKPN|CKPN_LT_PPKA"
+  },
+  "expected": {
+    "transition_journal_direction": {
+      "status": "K",
+      "value": null
+    },
+    "ckpn_lt_ppka_accepted": false
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

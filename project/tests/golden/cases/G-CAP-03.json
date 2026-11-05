@@ -1,0 +1,73 @@
+{
+  "id": "G-CAP-03",
+  "group": "CAPACITY",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "GRACE",
+  "method": "GRACE_BULLET",
+  "focus": "DSCR bunga periodik + balloon risk terpisah",
+  "source": {
+    "workbook": "X3",
+    "sheet": "6/13",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-11",
+    "D-16"
+  ],
+  "corrections": [],
+  "input": {
+    "surplus_monthly_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "margin_capacity": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    },
+    "balloon_due_rp": {
+      "status": "K",
+      "value_rp": null
+    }
+  },
+  "expected": {
+    "periodic_debt_service_definition": {
+      "status": "K",
+      "value": null
+    },
+    "dscr_periodic": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "balloon_adequacy": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "status": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

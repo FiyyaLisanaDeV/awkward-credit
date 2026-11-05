@@ -1,0 +1,22 @@
+# Secrets / PII / local artifacts (NEVER commit)
+/.env
+/.env.*
+/storage/
+/vendor/
+/node_modules/
+/*.sqlite
+*.key
+*.pem
+*.p12
+# PII samples, SLIK/KTP/KK, core banking exports
+**/pii/**
+**/slik_samples/**
+**/ktp/**
+**/kk/**
+**/npwp/**
+**/*nasabah*real*
+**/*dummy*real* # guard misnaming
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

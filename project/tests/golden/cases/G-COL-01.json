@@ -1,0 +1,60 @@
+{
+  "id": "G-COL-01",
+  "group": "COLLATERAL",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "ALL",
+  "method": "-",
+  "focus": "PPKA/LTV 4 nilai: no double-haircut (fix T13, D-07)",
+  "source": {
+    "workbook": "X1 apraisal; X2/X3 S1,S2",
+    "sheet": "TBD",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-07"
+  ],
+  "corrections": [],
+  "input": {
+    "market_value_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "liquidation_value_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "ppka_value_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "ltv_basis": "K_SINGLE_BASIS",
+    "exposure_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "category_legal_basis": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "ltv": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "double_haircut_detected": false,
+    "components_separated": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

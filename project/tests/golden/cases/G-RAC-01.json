@@ -1,0 +1,62 @@
+{
+  "id": "G-RAC-01",
+  "group": "RAC",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": true,
+  "product": "ALL",
+  "method": "-",
+  "focus": "BMPK exposure langgar → ditolak (negatif, non-bypass)",
+  "source": {
+    "workbook": "-",
+    "sheet": "-",
+    "cells": "-"
+  },
+  "policy_refs": [
+    "D-13"
+  ],
+  "corrections": [],
+  "input": {
+    "related_party": {
+      "status": "K",
+      "value": null
+    },
+    "borrower_group": {
+      "status": "K",
+      "value": null
+    },
+    "existing_exposure_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "new_exposure_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "capital_base_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "bmpk_limit": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    }
+  },
+  "expected": {
+    "accepted": false,
+    "hard_stop": true,
+    "bypass_allowed": false
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [
+    "Ambang/persen BMPK = [K klaim independen]; isi dari D-13 [H]"
+  ],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

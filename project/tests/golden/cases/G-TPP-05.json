@@ -1,0 +1,78 @@
+{
+  "id": "G-TPP-05",
+  "group": "TPP",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "FLAT",
+  "focus": "Dana diterima + blokir 2x + perlakuan blokir lama konsisten jurnal (fix T10)",
+  "source": {
+    "workbook": "X1",
+    "sheet": "hitungan/memo cair/pemblokiran",
+    "cells": "TBD [K]",
+    "label": "dummy"
+  },
+  "policy_refs": [
+    "D-05",
+    "D-06"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "total_fees_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "installment_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "blocked_multiplier": {
+      "status": "K",
+      "value": null
+    },
+    "old_blocked_balance_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "old_blocked_treatment": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "dana_diterima_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "blocked_amount_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "destination_account_delta_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "matches_memo_cair": {
+      "status": "K",
+      "value": null
+    },
+    "ledger_balanced": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

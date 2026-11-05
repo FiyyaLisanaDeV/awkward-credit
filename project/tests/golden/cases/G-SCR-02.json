@@ -1,0 +1,51 @@
+{
+  "id": "G-SCR-02",
+  "group": "SCORING",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "ALL",
+  "method": "-",
+  "focus": "SLIK override: alasan+otorisasi+audit (fix T4)",
+  "source": {
+    "workbook": "X2/X3",
+    "sheet": "2/8",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-02",
+    "D-03"
+  ],
+  "corrections": [],
+  "input": {
+    "slik_flag_fatal": {
+      "status": "K",
+      "value": null
+    },
+    "override_requested": true,
+    "reason": {
+      "status": "K",
+      "value": null
+    },
+    "approver": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "override_allowed_by_policy": {
+      "status": "K",
+      "value": null
+    },
+    "audit_event_recorded": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

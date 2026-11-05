@@ -1,0 +1,221 @@
+{
+  "schema": "bpr-golden-vectors-manifest/v1",
+  "status": "DRAFT_K_PLACEHOLDER",
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "total": 29,
+  "dummy_data": true,
+  "pii": false,
+  "rules": [
+    "Semua nilai numerik final = [K] sampai diverifikasi (sumber sheet/sel atau script Decimal/BCMath independen).",
+    "C-002 (IDIR 85.93%, net 2,948,080, EIR contoh 28.88%@60m) = KLAIM [K], bukan terverifikasi.",
+    "Dilarang faktor flat->efektif 1.81x/0.87x; gunakan IRR/EIR numerik.",
+    "Money = BIGINT rupiah (value_rp integer) di implementasi; JSON placeholder boleh null.",
+    "Kasus negative_test=true harus punya tes negatif eksplisit.",
+    "Policy/ambang/pasal/angka regulasi hanya dari [H]/sumber resmi; default DRAFT non-ACTIVE."
+  ],
+  "cases": [
+    {
+      "id": "G-TPP-01",
+      "group": "TPP",
+      "focus": "Koreksi kasus utama (C-002): IDIR/net/RATE eksak, no 1.81x",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-TPP-02",
+      "group": "TPP",
+      "focus": "DSR total otomatis dari SLIK multi fasilitas (fix T2/T3/T4)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-TPP-03",
+      "group": "TPP",
+      "focus": "Boundary IDIR hard-stop (=threshold dan >threshold)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-TPP-04",
+      "group": "TPP",
+      "focus": "Top-up/payoff + penalti + komponen biaya (D-06)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-TPP-05",
+      "group": "TPP",
+      "focus": "Dana diterima + blokir 2x + perlakuan blokir lama konsisten jurnal (fix T10)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-01",
+      "group": "SCHEDULE",
+      "focus": "Tenor 1 edge rounding akhir",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-02",
+      "group": "SCHEDULE",
+      "focus": "Plafon kecil + rounding Rp1, adjustment tercatat",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-03",
+      "group": "SCHEDULE",
+      "focus": "Saldo akhir 0 (PMT/IRR)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-04",
+      "group": "SCHEDULE",
+      "focus": "Banding Flat; EIR numerik; no 1,81x",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-05",
+      "group": "SCHEDULE",
+      "focus": "Bunga berjalan, bullet akhir (X3)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-06",
+      "group": "SCHEDULE",
+      "focus": "Kecukupan balloon >=1.10 (buffer)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-07",
+      "group": "SCHEDULE",
+      "focus": "Kecukupan balloon 1.00 (perhatian boundary)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCH-08",
+      "group": "SCHEDULE",
+      "focus": "Kecukupan balloon <1.00 (tidak layak/hard-stop/mitigasi) [K]",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-CAP-01",
+      "group": "CAPACITY",
+      "focus": "RPC/DSCR/plafon max Flat",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-CAP-02",
+      "group": "CAPACITY",
+      "focus": "RPC/DSCR/plafon max Anuitas",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-CAP-03",
+      "group": "CAPACITY",
+      "focus": "DSCR bunga periodik + balloon risk terpisah",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-MK-01",
+      "group": "CAPACITY",
+      "focus": "Modal kerja cash turnover; komponen biaya eksplisit (fix T7)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-MK-02",
+      "group": "CAPACITY",
+      "focus": "WCD/gap; klasifikasi aset enum, ekuitas riil (fix T6)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-STR-01",
+      "group": "CAPACITY",
+      "focus": "Stress omzet turun ringan: DSCR pass/fail",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-STR-02",
+      "group": "CAPACITY",
+      "focus": "Stress kombinasi terburuk + mitigasi",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-COL-01",
+      "group": "COLLATERAL",
+      "focus": "PPKA/LTV 4 nilai: no double-haircut (fix T13, D-07)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-COL-02",
+      "group": "COLLATERAL",
+      "focus": "Boundary LTV max",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCR-01",
+      "group": "SCORING",
+      "focus": "5C rating boundary (D-02, band [K])",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-SCR-02",
+      "group": "SCORING",
+      "focus": "SLIK override: alasan+otorisasi+audit (fix T4)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-DEC-01",
+      "group": "DECISION",
+      "focus": "Hard-stop IDIR vs soft-score konflik (fix T1)",
+      "negative_test": false,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-RAC-01",
+      "group": "RAC",
+      "focus": "BMPK exposure langgar → ditolak (negatif, non-bypass)",
+      "negative_test": true,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-RAC-02",
+      "group": "RAC",
+      "focus": "Over-limit sektor + override Direksi berjustifikasi teraudit",
+      "negative_test": true,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-CKP-01",
+      "group": "CKPN",
+      "focus": "Arah PPKA↔CKPN benar; CKPN<PPKA ditolak (negatif)",
+      "negative_test": true,
+      "status": "K_PLACEHOLDER"
+    },
+    {
+      "id": "G-WO-01",
+      "group": "WRITE_OFF",
+      "focus": "Hapus buku parsial ditolak; full+eligibility lolos (negatif)",
+      "negative_test": true,
+      "status": "K_PLACEHOLDER"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "id": "G-TPP-01",
+  "group": "TPP",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "FLAT",
+  "focus": "Koreksi kasus utama (C-002): IDIR/net/RATE eksak, no 1.81x",
+  "source": {
+    "workbook": "X1",
+    "sheet": "analisis kredit/hitungan/FLAT-ANN-EFF",
+    "cells": "TBD [K]",
+    "label": "dummy"
+  },
+  "policy_refs": [
+    "D-05",
+    "D-11"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    },
+    "penghasilan_bersih_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "angsuran_baru_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "angsuran_eksisting_slik_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "fees": {
+      "status": "K",
+      "value": null
+    },
+    "blocked_saving_multiplier": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "idir": {
+      "claimed_C002": {
+        "status": "K",
+        "value": 0.8593,
+        "note": "KLAIM C-002, bukan terverifikasi; ganti dengan nilai dari sheet/sel sumber"
+      },
+      "verified": {
+        "status": "K",
+        "value": null,
+        "format": "percent_or_decimal"
+      }
+    },
+    "penghasilan_bersih_rp": {
+      "claimed_C002": {
+        "status": "K",
+        "value_rp": 2948080
+      },
+      "verified": {
+        "status": "K",
+        "value_rp": null
+      }
+    },
+    "eir_irr_pa": {
+      "claimed_C002": {
+        "status": "K",
+        "value": 0.2888,
+        "tenor_months": 60
+      },
+      "verified": {
+        "status": "K",
+        "value": null,
+        "format": "decimal_per_year"
+      }
+    },
+    "schedule": {
+      "sum_principal_eq_plafon": true,
+      "closing_balance_rp": 0,
+      "rounding_adjustment_rp": {
+        "status": "K",
+        "value_rp": null
+      }
+    },
+    "no_flat_effective_factor_181x": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [
+    "Isi claimed_C002 hanya jika diverifikasi ke sumber; default expected.verified=null"
+  ],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

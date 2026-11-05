@@ -1,0 +1,67 @@
+{
+  "id": "G-TPP-04",
+  "group": "TPP",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "FLAT",
+  "focus": "Top-up/payoff + penalti + komponen biaya (D-06)",
+  "source": {
+    "workbook": "X1",
+    "sheet": "hitungan/memo cair",
+    "cells": "TBD [K]",
+    "label": "dummy"
+  },
+  "policy_refs": [
+    "D-06",
+    "D-08"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "old_principal_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "accrued_interest_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "penalty_rate": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "penalty_amount_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "fees": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "payoff_total_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "net_disbursement_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "journal_balanced": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

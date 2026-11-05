@@ -1,0 +1,85 @@
+{
+  "id": "G-TPP-02",
+  "group": "TPP",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "FLAT",
+  "focus": "DSR total otomatis dari SLIK multi fasilitas (fix T2/T3/T4)",
+  "source": {
+    "workbook": "X1",
+    "sheet": "analisis kredit/SLIK",
+    "cells": "TBD [K]",
+    "label": "dummy"
+  },
+  "policy_refs": [
+    "D-03",
+    "D-11"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "net_income_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "new_installment_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "slik_facilities": [
+      {
+        "lender": "K",
+        "plafon_rp": {
+          "status": "K",
+          "value_rp": null
+        },
+        "baki_rp": {
+          "status": "K",
+          "value_rp": null
+        },
+        "installment_rp": {
+          "status": "K",
+          "value_rp": null
+        },
+        "collectibility": {
+          "status": "K",
+          "value": null
+        },
+        "valid": {
+          "status": "K",
+          "value": null
+        }
+      }
+    ],
+    "consent_active": true
+  },
+  "expected": {
+    "total_existing_installment_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "dsr_total": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "slik_validation_flags": {
+      "status": "K",
+      "value": null
+    },
+    "dsr_source": "SLIK_STRUCTURED"
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

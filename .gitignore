@@ -1,0 +1,22 @@
+# Secrets — JANGAN pernah commit
+*token*
+*.token
+*.key
+*.pem
+*.p12
+.env
+.env.*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated wiki output (dibangun ulang oleh build-wiki.py)
+/wiki/
+
+# Master Excel bisnis (KRITIS) — JANGAN pernah commit/publish
+*.xlsx
+*.xls
+*.xlsm

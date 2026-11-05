@@ -1,0 +1,55 @@
+{
+  "id": "G-RAC-02",
+  "group": "RAC",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": true,
+  "product": "ALL",
+  "method": "-",
+  "focus": "Over-limit sektor + override Direksi berjustifikasi teraudit",
+  "source": {
+    "workbook": "-",
+    "sheet": "-",
+    "cells": "-"
+  },
+  "policy_refs": [
+    "D-14"
+  ],
+  "corrections": [],
+  "input": {
+    "sector": {
+      "status": "K",
+      "value": null
+    },
+    "sector_exposure_after": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "sector_limit": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "director_override": true,
+    "justification": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "system_rejected_pre_override": true,
+    "override_recorded": true,
+    "audit_event": true,
+    "bmpk_not_overridden": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}

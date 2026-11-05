@@ -1,0 +1,71 @@
+{
+  "id": "G-SCH-07",
+  "group": "SCHEDULE",
+  "status": "K_PLACEHOLDER",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "GRACE",
+  "method": "GRACE_BULLET",
+  "focus": "Kecukupan balloon 1.00 (perhatian boundary)",
+  "source": {
+    "workbook": "X3",
+    "sheet": "2/6/13",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-05",
+    "D-11"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "kewajiban_akhir_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "sumber_pelunasan_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "threshold_buffer": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "threshold_ok": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    }
+  },
+  "expected": {
+    "rasio_kecukupan": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "rasio_case_hint": 1.0,
+    "status": {
+      "status": "K",
+      "value": null
+    },
+    "hard_stop_or_mitigation": {
+      "status": "K",
+      "value": null
+    },
+    "source_required": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [
+    "rasio_case_hint hanya penanda skenario; nilai final dari input terverifikasi"
+  ],
+  "generated_at": "2026-11-05T00:00:00+08:00"
+}
