@@ -57,3 +57,35 @@ Mengatur tata cara analisis, persetujuan, dokumentasi, penyimpanan, dan audit kr
 ## 9. Bukti & pengesahan
 - Setiap langkah menyimpan bukti: `ApprovalLog`, ledger event, notifikasi, dokumen/hash.
 - SOP ini perlu **review & tanda tangan pemilik proses** (Kepatuhan/Operasional/Komite) sebelum go-live `[K]`.
+
+## 10. Rujukan regulasi & kewajiban kunci
+Riset lengkap: `commandcode bpr/docs/research/sop-ojk.md`. Pasal POJK 1/2024 & 9/2024 di bawah **dibaca dari salinan resmi PDF**; regulasi lain dipetakan pada level judul/kewajiban, pasal menyusul `[K]`.
+
+**POJK 9/2024 — Tata Kelola BPR/BPRS `[V]`**
+- Pasal 2–3: prinsip tata kelola di seluruh jenjang; wajib **prosedur internal** dan evaluasi/pengkinian.
+- Pasal 22: fungsi **audit intern, manajemen risiko, kepatuhan** (satuan kerja/Pejabat Eksekutif).
+- Pasal 70: kebijakan **benturan kepentingan**; Pasal 72: fungsi & prosedur kepatuhan.
+- Pasal 79–83: **audit intern efektif** (rencana tahunan, independensi, pelaporan).
+- Pasal 87–90: **manajemen risiko efektif**, integrasi tata kelola/MR/kepatuhan, **APU-PPT**, **strategi anti fraud**.
+- Pasal 92: **BMPK**; Pasal 93 & 97: transparansi kondisi/produk/data konsumen dan **tata kelola TI**.
+- Pasal 102–103: **laporan transparansi & pelaksanaan tata kelola**.
+
+**POJK 1/2024 — Kualitas Aset BPR `[V]`**
+- Pasal 2–12: kelola aset prudent; kualitas kredit berdasarkan **prospek, kinerja, kemampuan bayar**; kolektibilitas **1–5**; penyimpangan → **macet**.
+- Pasal 17: agunan tunai yang diblokir → **lancar**.
+- Pasal 19–21: **PPKA umum ≥0,5%**, PPKA khusus **3%/10%/50%/100%**; **haircut agunan** (emas 85%, HT/fidusia 80%, dst.) dan penuaan agunan; penilaian agunan berkala.
+- Pasal 26–27: **CKPN** sesuai standar akuntansi; bila CKPN < PPKA, selisih **mengurangi modal**.
+- Pasal 29–34: **restrukturisasi** (kriteria, larangan menghindari downgrade, kualitas pasca-restrukturisasi).
+- Pasal 42–43: **hapus buku hanya macet + cadangan 100%**, **dilarang parsial**, wajib upaya recovery & dokumentasi.
+- Pasal 45–46: wajib **kebijakan & prosedur perkreditan tertulis** (disetujui Dewan Komisaris/Direksi) dan pengawasan efektif.
+
+**Regulasi terkait `[V*]`**
+- **POJK 23/2022** (+ SEOJK 11/SEOJK.03/2023) — BMPK BPR/BPRS.
+- **POJK 12/2024** — strategi anti fraud LJK (pencegahan, deteksi, investigasi, pelaporan, sanksi, pemantauan).
+- **POJK 8/2023** — APU-PPT/PPPSPM (koreksi: bukan hanya PBI/SE BI lama).
+- **POJK 22/2023** — perlindungan konsumen: transparansi produk/biaya, perlakuan adil, perlindungan data, pengaduan/sengketa.
+- **POJK 18/2017 + POJK 11/2024 + SEOJK 11/SEOJK.01/2024** — SLIK: persetujuan, penggunaan, koreksi.
+- **POJK 34/2025** — TI/DRP (pusat data & DRP; Pasal 32 perlu verifikasi salinan resmi `[K]`).
+- **UU 27/2022** PDP; **UU 10/2020 + PP 71/2019** TTE/e-meterai; **SEOJK 21/SEOJK.03/2024** PA BPR dan **PSAK 71** (EIR).
+
+**Implikasi operasional:** SOP ini wajib disahkan; parameter (BMPK, PPKA, ambang) dan engine pendukung (PPKA/CKPN, BMPK, anti-fraud, APU-PPT) masih `[Rencana/K]`.
