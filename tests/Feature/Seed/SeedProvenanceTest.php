@@ -29,7 +29,7 @@ it('idempoten saat dijalankan dua kali', function () {
 
     expect(DB::table('cabang')->count())->toBe(3)
         ->and(DB::table('produk')->count())->toBe(9)
-        ->and(DB::table('users')->count())->toBe(1)
+        ->and(DB::table('users')->count())->toBe(2)
         ->and(DB::table('ref_checklist_dokumen')->count())->toBe(28)
         ->and(DB::table('ref_template_dokumen')->count())->toBe(17);
 });

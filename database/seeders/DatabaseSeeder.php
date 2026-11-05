@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use Database\Seeders\Reference\AdminUserSeeder;
 use Database\Seeders\Reference\ApprovalMatrixSeeder;
+use Database\Seeders\Reference\AuditorUserSeeder;
 use Database\Seeders\Reference\CabangSeeder;
 use Database\Seeders\Reference\ChecklistDokumenSeeder;
 use Database\Seeders\Reference\ImportProfilSeeder;
@@ -33,6 +34,7 @@ final class DatabaseSeeder extends Seeder
             ChecklistDokumenSeeder::class,
             RolePermissionSeeder::class,
             AdminUserSeeder::class,
+            AuditorUserSeeder::class,
             ParameterKebijakanSeeder::class,
             ApprovalMatrixSeeder::class,
             TemplateDokumenSeeder::class,
