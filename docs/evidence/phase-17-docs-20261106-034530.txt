@@ -1,0 +1,18 @@
+PHASE 17 — Dokumentasi Pengguna, SOP & Pelatihan (artefak) | 20261106-034530
+Status: dokumen lengkap; REVIEW/TANDA TANGAN PEMILIK PROSES = PENDING [K]
+
+Dokumen:
+01-manual-ao.md
+02-manual-admin.md
+03-panduan-komite.md
+04-sop-poik.md
+05-pelatihan-3-cabang.md
+06-faq.md
+README.md
+
+docs:check --strict:
+temuan: 0 error, 0 peringatan
+
+verify --full:
+  Tests:    140 passed (1789 assertions)
+VERIFY: OK (--full)

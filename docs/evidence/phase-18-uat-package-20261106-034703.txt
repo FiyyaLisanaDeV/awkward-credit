@@ -1,0 +1,15 @@
+PHASE 18 — Paket UAT, Go-Live & Serah Terima (artefak) | 20261106-034703
+Status: paket siap; EKSEKUSI UAT & TANDA TANGAN = PENDING [K]
+
+Dokumen:
+README.md
+checklist-go-live.md
+evidence-pack.md
+jadwal-pemeliharaan.md
+serah-terima.md
+skenario-uat.md
+
+Gerbang teknis:
+verify --full: VERIFY: OK (--full)
+ledger:verify: OK
+hardcode:audit: hardcode:audit — 0 pelanggaran
