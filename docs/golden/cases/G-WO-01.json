@@ -1,0 +1,70 @@
+{
+  "id": "G-WO-01",
+  "group": "WRITE_OFF",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": true,
+  "product": "ALL",
+  "method": "-",
+  "focus": "Hapus buku parsial ditolak; full+eligibility lolos (negatif)",
+  "source": {
+    "workbook": "-",
+    "sheet": "-",
+    "cells": "-"
+  },
+  "policy_refs": [
+    "D-16"
+  ],
+  "corrections": [],
+  "input": {
+    "agreement_facilities_count": {
+      "status": "K",
+      "value": null
+    },
+    "facilities_in_request": {
+      "status": "K",
+      "value": null
+    },
+    "collectibility": {
+      "status": "K",
+      "value": null
+    },
+    "provision_coverage": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "collection_evidence": {
+      "status": "K",
+      "value": null
+    },
+    "partial": true
+  },
+  "expected": {
+    "partial_accepted": false,
+    "full_accepted_if_eligible": {
+      "status": "K",
+      "value": null
+    },
+    "eligibility_checks_recorded": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "partial_accepted": false,
+      "full_accepted_if_eligible": true,
+      "eligibility_checks_recorded": true
+    }
+  }
+}

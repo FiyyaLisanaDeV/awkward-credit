@@ -1,0 +1,73 @@
+{
+  "id": "G-SCH-05",
+  "group": "SCHEDULE",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "GRACE_BULLET",
+  "focus": "Bunga berjalan, bullet akhir (X3)",
+  "source": {
+    "workbook": "X3",
+    "sheet": "13.Perhitungan Kredit",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-05"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    },
+    "grace_months": {
+      "status": "K",
+      "value": null
+    },
+    "rounding_policy": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "interest_only_during_grace": true,
+    "balloon_due_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "closing_rule": "BALLOON"
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "interest_only_during_grace": true,
+      "balloon_due_rp": 80000000,
+      "closing_rule": "BALLOON",
+      "final_installment_rp": 81200000
+    }
+  }
+}

@@ -158,10 +158,22 @@ def main():
             return False
         inp_num = has_num(d.get("input", {}))
         exp_num = has_num(d.get("expected", {}))
-        if inp_num or exp_num:
+        rc = d.get("recomputed", {})
+        if inp_num or exp_num or (rc.get("values") is not None):
             filled += 1
         if (d.get("verification") or {}).get("verified"):
             verified += 1
+
+        # recomputed invariants
+        rcv = rc.get("values") or {}
+        if rcv.get("no_flat_effective_factor_181x") is False:
+            problems.append("recomputed: flat/effective factor used")
+        if "schedule_sum_principal_eq_plafon" in rcv and rcv["schedule_sum_principal_eq_plafon"] is not True:
+            problems.append("recomputed: sum principal != plafon")
+        if "schedule_closing_balance_rp" in rcv and rcv["schedule_closing_balance_rp"] != 0:
+            problems.append("recomputed: closing balance != 0")
+        if d.get("negative_test") and rcv.get("accepted") is not False and "accepted" in rcv:
+            problems.append("recomputed: negative test should reject")
         # compute check for known schedule shapes
         inp = d.get("input", {}) or {}
         method = (d.get("method") or "").upper()
@@ -193,7 +205,8 @@ def main():
         else:
             ok += 1
             print(f"OK   {bid}  neg={d.get('negative_test')} filled={inp_num or exp_num} ver={bool((d.get('verification') or {}).get('verified'))}")
-    print(f"\nSUMMARY cases={len(files)} ok={ok} fail={err} filled={filled} verified={verified}")
+    recomputed = sum(1 for f in files if (json.load(open(f)).get("recomputed") or {}).get("values") is not None)
+    print(f"\nSUMMARY cases={len(files)} ok={ok} fail={err} filled={filled} recomputed={recomputed} verified={verified}")
     return 1 if err else 0
 
 

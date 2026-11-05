@@ -1,0 +1,16 @@
+# Claims — Register Klaim Regulasi (DRAFT, NON-ACTIVE)
+
+Status: klaim + sumber yang **ditemukan lewat riset web**. Pasal/ayat **belum** diverifikasi dari PDF resmi; jangan dipakai seed/produksi/`legal_basis`.
+
+| ID | Klaim | Sumber resmi (ditemukan) | Status |
+|---|---|---|---|
+| V1 | POJK Nomor 1 Tahun 2024 tentang Kualitas Aset BPR (menggantikan POJK 33/POJK.03/2018) | https://www.ojk.go.id/id/regulasi/Pages/Kualitas-Aset-Bank-Perekonomian-Rakyat.aspx ; PDF: https://www.ojk.go.id/id/regulasi/Documents/Pages/Kualitas-Aset-Bank-Perekonomian-Rakyat/POJK%201%20Tahun%202024%20Kualitas%20Aset%20Bank%20Perekonomian%20Rakyat.pdf | OFFICIAL_PAGE_FOUND, pasal PENDING |
+| V1-BPRS | POJK Nomor 24 Tahun 2024 tentang Kualitas Aset BPRS | https://www.ojk.go.id/id/regulasi/Pages/POJK-24-Tahun-2024-Kualitas-Aset-Bank-Perekonomian-Rakyat-Syariah.aspx | OFFICIAL_PAGE_FOUND, pasal PENDING |
+| V3 | POJK 18/POJK.03/2017 + POJK 64/POJK.03/2020 + POJK 11 Tahun 2024 (perubahan kedua) tentang SLIK | https://ojk.go.id/id/kanal/perbankan/regulasi/peraturan-ojk/Pages/POJK-tentang-Pelaporan-dan-Permintaan-Informasi-Debitur-melalui-Sistem-Layanan-Informasi-Keuangan.aspx ; https://peraturan.bpk.go.id/Details/301733/peraturan-ojk-no-11-tahun-2024 | OFFICIAL_PAGE_FOUND, consent pasal PENDING |
+| V3-teknis | SEOJK 11/SEOJK.01/2024 tentang Pelaporan dan Permintaan Informasi Debitur melalui SLIK | https://ojk.go.id/id/regulasi/Pages/Pelaporan-dan-Permintaan-Informasi-Debitur-Melalui-Sistem-Layanan-Informasi-Keuangan-11-SEOJK01-2024.aspx | OFFICIAL_PAGE_FOUND |
+| V4 | POJK Nomor 22 Tahun 2023 tentang Pelindungan Konsumen dan Masyarakat di Sektor Jasa Keuangan | https://ojk.go.id/id/regulasi/Pages/Pelindungan-Konsumen-dan-Masyarakat-di-Sektor-Jasa-Keuangan.aspx ; https://peraturan.bpk.go.id/Details/302699/peraturan-ojk-no-22-tahun-2023 | OFFICIAL_PAGE_FOUND, pasal PENDING |
+| V2-koreksi | POJK Nomor 9 Tahun 2024 tentang Penerapan Tata Kelola BPR dan BPRS (bukan "POJK Manajemen Risiko" tersendiri) | https://www.ojk.go.id/id/regulasi/Pages/POJK-9-2024-Penerapan-Tata-Kelola-bagi-BPR-dan-BPRS.aspx | OFFICIAL_PAGE_FOUND |
+| V7-TI | POJK Nomor 34 Tahun 2025 tentang Penyelenggaraan TI oleh BPR dan BPRS (menggantikan POJK 75/POJK.03/2016) | https://www.ojk.go.id/id/regulasi/Pages/POJK-34-Tahun-2025-Penyelenggaraan-Teknologi-Informasi-oleh-Bank-Perekonomian-Rakyat-dan-Bank-Perekonomian-Rakyat-Syariah.aspx | OFFICIAL_PAGE_FOUND |
+| V4-koreksi | POJK 13 Tahun 2024 (Transparansi SBDK) = Bank Umum Konvensional, **bukan BPR** | https://www.ojk.go.id/id/regulasi/Pages/POJK-13-2024-Transparansi-dan-Publikasi-Suku-Bunga-Dasar-Kredit-Bagi-Bank-Umum-Konvensional.aspx | NOT_APPLICABLE_TO_BPR |
+
+Aturan: setiap `OFFICIAL_PAGE_FOUND` hanya naik menjadi `[V]` setelah Compliance/Legal mengunduh PDF, mencatat nomor/tahun/pasal/ayat/tanggal berlaku/tautan/tanggal unduh, dan mengisi `evidence` di `docs/ref.md`.

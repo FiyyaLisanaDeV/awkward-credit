@@ -1,0 +1,72 @@
+{
+  "id": "G-SCH-01",
+  "group": "SCHEDULE",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "FLAT",
+  "focus": "Tenor 1 edge rounding akhir",
+  "source": {
+    "workbook": "X1/X2",
+    "sheet": "jadwal",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-05"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    },
+    "grace_months": {
+      "status": "K",
+      "value": null
+    },
+    "rounding_policy": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "periods": 1,
+    "closing_balance_rp": 0,
+    "adjustment_rp": {
+      "status": "K",
+      "value_rp": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "periods": 1,
+      "closing_balance_rp": 0,
+      "adjustment_rp": 0
+    }
+  }
+}

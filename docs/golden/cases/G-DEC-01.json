@@ -1,0 +1,55 @@
+{
+  "id": "G-DEC-01",
+  "group": "DECISION",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "-",
+  "focus": "Hard-stop IDIR vs soft-score konflik (fix T1)",
+  "source": {
+    "workbook": "X1",
+    "sheet": "analisis kredit/Scoring-konsumtif",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-11",
+    "D-02"
+  ],
+  "corrections": [],
+  "input": {
+    "idir_hard_stop": true,
+    "soft_score_positive": true
+  },
+  "expected": {
+    "decision": "HARD_STOP_OR_REJECT",
+    "conflict_flagged": true,
+    "reasons": [
+      {
+        "status": "K",
+        "value": null
+      }
+    ]
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "decision": "HARD_STOP_OR_REJECT",
+      "conflict_flagged": true,
+      "reasons": [
+        "IDIR hard-stop overrides positive soft-score (T1)"
+      ]
+    }
+  }
+}

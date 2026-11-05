@@ -1,0 +1,68 @@
+{
+  "id": "G-SCH-03",
+  "group": "SCHEDULE",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "ANNUITY",
+  "focus": "Saldo akhir 0 (PMT/IRR)",
+  "source": {
+    "workbook": "X2",
+    "sheet": "13.Perhitungan Kredit",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-05"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    },
+    "grace_months": {
+      "status": "K",
+      "value": null
+    },
+    "rounding_policy": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "closing_balance_rp": 0,
+    "pmt_constant": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "closing_balance_rp": 0,
+      "pmt_constant": true,
+      "pmt_rp": 2031474
+    }
+  }
+}

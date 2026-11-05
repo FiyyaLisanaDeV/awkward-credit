@@ -1,0 +1,79 @@
+{
+  "id": "G-CAP-02",
+  "group": "CAPACITY",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "MODAL_KERJA",
+  "method": "ANNUITY",
+  "focus": "RPC/DSCR/plafon max Anuitas",
+  "source": {
+    "workbook": "X2",
+    "sheet": "6/13",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-11"
+  ],
+  "corrections": [],
+  "input": {
+    "surplus_monthly_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "margin_capacity": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "rate_pa": {
+      "status": "K",
+      "value": null,
+      "format": "decimal_per_year"
+    },
+    "tenor_months": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "rpc_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "dscr": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "max_plafon_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "status": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "rpc_rp": 4000000,
+      "dscr": 1.0,
+      "max_plafon_rp": 157521076,
+      "status": "LAYAK",
+      "dscr_basis": "installment_at_max_plafon"
+    }
+  }
+}

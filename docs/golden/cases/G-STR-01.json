@@ -1,0 +1,66 @@
+{
+  "id": "G-STR-01",
+  "group": "CAPACITY",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "-",
+  "focus": "Stress omzet turun ringan: DSCR pass/fail",
+  "source": {
+    "workbook": "X2/X3",
+    "sheet": "7",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-18"
+  ],
+  "corrections": [],
+  "input": {
+    "scenario": "OMZET_TURUN_RINGAN",
+    "deltas": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "surplus_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "rpc_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "dscr": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "status": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "surplus_rp": 4250000,
+      "rpc_rp": 3400000,
+      "dscr": 1.3421054397507157,
+      "status": "LAYAK",
+      "assumption": "omzet_turun_ringan -> surplus 85% dari 5jt"
+    }
+  }
+}

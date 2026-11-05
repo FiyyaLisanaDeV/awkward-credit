@@ -1,0 +1,83 @@
+{
+  "id": "G-SCH-06",
+  "group": "SCHEDULE",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "GRACE",
+  "method": "GRACE_BULLET",
+  "focus": "Kecukupan balloon >=1.10 (buffer)",
+  "source": {
+    "workbook": "X3",
+    "sheet": "2/6/13",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-05",
+    "D-11"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "kewajiban_akhir_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "sumber_pelunasan_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "threshold_buffer": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "threshold_ok": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    }
+  },
+  "expected": {
+    "rasio_kecukupan": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "rasio_case_hint": 1.1,
+    "status": {
+      "status": "K",
+      "value": null
+    },
+    "hard_stop_or_mitigation": {
+      "status": "K",
+      "value": null
+    },
+    "source_required": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [
+    "rasio_case_hint hanya penanda skenario; nilai final dari input terverifikasi"
+  ],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "rasio_kecukupan": 1.1,
+      "rasio_case_hint": 1.1,
+      "status": "LAYAK",
+      "hard_stop_or_mitigation": "NONE",
+      "source_required": true
+    }
+  }
+}

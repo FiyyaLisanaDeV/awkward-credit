@@ -1,0 +1,99 @@
+{
+  "id": "G-TPP-03",
+  "group": "TPP",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "TPP",
+  "method": "FLAT",
+  "focus": "Boundary IDIR hard-stop (=threshold dan >threshold)",
+  "source": {
+    "workbook": "X1",
+    "sheet": "analisis kredit",
+    "cells": "TBD [K]",
+    "label": "dummy"
+  },
+  "policy_refs": [
+    "D-11"
+  ],
+  "corrections": [
+    "NO_FLAT_TO_EFFECTIVE_1_81X",
+    "EIR_NUMERIC_IRR"
+  ],
+  "input": {
+    "threshold_idir": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "scenarios": [
+      {
+        "case": "at_threshold",
+        "idir": {
+          "status": "K",
+          "value": null,
+          "format": "percent_or_decimal"
+        },
+        "expected_hard_stop": {
+          "status": "K",
+          "value": null
+        }
+      },
+      {
+        "case": "above_threshold",
+        "idir": {
+          "status": "K",
+          "value": null,
+          "format": "percent_or_decimal"
+        },
+        "expected_hard_stop": {
+          "status": "K",
+          "value": null
+        }
+      }
+    ]
+  },
+  "expected": {
+    "hard_stop_triggered": {
+      "status": "K",
+      "value": null
+    },
+    "decision_layer": "HARD_STOP",
+    "reason": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "threshold_idir": 0.8,
+      "scenarios": [
+        {
+          "case": "at_threshold",
+          "idir": 0.8,
+          "expected_hard_stop": true
+        },
+        {
+          "case": "above_threshold",
+          "idir": 0.81,
+          "expected_hard_stop": true
+        }
+      ],
+      "hard_stop_triggered": true,
+      "decision_layer": "HARD_STOP",
+      "reason": "IDIR >= threshold (>= dianggap hard-stop, DRAFT D-11)"
+    }
+  }
+}

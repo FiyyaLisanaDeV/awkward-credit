@@ -1,0 +1,56 @@
+{
+  "id": "G-MK-01",
+  "group": "CAPACITY",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "-",
+  "focus": "Modal kerja cash turnover; komponen biaya eksplisit (fix T7)",
+  "source": {
+    "workbook": "X2",
+    "sheet": "3/5",
+    "cells": "TBD"
+  },
+  "policy_refs": [],
+  "corrections": [],
+  "input": {
+    "cash_operating_cost_year_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "working_days": {
+      "status": "K",
+      "value": null
+    },
+    "turnover_days": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "working_capital_need_rp": {
+      "status": "K",
+      "value_rp": null
+    },
+    "components_explicit": true
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "working_capital_need_rp": 20000000,
+      "components_explicit": true
+    }
+  }
+}

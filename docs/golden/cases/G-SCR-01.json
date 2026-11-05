@@ -1,0 +1,81 @@
+{
+  "id": "G-SCR-01",
+  "group": "SCORING",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+  "dummy_data": true,
+  "pii": false,
+  "negative_test": false,
+  "product": "PRODUKTIF",
+  "method": "-",
+  "focus": "5C rating boundary (D-02, band [K])",
+  "source": {
+    "workbook": "X2/X3",
+    "sheet": "8",
+    "cells": "TBD"
+  },
+  "policy_refs": [
+    "D-02"
+  ],
+  "corrections": [],
+  "input": {
+    "scores": {
+      "character": {
+        "status": "K",
+        "value": null
+      },
+      "capacity": {
+        "status": "K",
+        "value": null
+      },
+      "capital": {
+        "status": "K",
+        "value": null
+      },
+      "collateral": {
+        "status": "K",
+        "value": null
+      },
+      "condition": {
+        "status": "K",
+        "value": null
+      }
+    },
+    "weights": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "expected": {
+    "total_weighted": {
+      "status": "K",
+      "value": null,
+      "format": "percent_or_decimal"
+    },
+    "rating": {
+      "status": "K",
+      "value": null
+    },
+    "model_version": {
+      "status": "K",
+      "value": null
+    }
+  },
+  "verification": {
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence": null
+  },
+  "notes": [],
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "total_weighted": 3.4,
+      "rating": "LAYAK",
+      "model_version": "5C_DRAFT_V1"
+    }
+  }
+}
