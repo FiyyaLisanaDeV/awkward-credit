@@ -52,3 +52,4 @@
 | 0.1 | 2026-11-05 | Inisialisasi 23 bab + mekanisme update (templates, CHANGELOG, MANIFEST, snapshot script) |
 | 0.1.1 | 2026-11-05 | Publikasi repo + wiki (32 halaman) |
 | 0.1.2 | 2026-11-05 | Tambah dokumen produk `PRD.md` + `ERD.md` → wiki (34 halaman) |
+| 0.1.3 | 2026-11-05 | Poles `README.md` (lebih informatif & terstruktur) |

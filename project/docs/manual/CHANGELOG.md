@@ -20,3 +20,8 @@ Semua perubahan manual dicatat di sini (append-oriented). Format: tanggal, versi
 - **Bukti `[E]`:** 61 migrasi · 55 model · 35 enum pada repo `loan-analytic-bpr` (nama tabel aktual: `debitur`, `permohonan_kredit`, `analisis_*`, `kredit`, `jadwal_angsuran`, `ledger`, dll).
 - **Wiki:** `project/scripts/build-wiki.py` diperluas → publikasi dokumen root sebagai halaman `PRD` & `ERD`; Home + `_Sidebar` menambah bagian **Dokumen Produk**. Wiki kini **34 halaman**.
 - **Guardrail:** tautan internal diverifikasi ke berkas nyata; tanpa nama/ukuran/lokasi workbook Excel maupun path absolut.
+
+## 0.1.3 — 2026-11-05 (README dipoles)
+- **README.md** disusun ulang agar lebih informatif & terstruktur: tabel properti proyek, daftar isi bertaut, konteks & tujuan, tabel status per area, sumber referensi X1/X2/X3 (tetap tanpa identitas berkas), peta dokumen, arsitektur & stack, kontrak/guardrail, tabel koreksi wajib T1–T14, golden/spec/evidence, manual & wiki, struktur repositori, label bukti + precedence, dan panduan mulai.
+- **Verifikasi:** 23 tautan internal dicek (semua valid); tanpa nama/ukuran/lokasi workbook Excel maupun path absolut.
+- **Wiki:** 34 halaman (tidak berubah); README bukan halaman wiki.
