@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """build-wiki.py — ubah manual book (project/docs/manual) menjadi halaman wiki GitHub.
 
-Output: <repo>/wiki/*.md  (Home, _Sidebar, _Footer, Bab 1..23, + lampiran).
+Output: <repo>/wiki/*.md  (Home, Indeks, _Sidebar, _Footer, Bab 1..23, + lampiran).
 Jalankan lalu publikasikan via scripts/publish-wiki.sh.
 """
 from __future__ import annotations
@@ -64,10 +64,145 @@ ROOT = [
 ]
 ROOT_SLUG = {f: s for f, s, _ in ROOT}
 
+TITLE = {s: t for _f, s, t in CHAPTERS}
+
+GROUPS = [
+    ("Ringkasan", CHAPTERS[0:1]),
+    ("Arsitektur & Otorisasi", CHAPTERS[1:4]),
+    ("Domain Kredit", CHAPTERS[4:7]),
+    ("Perhitungan & Aturan", CHAPTERS[7:9]),
+    ("Workflow & Kredit", CHAPTERS[9:12]),
+    ("API, UI & CLI", CHAPTERS[12:15]),
+    ("Data, Import & Keamanan", CHAPTERS[15:18]),
+    ("Struktur Data & Gap", CHAPTERS[18:20]),
+    ("Operasional & Pemeliharaan", CHAPTERS[20:23]),
+]
+
 # target relatif (dari manual/) -> slug wiki
 SLUG = {
     "chapters/" + f: s for f, s, _ in CHAPTERS
 } | {t: s for t, s, _ in EXTRA} | {"README.md": "Home"}
+
+
+# --- rujukan silang antar-bab ----------------------------------------------
+# slug -> [(slug_target, alasan singkat)]
+RELATED: dict[str, list[tuple[str, str]]] = {
+    "Bab-01-Ringkasan-Ruang-Lingkup": [
+        ("Bab-02-Arsitektur-Stack", "stack & arsitektur"),
+        ("Bab-13-API-v1", "kontrak API"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap & keputusan terbuka"),
+    ],
+    "Bab-02-Arsitektur-Stack": [
+        ("Bab-03-Instalasi-Konfigurasi-Operasi", "instalasi & konfigurasi"),
+        ("Bab-19-Struktur-Data-Model-Migrasi", "model/migrasi/enum"),
+        ("Bab-12-Ledger-Audit-Integritas", "ledger & audit"),
+    ],
+    "Bab-03-Instalasi-Konfigurasi-Operasi": [
+        ("Bab-02-Arsitektur-Stack", "stack"),
+        ("Bab-15-CLI-Artisan-Tools", "perintah & quality tools"),
+        ("Bab-21-Operasional-Backup-Rilis", "operasional & rilis"),
+    ],
+    "Bab-04-Auth-RBAC-Keamanan": [
+        ("Bab-02-Arsitektur-Stack", "arsitektur"),
+        ("Bab-18-Keamanan-PII-PDP", "PII & PDP"),
+        ("Bab-10-Approval-Dokumen-Workflow", "kewenangan approval"),
+    ],
+    "Bab-05-Debitur-dan-Data-Nasabah": [
+        ("Bab-06-Permohonan-Produk-SLIK", "permohonan & SLIK"),
+        ("Bab-18-Keamanan-PII-PDP", "perlindungan PII"),
+        ("Bab-19-Struktur-Data-Model-Migrasi", "skema data"),
+    ],
+    "Bab-06-Permohonan-Produk-SLIK": [
+        ("Bab-05-Debitur-dan-Data-Nasabah", "data debitur"),
+        ("Bab-07-Analisis-Kredit", "analisis kredit"),
+        ("Bab-10-Approval-Dokumen-Workflow", "alur persetujuan"),
+    ],
+    "Bab-07-Analisis-Kredit": [
+        ("Bab-06-Permohonan-Produk-SLIK", "input permohonan"),
+        ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "perhitungan & simulasi"),
+        ("Bab-09-Business-Rules-Validasi", "aturan validasi"),
+    ],
+    "Bab-08-Perhitungan-Jadwal-EIR-Simulasi": [
+        ("Bab-07-Analisis-Kredit", "analisis"),
+        ("Bab-09-Business-Rules-Validasi", "aturan & ambang"),
+        ("Bab-11-Kredit-Fasilitas-Pembayaran", "jadwal & pembayaran"),
+    ],
+    "Bab-09-Business-Rules-Validasi": [
+        ("Bab-07-Analisis-Kredit", "analisis"),
+        ("Bab-10-Approval-Dokumen-Workflow", "approval & BR-06"),
+        ("Bab-12-Ledger-Audit-Integritas", "audit"),
+    ],
+    "Bab-10-Approval-Dokumen-Workflow": [
+        ("Bab-04-Auth-RBAC-Keamanan", "RBAC & permission"),
+        ("Bab-09-Business-Rules-Validasi", "BR-05/06/07"),
+        ("Bab-11-Kredit-Fasilitas-Pembayaran", "setelah approved"),
+    ],
+    "Bab-11-Kredit-Fasilitas-Pembayaran": [
+        ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "jadwal & EIR"),
+        ("Bab-10-Approval-Dokumen-Workflow", "approval & dokumen"),
+        ("Bab-12-Ledger-Audit-Integritas", "jurnal & audit"),
+    ],
+    "Bab-12-Ledger-Audit-Integritas": [
+        ("Bab-10-Approval-Dokumen-Workflow", "event approval"),
+        ("Bab-11-Kredit-Fasilitas-Pembayaran", "event angsuran"),
+        ("Bab-18-Keamanan-PII-PDP", "audit akses PII"),
+    ],
+    "Bab-13-API-v1": [
+        ("Bab-04-Auth-RBAC-Keamanan", "autentikasi & otorisasi"),
+        ("Bab-06-Permohonan-Produk-SLIK", "domain permohonan"),
+        ("Bab-14-UI-Web-Livewire", "UI web"),
+    ],
+    "Bab-14-UI-Web-Livewire": [
+        ("Bab-06-Permohonan-Produk-SLIK", "wizard permohonan"),
+        ("Bab-10-Approval-Dokumen-Workflow", "UI approval"),
+        ("Bab-11-Kredit-Fasilitas-Pembayaran", "UI jadwal & pembayaran"),
+    ],
+    "Bab-15-CLI-Artisan-Tools": [
+        ("Bab-03-Instalasi-Konfigurasi-Operasi", "setup"),
+        ("Bab-09-Business-Rules-Validasi", "audit aturan"),
+        ("Bab-21-Operasional-Backup-Rilis", "operasional"),
+    ],
+    "Bab-16-Master-Policy-Seeder": [
+        ("Bab-07-Analisis-Kredit", "parameter analisis"),
+        ("Bab-09-Business-Rules-Validasi", "ambang & validasi"),
+        ("Bab-19-Struktur-Data-Model-Migrasi", "skema referensi"),
+    ],
+    "Bab-17-Import-Ekstraksi-Data-Quality": [
+        ("Bab-05-Debitur-dan-Data-Nasabah", "data debitur"),
+        ("Bab-06-Permohonan-Produk-SLIK", "SLIK"),
+        ("Bab-18-Keamanan-PII-PDP", "PII & consent"),
+    ],
+    "Bab-18-Keamanan-PII-PDP": [
+        ("Bab-04-Auth-RBAC-Keamanan", "RBAC"),
+        ("Bab-12-Ledger-Audit-Integritas", "audit"),
+        ("Bab-17-Import-Ekstraksi-Data-Quality", "import & consent"),
+    ],
+    "Bab-19-Struktur-Data-Model-Migrasi": [
+        ("Bab-02-Arsitektur-Stack", "arsitektur"),
+        ("Bab-05-Debitur-dan-Data-Nasabah", "domain debitur"),
+        ("Bab-16-Master-Policy-Seeder", "data referensi"),
+    ],
+    "Bab-20-Known-Issues-Gap-Rencana": [
+        ("Bab-09-Business-Rules-Validasi", "aturan"),
+        ("Bab-18-Keamanan-PII-PDP", "kepatuhan"),
+        ("Bab-21-Operasional-Backup-Rilis", "operasional"),
+    ],
+    "Bab-21-Operasional-Backup-Rilis": [
+        ("Bab-03-Instalasi-Konfigurasi-Operasi", "instalasi"),
+        ("Bab-15-CLI-Artisan-Tools", "perintah"),
+        ("Bab-12-Ledger-Audit-Integritas", "integritas data"),
+    ],
+    "Bab-22-Mekanisme-Update-Manual-Book": [
+        ("Bab-01-Ringkasan-Ruang-Lingkup", "ruang lingkup"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap"),
+        ("Bab-21-Operasional-Backup-Rilis", "rilis"),
+    ],
+    "Bab-23-Glosarium-Indeks": [
+        ("Bab-01-Ringkasan-Ruang-Lingkup", "ringkasan"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap"),
+        ("Bab-22-Mekanisme-Update-Manual-Book", "pemeliharaan manual"),
+    ],
+}
 
 
 def wiki_slug(rel: str) -> str | None:
@@ -144,6 +279,49 @@ def write(name: str, text: str) -> None:
         fh.write(text.rstrip() + "\n")
 
 
+def group_of(slug: str) -> str:
+    for name, items in GROUPS:
+        if any(s == slug for _f, s, _t in items):
+            return name
+    return ""
+
+
+def header_block(slug: str, title: str) -> str:
+    group = group_of(slug)
+    return f"> **Bagian wiki:** {group} · **Halaman:** {title} · [🏠 Home](Home)\n"
+
+
+def outline_block(sections: list[str]) -> str:
+    if not sections:
+        return ""
+    lines = ["", "**Isi halaman:**", ""]
+    for sec in sections:
+        lines.append(f"- {sec}")
+    return "\n".join(lines) + "\n"
+
+
+def with_header(text: str, slug: str, title: str, sections: list[str] | None = None) -> str:
+    block = header_block(slug, title) + outline_block(sections or [])
+    head, sep, rest = text.partition("\n")
+    if head.startswith("# "):
+        return head + "\n\n" + block + ("\n" + rest if sep else "")
+    return block + "\n" + text
+
+
+def sections_of(text: str) -> list[str]:
+    return [line[3:].strip() for line in text.splitlines() if line.startswith("## ")]
+
+
+def related_block(slug: str) -> str:
+    items = RELATED.get(slug, [])
+    if not items:
+        return ""
+    lines = ["", "## Lihat juga", ""]
+    for target, reason in items:
+        lines.append(f"- [{TITLE.get(target, target)}]({target}) — {reason}")
+    return "\n".join(lines) + "\n"
+
+
 def nav(prev_slug: str | None, prev_title: str | None, nxt_slug: str | None, nxt_title: str | None) -> str:
     left = f"← [{prev_title}]({prev_slug})" if prev_slug else "← *(awal)*"
     right = f"[{nxt_title}]({nxt_slug}) →" if nxt_slug else "*(akhir)* →"
@@ -152,11 +330,16 @@ def nav(prev_slug: str | None, prev_title: str | None, nxt_slug: str | None, nxt
 
 def build() -> None:
     os.makedirs(OUT, exist_ok=True)
+    sections: dict[str, list[str]] = {}
 
     # 1) Bab
     for i, (fname, slug, title) in enumerate(CHAPTERS):
         src = os.path.join(MANUAL, "chapters", fname)
-        body = convert_links(read(src), "chapters/" + fname)
+        raw = read(src)
+        sections[slug] = sections_of(raw)
+        body = convert_links(raw, "chapters/" + fname)
+        body = with_header(body, slug, title, sections[slug])
+        body += related_block(slug)
         prev = CHAPTERS[i - 1] if i > 0 else None
         nxt = CHAPTERS[i + 1] if i < len(CHAPTERS) - 1 else None
         body += nav(prev[1] if prev else None, prev[2] if prev else None,
@@ -181,15 +364,69 @@ def build() -> None:
         body += nav(None, None, None, None)
         write(slug, body)
 
-    # 3) Home
+    # 3) Indeks — daftar bab + bagian
+    idx = [
+        "# Indeks",
+        "",
+        "Daftar seluruh bab dan bagian manual. Gunakan halaman ini sebagai rujukan cepat;",
+        "setiap bab juga memiliki blok **Lihat juga** ke bab terkait.",
+        "",
+        "## Daftar bab",
+        "",
+    ]
+    for _f, slug, title in CHAPTERS:
+        idx.append(f"- [{title}]({slug}) — *{group_of(slug)}*")
+    idx += ["", "## Bagian per bab", ""]
+    for _f, slug, title in CHAPTERS:
+        idx.append(f"### [{title}]({slug})")
+        idx.append("")
+        for sec in sections.get(slug, []):
+            idx.append(f"- {sec}")
+        idx.append("")
+    write("Indeks", "\n".join(idx))
+
+    # 4) Home
     toc = "\n".join(f"{i+1}. [{t}]({s})" for i, (_f, s, t) in enumerate(CHAPTERS))
+    status_rows = [
+        ("Debitur & data nasabah", "Terimplementasi", "Bab-05-Debitur-dan-Data-Nasabah"),
+        ("Permohonan & SLIK", "Terimplementasi", "Bab-06-Permohonan-Produk-SLIK"),
+        ("Analisis & simulasi", "Terimplementasi", "Bab-07-Analisis-Kredit"),
+        ("Business rules (15 BR)", "Terimplementasi", "Bab-09-Business-Rules-Validasi"),
+        ("Approval, workflow & notifikasi", "Terimplementasi (Fase 13)", "Bab-10-Approval-Dokumen-Workflow"),
+        ("Kredit, jadwal & pembayaran", "Terimplementasi (Fase 13)", "Bab-11-Kredit-Fasilitas-Pembayaran"),
+        ("Ledger & audit (hash chain)", "Terimplementasi", "Bab-12-Ledger-Audit-Integritas"),
+        ("API v1 (42 endpoint)", "Terimplementasi", "Bab-13-API-v1"),
+        ("UI web (Blade + Livewire)", "Terimplementasi (Fase 12–14)", "Bab-14-UI-Web-Livewire"),
+        ("Dokumen (17 generator)", "Terimplementasi (Fase 14)", "Bab-10-Approval-Dokumen-Workflow"),
+        ("Import & ekstraksi", "Belum (Fase 12B)", "Bab-17-Import-Ekstraksi-Data-Quality"),
+        ("Hardening, UAT & go-live", "Belum (Fase 16–18)", "Bab-21-Operasional-Backup-Rilis"),
+        ("Golden terverifikasi", "0/29 — menunggu sumber & tanda tangan", "Bab-20-Known-Issues-Gap-Rencana"),
+    ]
+    status = "\n".join(f"| {m} | {s} | [{TITLE[slug]}]({slug}) |" for m, s, slug in status_rows)
+    reading_paths = [
+        ("Analis Kredit", ["Bab-05-Debitur-dan-Data-Nasabah", "Bab-06-Permohonan-Produk-SLIK", "Bab-07-Analisis-Kredit", "Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "Bab-09-Business-Rules-Validasi", "Bab-10-Approval-Dokumen-Workflow", "Bab-11-Kredit-Fasilitas-Pembayaran"]),
+        ("Komite / Manajemen", ["Bab-01-Ringkasan-Ruang-Lingkup", "Bab-07-Analisis-Kredit", "Bab-09-Business-Rules-Validasi", "Bab-10-Approval-Dokumen-Workflow", "Bab-20-Known-Issues-Gap-Rencana"]),
+        ("Admin / Operasional", ["Bab-03-Instalasi-Konfigurasi-Operasi", "Bab-16-Master-Policy-Seeder", "Bab-21-Operasional-Backup-Rilis", "Bab-22-Mekanisme-Update-Manual-Book"]),
+        ("Developer", ["Bab-02-Arsitektur-Stack", "Bab-19-Struktur-Data-Model-Migrasi", "Bab-13-API-v1", "Bab-14-UI-Web-Livewire", "Bab-15-CLI-Artisan-Tools", "Bab-12-Ledger-Audit-Integritas"]),
+        ("Compliance / Audit", ["Bab-04-Auth-RBAC-Keamanan", "Bab-12-Ledger-Audit-Integritas", "Bab-18-Keamanan-PII-PDP", "Bab-20-Known-Issues-Gap-Rencana"]),
+    ]
+    paths = "\n".join(
+        "| " + role + " | " + " → ".join(f"[{TITLE[s]}]({s})" for s in seq) + " |"
+        for role, seq in reading_paths
+    )
     home = f"""# Manual Book — Loan Analytic BPR
 
 **Aplikasi Analisis Kredit, Dokumen & Ledger BPR** (PT BPR Bahteramas Kendari).
 
 Manual lengkap yang mencakup seluruh fungsi aplikasi, disusun dari bukti kode/route/migrasi/config/test (`[E]`) plus rencana lapis risiko (`[K]`/`[Rencana]`).
 
-> Repo: [{REPO_URL}]({REPO_URL}) · Sumber manual: [`project/docs/manual/`]({BLOB}/project/docs/manual/README.md)
+> Repo: [{REPO_URL}]({REPO_URL}) · Sumber manual: [`project/docs/manual/`]({BLOB}/project/docs/manual/README.md) · [Indeks lengkap](Indeks)
+
+## Cara memakai wiki
+1. Mulai dari **peta baca per peran** di bawah, lalu ikuti tautan bab.
+2. Setiap bab punya **header bagian**, **isi halaman**, dan blok **Lihat juga** ke bab terkait.
+3. Label bukti (`[E]/[A]/[K]/[H]/[Rencana]`) menunjukkan tingkat kepastian isi.
+4. Untuk status proyek & gap terkini, buka [Known Issues, Gap & Rencana](Bab-20-Known-Issues-Gap-Rencana).
 
 ## Label bukti
 | Label | Arti |
@@ -200,12 +437,26 @@ Manual lengkap yang mencakup seluruh fungsi aplikasi, disusun dari bukti kode/ro
 | `[H]` | Keputusan bertanda tangan. |
 | `[Rencana]` | Belum terimplementasi. |
 
+## Peta baca per peran
+| Peran | Urutan baca |
+|---|---|
+{paths}
+
+## Status ringkas per modul
+| Modul | Status | Bab |
+|---|---|---|
+{status}
+
 ## Dokumen produk
 - [PRD — Product Requirements](PRD) — ruang lingkup, kebutuhan, koreksi wajib, NFR, milestone
 - [ERD — Entity Relationship](ERD) — skema data (tabel/model/enum), relasi, invariant, gap
 
 ## Daftar isi
 {toc}
+
+## Navigasi & indeks
+- [Indeks lengkap (bab + bagian)](Indeks)
+- [Glosarium & Indeks](Bab-23-Glosarium-Indeks)
 
 ## Lampiran
 - [Feature Matrix](Feature-Matrix) — peta fungsi → status → bab
@@ -220,20 +471,9 @@ _Perbarui manual setiap kali fitur/fungsi menjadi **final** — lihat [Bab 22](B
 """
     write("Home", home)
 
-    # 4) Sidebar & footer
-    groups = [
-        ("Ringkasan", CHAPTERS[0:1]),
-        ("Arsitektur & Otorisasi", CHAPTERS[1:4]),
-        ("Domain Kredit", CHAPTERS[4:7]),
-        ("Perhitungan & Aturan", CHAPTERS[7:9]),
-        ("Workflow & Kredit", CHAPTERS[9:12]),
-        ("API, UI & CLI", CHAPTERS[12:15]),
-        ("Data, Import & Keamanan", CHAPTERS[15:18]),
-        ("Struktur Data & Gap", CHAPTERS[18:20]),
-        ("Operasional & Pemeliharaan", CHAPTERS[20:23]),
-    ]
-    lines = ["### Manual Book BPR", "", "**[🏠 Home](Home)**", ""]
-    for gname, items in groups:
+    # 5) Sidebar & footer
+    lines = ["### Manual Book BPR", "", "**[🏠 Home](Home)** · **[Indeks](Indeks)**", ""]
+    for gname, items in GROUPS:
         lines.append(f"**{gname}**")
         for _f, s, t in items:
             lines.append(f"- [{t}]({s})")
