@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup Interaktif — Loan Analytic BPR</title>
+<style>
+:root{
+  --primary:#0b5d3b;--primary-dark:#084529;--accent:#c9a227;--bg:#f6f7f9;--surface:#fff;
+  --border:#d9dee5;--text:#1f2933;--muted:#5f6b7a;--danger:#b42318;--warning:#b54708;--success:#067647;
+  --blue:#2563eb;--radius:8px;--shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.10);
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:"Helvetica Neue",Arial,system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
+h1,h2,h3,h4{margin:0 0 .5rem;line-height:1.25}h1{font-size:1.5rem}h2{font-size:1.2rem}h3{font-size:1rem}p{margin:0 0 .75rem}
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--primary-dark);color:#e8efe9;padding:1rem 0;flex-shrink:0}
+.sidebar .brand{padding:0 1rem 1rem;font-weight:700;letter-spacing:.02em}
+.sidebar nav a{display:block;padding:.55rem 1rem;color:#cfe0d5;border-left:3px solid transparent;cursor:pointer}
+.sidebar nav a:hover,.sidebar nav a.active{background:rgba(255,255,255,.08);border-left-color:var(--accent);color:#fff;text-decoration:none}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.content{padding:1.25rem;flex:1}.footer{padding:.75rem 1.25rem;color:var(--muted);font-size:.8rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:1rem;margin-bottom:1rem}
+.grid{display:grid;gap:1rem}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:980px){.g2,.g3,.g4{grid-template-columns:1fr}.sidebar{width:200px}}@media(max-width:700px){.app-shell{flex-direction:column}.sidebar{width:100%}.sidebar nav{display:flex;flex-wrap:wrap}.sidebar nav a{border-left:0;border-bottom:3px solid transparent}}
+label{display:block;font-weight:600;margin-bottom:.25rem;font-size:.9rem}
+input,select,textarea{width:100%;padding:.5rem .6rem;border:1px solid var(--border);border-radius:6px;background:#fff;color:inherit;font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid rgba(11,93,59,.25);border-color:var(--primary)}
+.field{margin-bottom:.85rem}.hint{color:var(--muted);font-size:.8rem}.muted{color:var(--muted)}
+.btn{display:inline-block;padding:.5rem .9rem;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--text);cursor:pointer;font:inherit}
+.btn:hover{background:#f8fafb;text-decoration:none}.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn-primary:hover{background:#0a5235}
+.btn-sm{padding:.3rem .6rem;font-size:.85rem}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:9px 8px;border-bottom:1px solid var(--border)}
+td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top}tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85rem}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.b-draft{background:#eef2f6;color:var(--muted)}.b-warn{background:#fef0c7;color:var(--warning)}.b-ok{background:#dcfae6;color:var(--success)}.b-bad{background:#fee4e2;color:var(--danger)}.b-info{background:#dbeafe;color:var(--blue)}
+.wizard-steps{display:flex;gap:.5rem;list-style:none;padding:0;margin:0 0 1rem;flex-wrap:wrap}
+.wizard-steps li{display:flex;align-items:center;gap:.4rem;padding:.35rem .7rem;border-radius:999px;background:#eef2f6;color:var(--muted);font-size:.85rem;cursor:pointer}
+.wizard-steps li.active{background:var(--primary);color:#fff}.wizard-steps li.done{background:#e7f6ee;color:var(--success)}
+.step-no{display:inline-grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:50%;background:rgba(0,0,0,.08);font-size:.75rem;font-weight:700}
+.wizard-steps li.active .step-no{background:rgba(255,255,255,.2)}
+.tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.tab{padding:.4rem .75rem;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:.85rem}
+.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.review-list{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:.35rem .8rem;margin:0}
+.review-list dt{color:var(--muted);font-size:.85rem}.review-list dd{margin:0;font-weight:500}
+.bar{height:8px;background:#e6eaef;border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:var(--primary)}
+.kelengkapan-head{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.3rem}
+.dscr{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}.dscr-value{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums}
+.callout{border-left:4px solid var(--accent);background:#fffcf0;padding:12px 14px;border-radius:10px}
+.callout-red{border-left-color:var(--danger);background:#fff5f5}.callout-green{border-left-color:var(--success);background:#f2fff7}
+.code{background:#0f172a;color:#e2e8f0;padding:.75rem;border-radius:6px;overflow:auto;font-size:.75rem;max-height:260px}
+.mock-banner{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:10px 14px;border-radius:10px;font-size:12px;line-height:1.5;margin-bottom:14px}
+.table-scroll{overflow-x:auto;max-height:340px}
+.kpi .hint{margin-bottom:2px}.kpi h2{margin:0;font-size:1.6rem}
+.flex{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}.gap2{gap:1rem}.mt1{margin-top:.5rem}.mt2{margin-top:1rem}.mb0{margin-bottom:0}
+.hidden{display:none!important}.right{margin-left:auto}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">Loan Analytic BPR</div>
+    <nav id="sidenav"></nav>
+  </aside>
+  <div class="main">
+    <header class="navbar">
+      <div class="muted" id="pageTitle">Dashboard</div>
+      <div class="flex">
+        <span class="badge b-info">MOCKUP</span>
+        <span class="small muted">analis.demo (dummy)</span>
+        <a class="btn btn-sm" onclick="go('dashboard')">Beranda</a>
+      </div>
+    </header>
+    <main class="content">
+      <div class="mock-banner"><b>Mockup interaktif (verifikasi visual)</b> — seluruh data <b>dummy</b>, tanpa PII, tanpa identitas workbook sumber. Angka kalkulasi bersifat <b>ilustrasi</b> dan <b>bukan keputusan [H]</b>; rumus produksi wajib golden test terverifikasi. Tidak memakai faktor 1,81x (EIR/IRR numerik di produksi).</div>
+      <div id="view"></div>
+    </main>
+    <footer class="footer">Loan Analytic BPR · Mockup verifikasi visual · <span id="today"></span></footer>
+  </div>
+</div>
+
+<script>
+const NAV=[
+  {id:'dashboard',label:'Dasbor'},
+  {id:'debitur',label:'Debitur'},
+  {id:'permohonan',label:'Permohonan'},
+  {id:'analisis',label:'Analisis Kredit'},
+  {id:'simulasi',label:'Simulasi'},
+  {id:'ledger',label:'Ledger & Integritas'},
+  {id:'golden',label:'Golden Readiness'}
+];
+const state={page:'dashboard',dTab:'identitas',pStep:1,aTab:'kapasitas',sim:{P:100000000,r:0.18,n:12,metode:'FLAT',grace:0}};
+
+const debitur=[
+  {id:'D-001',nama:'Budi Santoso (dummy)',nik:'7371********0001',hp:'0812****001',usaha:'Perdagangan',perm:2},
+  {id:'D-002',nama:'Siti Aminah (dummy)',nik:'7371********0002',hp:'0813****002',usaha:'Jasa',perm:1},
+  {id:'D-003',nama:'Andi Pratama (dummy)',nik:'7371********0003',hp:'0852****003',usaha:'Pertanian',perm:1}
+];
+const permohonan=[
+  {no:'PK/2026/00021',debitur:'Budi Santoso (dummy)',produk:'TPP',plafon:80000000,tenor:60,sistem:'FLAT',status:'ANALISIS',kel:78},
+  {no:'PK/2026/00022',debitur:'Siti Aminah (dummy)',produk:'MODAL_KERJA',plafon:150000000,tenor:24,sistem:'ANUITAS',status:'DRAFT',kel:45},
+  {no:'PK/2026/00023',debitur:'Andi Pratama (dummy)',produk:'GRACE_PERIOD',plafon:200000000,tenor:36,sistem:'GRACE',status:'SUBMITTED',kel:62}
+];
+const slikRows=[
+  {lembaga:'Bank X (dummy)',jenis:'Kredit Modal Kerja',plafon:50000000,baki:30000000,angs:1500000,kolek:'1 - Lancar'},
+  {lembaga:'Koperasi Y (dummy)',jenis:'Multiguna',plafon:20000000,baki:12000000,angs:900000,kolek:'1 - Lancar'}
+];
+
+function rp(n){ n=Math.round(Number(n)||0); return 'Rp '+n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+function fmt(n,d=2){ return Number(n).toLocaleString('id-ID',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function badge(s){
+  const m={DRAFT:'b-draft',ANALISIS:'b-info',SUBMITTED:'b-warn',APPROVED:'b-ok',ACTIVE:'b-ok',DITOLAK:'b-bad',REJECT:'b-bad',HARD_STOP:'b-bad',LAYAK:'b-ok',PERHATIAN:'b-warn'};
+  return `<span class="badge ${m[s]||'b-draft'}">${s}</span>`;
+}
+
+function go(p){ state.page=p; render(); }
+function render(){
+  document.getElementById('today').textContent=new Date().toLocaleDateString('id-ID');
+  const nav=document.getElementById('sidenav'); nav.innerHTML=NAV.map(n=>`<a class="${state.page===n.id?'active':''}" onclick="go('${n.id}')">${n.label}</a>`).join('');
+  const cur=NAV.find(n=>n.id===state.page)||NAV[0]; document.getElementById('pageTitle').textContent=cur.label;
+  const v=document.getElementById('view');
+  const pages={dashboard:pageDashboard,debitur:pageDebitur,permohonan:pagePermohonan,analisis:pageAnalisis,simulasi:pageSimulasi,ledger:pageLedger,golden:pageGolden};
+  v.innerHTML=(pages[state.page]||pageDashboard)();
+  if(state.page==='simulasi') bindSim();
+}
+
+function pageDashboard(){
+  return `
+  <h1>Dasbor</h1><p class="muted">Ringkasan portofolio (dummy). KPI nyata terhubung ke data di fase lanjutan.</p>
+  <div class="grid g4">
+    <div class="card kpi"><div class="hint">Draft</div><h2>4</h2></div>
+    <div class="card kpi"><div class="hint">Dalam Analisis</div><h2>3</h2></div>
+    <div class="card kpi"><div class="hint">Disetujui</div><h2>2</h2></div>
+    <div class="card kpi"><div class="hint">Kredit Aktif</div><h2>11</h2></div>
+  </div>
+  <div class="grid g2 mt2">
+    <div class="card"><h3>Permohonan terbaru</h3>
+      <table><thead><tr><th>No</th><th>Debitur</th><th>Status</th><th class="num">Plafon</th></tr></thead>
+      <tbody>${permohonan.map(p=>`<tr><td class="mono">${p.no}</td><td>${p.debitur}</td><td>${badge(p.status)}</td><td class="num">${rp(p.plafon)}</td></tr>`).join('')}</tbody></table>
+    </div>
+    <div class="card"><h3>Gate & perhatian</h3>
+      <div class="callout-red callout mb0"><b>Gate F4 tertutup</b><div class="small">Golden terverifikasi 0/29; keputusan D-01..D-20 masih DRAFT. Engine/parity belum boleh dikunci.</div></div>
+      <ul class="muted" style="margin:10px 0 0 18px;line-height:1.7">
+        <li>3 red flag: DSR tinggi, dokumen belum lengkap, kolektibilitas perlu cek.</li>
+        <li>C-002 (IDIR 85,93%/RATE eksak) = klaim [K], bukan terverifikasi.</li>
+        <li>Snapshot analisis immutable & ledger double-entry+COA = [Rencana].</li>
+      </ul>
+    </div>
+  </div>`;
+}
+
+function pageDebitur(){
+  return `
+  <div class="page-head"><h1>Debitur</h1><button class="btn btn-primary" onclick="alert('Mockup: buka wizard debitur (3 langkah).')">+ Debitur Baru</button></div>
+  <div class="card">
+    <table><thead><tr><th>Nama</th><th>No. Identitas</th><th>No. HP</th><th>Usaha</th><th class="num">Permohonan</th><th></th></tr></thead>
+    <tbody>${debitur.map(d=>`<tr><td>${d.nama}</td><td class="mono">${d.nik}</td><td class="mono">${d.hp}</td><td>${d.usaha}</td><td class="num">${d.perm}</td><td><a onclick="state.dTab='identitas';state.dId='${d.id}';render()">Detail</a></td></tr>`).join('')}</tbody></table>
+  </div>
+  ${state.dId ? detailDebitur(debitur.find(x=>x.id===state.dId)) : ''}`;
+}
+function detailDebitur(d){ if(!d) return '';
+  const tabs={identitas:`<dl class="review-list"><dt>ID</dt><dd>${d.id}</dd><dt>Nama</dt><dd>${d.nama}</dd><dt>No. Identitas (mask)</dt><dd class="mono">${d.nik}</dd><dt>No. HP (mask)</dt><dd class="mono">${d.hp}</dd><dt>Usaha</dt><dd>${d.usaha}</dd><dt>PII</dt><dd>${badge('TERMASKER')} — enkripsi+blind index di produksi [Rencana]</dd></dl>`,
+  pengkinian:`<p class="muted">Riwayat pengkinian data (dummy). Tanggal efektif & sumber tercatat.</p><table><thead><tr><th>Tanggal</th><th>Bidang</th><th>Keterangan</th></tr></thead><tbody><tr><td>2026-10-01</td><td>Alamat/Usaha</td><td>Pembaruan periodik (dummy)</td></tr></tbody></table>`,
+  riwayat:`<p class="muted">Riwayat permohonan/kredit (dummy).</p><ul><li>PK/2026/00021 — TPP — ${badge('ANALISIS')}</li><li>PK/2025/00110 — TPP — ${badge('LUNAS')}</li></ul>`};
+  return `<div class="card mt2"><h3>Detail: ${d.nama}</h3>
+    <div class="tabs">${Object.keys(tabs).map(t=>`<button class="tab ${state.dTab===t?'active':''}" onclick="state.dTab='${t}';render()">${t}</button>`).join('')}</div>
+    ${tabs[state.dTab]||tabs.identitas}</div>`;
+}
+
+function pagePermohonan(){
+  const p=permohonan[0];
+  const steps=['Debitur & Produk','Syarat & Kelengkapan','SLIK (review-first)','Ringkasan Biaya','Konfirmasi'];
+  return `
+  <div class="page-head"><h1>Permohonan</h1><button class="btn btn-primary" onclick="alert('Mockup: wizard 5 langkah — draft tersimpan bertahap.')">+ Permohonan Baru</button></div>
+  <div class="card">
+    <table><thead><tr><th>No</th><th>Debitur</th><th>Produk</th><th class="num">Plafon</th><th>Sistem</th><th>Status</th><th>Kelengkapan</th></tr></thead>
+    <tbody>${permohonan.map(r=>`<tr><td class="mono">${r.no}</td><td>${r.debitur}</td><td>${r.produk}</td><td class="num">${rp(r.plafon)}</td><td>${r.sistem}</td><td>${badge(r.status)}</td><td><div class="bar" style="width:120px"><div class="bar-fill" style="width:${r.kel}%"></div></div><span class="small muted">${r.kel}%</span></td></tr>`).join('')}</tbody></table>
+  </div>
+  <div class="card"><h3>Wizard Permohonan (ilustrasi 5 langkah) — ${p.no}</h3>
+    <ul class="wizard-steps">${steps.map((s,i)=>`<li class="${state.pStep===i+1?'active':(i+1<state.pStep?'done':'')}" onclick="state.pStep=${i+1};render()"><span class="step-no">${i+1}</span>${s}</li>`).join('')}</ul>
+    ${renderPStep(p,steps)}
+    <div class="flex mt2"><button class="btn" onclick="state.pStep=Math.max(1,state.pStep-1);render()">Sebelumnya</button><button class="btn btn-primary right" onclick="state.pStep=Math.min(5,state.pStep+1);render()">Lanjut / Simpan Draft</button></div>
+  </div>`;
+}
+function renderPStep(p,steps){
+  if(state.pStep===1) return `<div class="grid g2"><div class="field"><label>Debitur</label><input value="${p.debitur}" readonly></div><div class="field"><label>Produk</label><select><option ${p.produk==='TPP'?'selected':''}>TPP</option><option ${p.produk==='MODAL_KERJA'?'selected':''}>MODAL_KERJA</option><option ${p.produk==='GRACE_PERIOD'?'selected':''}>GRACE_PERIOD</option></select></div><div class="field"><label>Plafon (Rp)</label><input value="${p.plafon.toLocaleString('id-ID')}" ></div><div class="field"><label>Tenor (bulan)</label><input value="${p.tenor}"></div><div class="field"><label>Sistem bunga</label><select><option>FLAT</option><option>ANUITAS</option><option>GRACE_PERIOD</option></select></div><div class="field"><label>Tujuan penggunaan</label><input value="Modal kerja / konsumtif (dummy)"></div></div>`;
+  if(state.pStep===2) return `<p class="muted">Checklist kelengkapan dokumen (berbasis template). ${badge('REVIEW')} </p><div class="kelengkapan-head"><span>Kelengkapan</span><b>${p.kel}%</b></div><div class="bar"><div class="bar-fill" style="width:${p.kel}%"></div></div><ul class="muted" style="margin-top:10px;line-height:1.8"><li>☑ Identitas & formulir — ADA</li><li>☑ Bukti penghasilan — ADA</li><li>☐ Dokumen agunan — BELUM</li><li>☐ Surat keterangan usaha — BELUM</li></ul>`;
+  if(state.pStep===3) return `<p class="muted">Import/entry SLIK: <b>review-first</b>, confidence + provenance, consent wajib. Tidak auto-commit. Validasi: baki≤plafon (flag), duplikat, kolek 1–5 (T2–T4).</p>
+    <table><thead><tr><th>Lembaga</th><th>Jenis</th><th class="num">Plafon</th><th class="num">Baki</th><th class="num">Angsuran/bln</th><th>Kolek</th></tr></thead>
+    <tbody>${slikRows.map(r=>`<tr><td>${r.lembaga}</td><td>${r.jenis}</td><td class="num">${rp(r.plafon)}</td><td class="num">${rp(r.baki)}</td><td class="num">${rp(r.angs)}</td><td>${badge('OK')} ${r.kolek}</td></tr>`).join('')}</tbody></table>
+    <div class="callout mt2 small">Total angsuran eksisting SLIK (otomatis) = <b>${rp(slikRows.reduce((a,r)=>a+r.angs,0))}</b> → dipakai DSR total (fix T2). Sumber & consent tercatat.</div>`;
+  if(state.pStep===4) return `<dl class="review-list"><dt>Plafon</dt><dd>${rp(p.plafon)}</dd><dt>Tenor / Sistem</dt><dd>${p.tenor} bln · ${p.sistem}</dd><dt>Biaya & dana diterima</dt><dd class="muted">Dirinci di memo (snapshot) — T10: blokir lama eksplisit + jurnal seimbang. [K D-06]</dd><dt>Dokumen</dt><dd>Generated dari snapshot, tanpa hardcode/add-in (T8/T9/T12)</dd></dl>`;
+  return `<div class="callout-green callout"><b>Siap diajukan (mockup).</b><div class="small">Saat submit: validasi business rules + gate consent/kelengkapan. Keputusan final tetap manusia berwenang (maker-checker). Status → SUBMITTED/ANALISIS sesuai alur.</div></div>`;
+}
+
+function pageAnalisis(){
+  const gross=5348080, expense=2300000, slik=slikRows.reduce((a,r)=>a+r.angs,0), newAng=2533333; // ilustrasi
+  const net=gross-expense; const idir=newAng/net; const dsr=(newAng+slik)/net; const idirLimit=0.80; const dsrLimit=0.50;
+  const hardStop = idir>idirLimit;
+  const tabs={
+    neraca_lr:`<p class="muted">Input terstruktur neraca/LR → surplus operasional. Klasifikasi aset <b>enum</b> (fix T6: hindari double-count); ekuitas riil, flag tak-balance (tanpa plug).</p><table><thead><tr><th>Komponen</th><th class="num">Nilai (dummy)</th></tr></thead><tbody><tr><td>Aset lancar</td><td class="num">${rp(120000000)}</td></tr><tr><td>Aset tetap</td><td class="num">${rp(250000000)}</td></tr><tr><td>Kewajiban</td><td class="num">${rp(90000000)}</td></tr><tr><td>Ekuitas (riil)</td><td class="num">${rp(280000000)}</td></tr></tbody></table>`,
+    rasio_mk:`<p class="muted">Rasio likuiditas/solvabilitas/profitabilitas + modal kerja. Komponen biaya eksplisit (fix T7).</p><div class="grid g3"><div class="card"><div class="hint">Current ratio</div><b>1.45</b></div><div class="card"><div class="hint">D/E</div><b>0.32</b></div><div class="card"><div class="hint">Kebutuhan MK (gap)</div><b>${rp(15000000)}</b></div></div>`,
+    kapasitas: (function(){
+      return `<div class="grid g2">
+        <div class="card"><h3>Kapasitas (ilustrasi)</h3>
+          <dl class="review-list">
+            <dt>Penghasilan kotor</dt><dd>${rp(gross)}</dd>
+            <dt>Pengeluaran</dt><dd>${rp(expense)}</dd>
+            <dt>Penghasilan bersih</dt><dd><b>${rp(net)}</b> <span class="small muted">(acuan koreksi [K]: Rp2.948.080 — belum terverifikasi, C-002)</span></dd>
+            <dt>Angsuran baru</dt><dd>${rp(newAng)}</dd>
+            <dt>Angsuran eksisting SLIK</dt><dd>${rp(slik)} <span class="small muted">(otomatis, T2)</span></dd>
+            <dt>IDIR (angsuran baru / bersih)</dt><dd><div class="dscr"><span class="dscr-value" style="color:${idir>idirLimit?'var(--danger)':'var(--success)'}">${fmt(idir*100)}%</span><span class="small muted">batas ${fmt(idirLimit*100,0)}% [K D-11]</span></div></dd>
+            <dt>DSR total (baru+SLIK / bersih)</dt><dd><div class="dscr"><span class="dscr-value" style="color:${dsr>dsrLimit?'var(--warning)':'var(--success)'}">${fmt(dsr*100)}%</span><span class="small muted">batas ${fmt(dsrLimit*100,0)}% [K D-11]</span></div></dd>
+          </dl></div>
+        <div class="card"><h3>Keputusan engine (fix T1)</h3>
+          ${hardStop?`<div class="callout-red callout"><b>HARD STOP</b> — IDIR melampaui ambang. Meskipun soft-score positif, pengajuan <b>tidak lolos hard-stop</b>. Konflik <b>ditandai</b> (tidak disembunyikan).</div>`:`<div class="callout-green callout"><b>Lolos hard-stop</b> (ilustrasi).</div>`}
+          <table class="mt2"><thead><tr><th>Mesin</th><th>Hasil</th><th>Sifat</th></tr></thead><tbody>
+            <tr><td>IDIR/DSR</td><td>${badge(hardStop?'HARD_STOP':'LAYAK')}</td><td><b>Hard-stop</b></td></tr>
+            <tr><td>Soft-score (FSS/5C)</td><td>${badge('LAYAK')}</td><td>Soft</td></tr>
+            <tr><td>Conflict flag</td><td>${hardStop?badge('YA'):'—'}</td><td>Ditampilkan + alasan</td></tr>
+          </tbody></table>
+          <p class="small muted mt1">Putusan final = manusia berwenang (maker-checker, D-12). Angka & ambang ilustrasi [K].</p>
+        </div></div>`;
+    })(),
+    stress:`<p class="muted">6 skenario (dasar, omzet turun ringan/berat, biaya naik, kombinasi). Delta dari policy [K].</p>
+      <table><thead><tr><th>Skenario</th><th class="num">DSCR</th><th>Status</th></tr></thead><tbody>
+      <tr><td>Dasar</td><td class="num">1.35</td><td>${badge('LAYAK')}</td></tr>
+      <tr><td>Omzet turun ringan</td><td class="num">1.12</td><td>${badge('LAYAK')}</td></tr>
+      <tr><td>Omzet turun berat</td><td class="num">0.88</td><td>${badge('HARD_STOP')}</td></tr>
+      <tr><td>Biaya naik</td><td class="num">1.05</td><td>${badge('PERHATIAN')}</td></tr>
+      <tr><td>Kombinasi terburuk</td><td class="num">0.74</td><td>${badge('HARD_STOP')}</td></tr></tbody></table>`,
+    scoring:`<p class="muted">5C produktif / FSS TPP (TPP = redesign berversi, bukan template KPR, D-02). Band 1–5 [K]. Override wajib alasan+otorisasi+audit.</p>
+      <table><thead><tr><th>Aspek</th><th>Bobot</th><th class="num">Skor</th><th>Catatan</th></tr></thead><tbody>
+      <tr><td>Character</td><td>25%</td><td class="num">4</td><td>Dari SLIK terstruktur (T4)</td></tr>
+      <tr><td>Capacity</td><td>30%</td><td class="num">3</td><td>DSCR/IDIR</td></tr>
+      <tr><td>Capital</td><td>15%</td><td class="num">4</td><td>Ekuitas riil (T6)</td></tr>
+      <tr><td>Collateral</td><td>20%</td><td class="num">3</td><td>4 nilai, no double-haircut (T13,D-07)</td></tr>
+      <tr><td>Condition</td><td>10%</td><td class="num">3</td><td>Sub-kriteria; usia snapshot (T14)</td></tr>
+      </tbody></table><p class="mt1"><b>Total tertimbang (ilustrasi): 3.35</b> → ${badge('LAYAK')} <span class="small muted">(band/rating final [K D-02])</span></p>`,
+    rekomendasi:`<dl class="review-list"><dt>Rekomendasi sistem</dt><dd>${badge('PERHATIAN')} (ilustrasi)</dd><dt>Plafon / tenor</dt><dd>${rp(70000000)} / 48 bln (contoh)</dd><dt>Mitigasi</dt><dd>Tambahan agunan / penjamin; verifikasi penghasilan</dd><dt>Dokumen</dt><dd>Dari snapshot (versi+hash+QR), tanpa hardcode</dd><dt>Audit trail</dt><dd>Setiap override/status/akses PII → audit event</dd></dl>`
+  };
+  const labels={neraca_lr:'Neraca & LR',rasio_mk:'Rasio & MK',kapasitas:'Kapasitas & DSCR (T1)',stress:'Stress',scoring:'5C/FSS',rekomendasi:'Rekomendasi'};
+  return `<h1>Workbench Analisis Kredit</h1><p class="muted">Tab ala workbook (X1/X2/X3). Satu sumber kebenaran: snapshot (input + policy + engine + output) [Rencana].</p>
+    <div class="card"><div class="tabs">${Object.keys(tabs).map(t=>`<button class="tab ${state.aTab===t?'active':''}" onclick="state.aTab='${t}';render()">${labels[t]}</button>`).join('')}</div>
+    ${tabs[state.aTab]||tabs.kapasitas}</div>`;
+}
+
+// ---- simulator (integer rupiah, ilustrasi) ----
+function simRows(P,r,n,metode,grace){
+  P=Math.round(P); n=Math.max(1,Math.round(n)); grace=Math.max(0,Math.round(grace));
+  const im=r/12; let bal=P; const out=[];
+  if(metode==='FLAT'){
+    const bungaM=Math.round(P*im); const pokBase=Math.floor(P/n); let rem=P-pokBase*n;
+    for(let k=1;k<=n;k++){ const pok=pokBase+(k===n?rem:0); const row={k,saldo:bal,pok,bunga:bungaM,angs:pok+bungaM,akhir:bal-pok}; out.push(row); bal=row.akhir; }
+  } else if(metode==='ANNUITY'){
+    const A = im===0? P/n : P*im/(1-Math.pow(1+im,-n)); const Ar=Math.round(A);
+    for(let k=1;k<=n;k++){ let bunga=Math.round(bal*im), pok=(k===n?bal:Ar-bunga), angs=(k===n?pok+bunga:Ar); let akhir=bal-pok; out.push({k,saldo:bal,pok,bunga,angs,akhir}); bal=akhir; }
+  } else { // GRACE_BULLET (ilustrasi): grace = interest-only, akhir bullet
+    const g=Math.min(grace,n-1);
+    for(let k=1;k<=n;k++){ const bunga=Math.round(bal*im); let pok=0; if(k===n) pok=bal; const angs=pok+bunga; const akhir=bal-pok; out.push({k,saldo:bal,pok,bunga,angs,akhir,phase:k<=g?'grace':(k===n?'bullet':'-')}); bal=akhir; }
+  }
+  return out;
+}
+function irrMonthly(cfs){ // bisection, monthly
+  const npv=(rm)=>cfs.reduce((s,cf,t)=>s+cf/Math.pow(1+rm,t),0);
+  let lo=-0.99, hi=1.0, flo=npv(lo), fhi=npv(hi);
+  for(let i=0;i<60 && flo*fhi>0;i++){ hi*=2; fhi=npv(hi); }
+  if(flo*fhi>0) return null;
+  for(let i=0;i<120;i++){ const mid=(lo+hi)/2, fm=npv(mid); if(Math.abs(fm)<1e-3) return mid; if(flo*fm<=0){hi=mid;fhi=fm;} else {lo=mid;flo=fm;} }
+  return (lo+hi)/2;
+}
+function bindSim(){
+  const calc=()=>{
+    const P=+document.getElementById('sP').value||0, r=(+document.getElementById('sR').value||0)/100, n=+document.getElementById('sN').value||1, m=document.getElementById('sM').value, g=+document.getElementById('sG').value||0;
+    const rows=simRows(P,r,n,m,g); const sumPok=rows.reduce((a,x)=>a+x.pok,0); const sumB=rows.reduce((a,x)=>a+x.bunga,0);
+    const cfs=[-P, ...rows.map(x=>x.angs)]; const irrM=irrMonthly(cfs); const irrY=irrM!=null?(Math.pow(1+irrM,12)-1):null;
+    document.getElementById('simOut').innerHTML=`
+      <div class="grid g3">
+        <div class="card"><div class="hint">Angsuran/bln (indikatif)</div><h2 class="mb0">${rp(rows[0].angs)}${m==='ANNUITY'?' (≈ tetap)':''}${m==='GRACE_BULLET'?' (bunga berjalan)':''}</h2></div>
+        <div class="card"><div class="hint">Total bunga</div><h2 class="mb0">${rp(sumB)}</h2></div>
+        <div class="card"><div class="hint">Estimasi EIR/IRR (numerik, mockup)</div><h2 class="mb0">${irrY!=null?fmt(irrY*100,3)+'% p.a.':'n/a'}</h2><div class="small muted">Bukan faktor 1,81x; definisi arus kas [K D-05/V4].</div></div>
+      </div>
+      <div class="card"><div class="flex gap2"><span>Sum pokok = <b>${rp(sumPok)}</b></span><span>Saldo akhir = <b>${rp(rows[rows.length-1].akhir)}</b></span><span>${Math.abs(sumPok-P)<=1 && Math.abs(rows[rows.length-1].akhir)<=1?badge('INVARIAN OK'):badge('CEK')}</span></div></div>
+      <div class="card table-scroll"><table><thead><tr><th>#</th><th class="num">Saldo awal</th><th class="num">Pokok</th><th class="num">Bunga</th><th class="num">Angsuran</th><th class="num">Saldo akhir</th>${m==='GRACE_BULLET'?'<th>Fase</th>':''}</tr></thead>
+      <tbody>${rows.map(x=>`<tr><td>${x.k}</td><td class="num">${rp(x.saldo)}</td><td class="num">${rp(x.pok)}</td><td class="num">${rp(x.bunga)}</td><td class="num"><b>${rp(x.angs)}</b></td><td class="num">${rp(x.akhir)}</td>${m==='GRACE_BULLET'?`<td>${x.phase||''}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
+  };
+  ['sP','sR','sN','sM','sG'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',calc); });
+  const sync=()=>{ document.getElementById('gWrap').style.display=(document.getElementById('sM').value==='GRACE_BULLET')?'block':'none'; };
+  document.getElementById('sM').addEventListener('change',()=>{sync();calc();}); sync(); calc();
+}
+function pageSimulasi(){
+  return `<h1>Simulasi Kredit (ilustrasi)</h1>
+  <p class="muted">Perhitungan mockup integer-rupiah (Flat/Anuitas/Grace-bullet). EIR/IRR numerik estimasi — <b>bukan faktor 1,81x</b>. Produksi: engine murni + golden terverifikasi, uang BIGINT+brick/math, kebijakan pembulatan [K D-05].</p>
+  <div class="grid g2">
+    <div class="card"><h3>Parameter</h3>
+      <div class="field"><label>Plafon (Rp)</label><input id="sP" type="number" value="100000000" step="1000000"></div>
+      <div class="field"><label>Suku bunga nominal (% p.a.)</label><input id="sR" type="number" value="18" step="0.1"></div>
+      <div class="field"><label>Tenor (bulan)</label><input id="sN" type="number" value="12" step="1" min="1"></div>
+      <div class="field"><label>Metode</label><select id="sM"><option value="FLAT">Flat</option><option value="ANNUITY">Anuitas</option><option value="GRACE_BULLET">Grace (bunga berjalan + bullet pokok)</option></select></div>
+      <div class="field" id="gWrap"><label>Grace (bulan, bunga saja)</label><input id="sG" type="number" value="3" step="1" min="0"><div class="hint">Ilustrasi grace-bullet (X3); definisi/varian & kecukupan balloon [K].</div></div>
+    </div>
+    <div class="card"><h3>Catatan guardrail</h3>
+      <ul class="muted" style="margin:0 0 0 18px;line-height:1.8">
+        <li>Saldo akhir harus 0; sum(pokok)=plafon (± rounding rule [K D-05]).</li>
+        <li>Grace: sumber & perkiraan pelunasan pokok wajib (balloon) [E/K].</li>
+        <li>Satu sumber jadwal → dokumen/ledger (fix T8).</li>
+        <li>Biaya & dana diterima = snapshot + jurnal seimbang (T10, D-06).</li>
+      </ul>
+    </div>
+  </div>
+  <div id="simOut"></div>`;
+}
+
+function pageLedger(){
+  const ev=[{e:'DISBURSEMENT',ref:'PK/2026/00011',dr:'Piutang Pokok',cr:'Kas/Bank',amt:80000000},{e:'FEE_PROVISI',ref:'PK/2026/00011',dr:'Kas/Bank',cr:'Pend. Provisi',amt:800000},{e:'BLOCK_SAVING',ref:'PK/2026/00011',dr:'Tabungan',cr:'Tabungan Diblokir',amt:5066667},{e:'INSTALLMENT',ref:'PK/2026/00011#1',dr:'Kas/Bank',cr:'Piutang+Bunga',amt:2533333}];
+  return `<h1>Ledger & Integritas</h1>
+  <div class="grid g3"><div class="card kpi"><div class="hint">Ledger</div><h2>Append-only</h2><div class="small muted">hash-chain, immutable trigger</div></div><div class="card kpi"><div class="hint">Integritas</div><h2>Debit = Kredit</h2><div class="small muted">guard + DB constraint [Rencana]</div></div><div class="card kpi"><div class="hint">Koreksi</div><h2>Jurnal balik</h2><div class="small muted">bukan hapus/ubah</div></div></div>
+  <div class="card"><h3>Contoh jurnal (ilustrasi, bukan posting nyata)</h3>
+    <table><thead><tr><th>Event</th><th>Ref</th><th>Debit</th><th>Kredit</th><th class="num">Nominal</th><th>Cek</th></tr></thead>
+    <tbody>${ev.map(x=>`<tr><td class="mono">${x.e}</td><td class="mono">${x.ref}</td><td>${x.dr}</td><td>${x.cr}</td><td class="num">${rp(x.amt)}</td><td>${badge('SEIMBANG')}</td></tr>`).join('')}</tbody></table>
+    <p class="small muted mt1">COA mapping & ledger resmi/bayangan = [K D-01]; alokasi bayar/denda/penalti = [K D-05/D-06]. Saat ini skema app: ledger event-log; double-entry COA = [Rencana].</p>
+  </div>
+  <div class="card"><h3>Audit event (contoh)</h3><pre class="code">{"event":"APPROVAL_OVERRIDE","entity":"permohonan:PK/2026/00021","actor":"komite (dummy)","reason":"wajib alasan (T4/soft-override)","hash_prev":"…","hash":"…","immutable":true}</pre></div>`;
+}
+
+function pageGolden(){
+  const groups=[['SCHEDULE',8,'OK','jadwal/rounding/balloon'],['CAPACITY',7,'OK','RPC/DSCR/MK/stress'],['TPP',5,'OK','IDIR/DSR/payoff/dana (C-002 [K])'],['COLLATERAL',2,'OK','PPKA/LTV 4 nilai'],['SCORING',2,'OK','5C boundary; SLIK override'],['RAC',2,'NEG','BMPK non-bypass'],['CKPN',1,'NEG','CKPN<PPKA ditolak'],['WRITE_OFF',1,'NEG','hapus buku parsial ditolak'],['DECISION',1,'OK','hard-stop vs soft-score']];
+  return `<h1>Golden Readiness</h1>
+  <div class="grid g4"><div class="card kpi"><div class="hint">Total kasus</div><h2>29</h2></div><div class="card kpi"><div class="hint">Struktur OK</div><h2>29/29</h2></div><div class="card kpi"><div class="hint">Terverifikasi</div><h2>0/29</h2></div><div class="card kpi"><div class="hint">Gate F4</div><h2>${badge('TERTUTUP')}</h2></div></div>
+  <div class="card"><h3>Cakupan kelompok</h3>
+    <table><thead><tr><th>Kelompok</th><th class="num">Jml</th><th>Tipe</th><th>Fokus</th></tr></thead>
+    <tbody>${groups.map(g=>`<tr><td class="mono">${g[0]}</td><td class="num">${g[1]}</td><td>${g[2]==='NEG'?badge('NEGATIF'):'—'}</td><td class="muted">${g[3]}</td></tr>`).join('')}</tbody></table></div>
+  <div class="card"><h3>Checker & aturan</h3>
+    <pre class="code">$ python3 project/scripts/verify-golden.py
+SUMMARY cases=29 ok=29 fail=0 filled=6 verified=0
+# Aturan: dummy, no PII; nilai numerik final [K]; no 1,81x/0,87x;
+# EIR/IRR numerik; C-002 = klaim [K]; 4 negative_test wajib tes negatif eksplisit.</pre>
+    <p class="small muted">Blokir isi nilai: RAT-02 (sheet/sel C-002), RAT-03 (D-05/D-06), verifikasi primer V1/V3/V4, keputusan [H].</p>
+  </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

@@ -25,3 +25,7 @@ Semua perubahan manual dicatat di sini (append-oriented). Format: tanggal, versi
 - **README.md** disusun ulang agar lebih informatif & terstruktur: tabel properti proyek, daftar isi bertaut, konteks & tujuan, tabel status per area, sumber referensi X1/X2/X3 (tetap tanpa identitas berkas), peta dokumen, arsitektur & stack, kontrak/guardrail, tabel koreksi wajib T1–T14, golden/spec/evidence, manual & wiki, struktur repositori, label bukti + precedence, dan panduan mulai.
 - **Verifikasi:** 23 tautan internal dicek (semua valid); tanpa nama/ukuran/lokasi workbook Excel maupun path absolut.
 - **Wiki:** 34 halaman (tidak berubah); README bukan halaman wiki.
+
+## 0.1.4 — 2026-11-05 (mockup interaktif + golden readiness)
+- **Mockup interaktif (verifikasi visual):** `mockup-loan-analytic-bpr.html` (standalone) — shell + navigasi (Dasbor, Debitur, Permohonan wizard+SLIK review-first, Workbench Analisis: neraca/LR, rasio/MK, kapasitas/DSCR + demo hard-stop vs soft-score T1, stress, 5C/FSS, rekomendasi, Simulasi Flat/Anuitas/Grace-bullet dengan jadwal + estimasi IRR numerik — tanpa 1,81x, Ledger & integritas, Golden Readiness). Data **dummy**, tanpa PII, tanpa identitas workbook.
+- **Golden checker:** `project/scripts/verify-golden.py` (Decimal) → 29/29 OK, 0 error, 4 negative_test, 0 PII; filled 6/29 (partial/claim), **verified 0/29** (gate F4 tertutup). Evidence/handoff/golden README diperbarui.
