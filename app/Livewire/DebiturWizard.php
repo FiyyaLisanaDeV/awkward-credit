@@ -7,6 +7,7 @@ namespace App\Livewire;
 use App\Enums\JenisKelamin;
 use App\Enums\StatusPerkawinan;
 use App\Services\Debitur\DebiturService;
+use App\Support\Konstanta;
 use App\Support\Validation\DebiturRules;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
@@ -94,7 +95,7 @@ final class DebiturWizard extends Component
             'status_tempat_tinggal', 'lama_tinggal_tahun', 'koordinat_rumah',
             'jumlah_keluarga', 'jumlah_tanggungan',
         ],
-        3 => [
+        Konstanta::STEP_3 => [
             'pekerjaan_utama', 'jabatan', 'nama_perusahaan', 'lama_bekerja_tahun', 'penghasilan_bulanan',
         ],
     ];
@@ -103,7 +104,7 @@ final class DebiturWizard extends Component
     {
         $this->validate(Arr::only(DebiturRules::rules(), $this->fields[$this->step]));
 
-        if ($this->step < 3) {
+        if ($this->step < Konstanta::STEP_3) {
             $this->step++;
         }
     }

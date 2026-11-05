@@ -20,5 +20,19 @@ final class Konstanta
 
     public const SKOR_MAKS = 5;
 
+    public const STEP_3 = 3;
+
+    public const STEP_4 = 4;
+
+    public const STEP_5 = 5;
+
+    public const SLIK_PASTE_MIN_COLUMNS = 5;
+
+    public const SLIK_PASTE_BAKI_INDEX = 3;
+
+    public const SLIK_PASTE_KOLEKTIBILITAS_INDEX = 4;
+
+    public const SLIK_PASTE_ANGSURAN_INDEX = 5;
+
     public const MILI_PER_DETIK = 1000;
 }

@@ -54,6 +54,8 @@ final class SimulationRunner
     /**
      * Bandingkan dua hasil simulasi pada kolom numerik yang sama.
      *
+     * @param  array<string, mixed>  $awal
+     * @param  array<string, mixed>  $akhir
      * @return array<string, array{awal: float, akhir: float, selisih: float}>
      */
     public function diff(array $awal, array $akhir): array

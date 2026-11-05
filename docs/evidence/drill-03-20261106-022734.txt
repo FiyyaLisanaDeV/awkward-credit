@@ -1,0 +1,45 @@
+DRILL #3 — Cold-start (akhir Fase 12) | 20261106-022734
+Sumber: docs/PROGRESS.md + docs/TEKNIS.md (tanpa konteks percakapan)
+
+Q1) Fase apa yang sedang berjalan?
+    Fase 12 — Blade UI Forms (layout, komponen, wizard, simulator, riwayat, diff).
+
+Q2) Commit terakhir & tag apa?
+    HEAD sebelum fase-12: 011d856 feat(app): UI Livewire (debitur/permohonan/simulator), validasi, dan perbaikan QA baseline + paritas golden
+    Tag fase: phase-12-done (dibuat pada commit feat(phase-12)).
+
+Q3) Jumlah migrasi, route, test?
+    migrasi=61 rute=73 file_test=31
+    test:   Tests:    104 passed (1616 assertions)
+
+Q4) 3 langkah berikutnya (perintah konkret)?
+    1) Fase 12B Import & Efisiensi: 8 adapter + staging + UI import; uji fixture anonim + PII masked.
+    2) Fase 13 Dashboard + Workflow: KPI, inbox, timeline, notifikasi, pembayaran; feature test alur approval.
+    3) Selaraskan policy ACTIVE (IDIR 0,35 / margin 0,5 / LTV 0,7) vs rekomendasi DRAFT via D-11/D-07.
+
+Q5) Blocker apa yang terbuka?
+    - Q1–Q7 (PROGRESS §3): band 5C, checklist final, tarif asuransi, contoh iDeb, tesseract, role DB/cred VPS, bobot kelengkapan.
+    - D-01..D-20 DRAFT/UNKNOWN; RAT-01 (jalur repo) & RAT-03 (D-05/D-06) terbuka.
+    - V1/V3/V4: halaman resmi ditemukan, pasal/ayat PENDING (Compliance/Legal).
+
+Konfirmasi live (state:check):
++---------------------------------------+---------------+--------+
+| Item                                  | Nilai         | Status |
++---------------------------------------+---------------+--------+
+| php                                   | 8.3.7         | OK     |
+| laravel                               | 13.40.0       | OK     |
+| timezone                              | Asia/Makassar | OK     |
+| database                              | pgsql         | OK     |
+| migrasi                               | 61            | OK     |
+| rute                                  | 73            | OK     |
+| file test                             | 31            | OK     |
+| composer.lock                         | 76cd829130f7  | OK     |
+| git                                   | 011d856       | OK     |
+| dokumen: docs/RENCANA_IMPLEMENTASI.md | ada           | OK     |
+| dokumen: docs/TEKNIS.md               | ada           | OK     |
+| dokumen: docs/INVENTARIS_DATA.md      | ada           | OK     |
+| dokumen: docs/DSH_PROMPTS_SIMPLE.md   | ada           | OK     |
+| dokumen: docs/PROGRESS.md             | ada           | OK     |
+| dokumen: docs/DECISIONS.md            | ada           | OK     |
+| dokumen: docs/VERIFIKASI.md           | ada           | OK     |
++---------------------------------------+---------------+--------+

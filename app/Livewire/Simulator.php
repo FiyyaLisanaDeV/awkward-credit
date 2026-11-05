@@ -11,7 +11,6 @@ use App\Services\Calculation\AngsuranCalculator;
 use App\Services\Simulation\SimulationRunner;
 use App\Support\Validation\SimulasiRules;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
 
@@ -19,9 +18,9 @@ final class Simulator extends Component
 {
     public string $label = '';
 
-    public string $produk_tipe = 'TPP';
+    public string $produk_tipe = ProdukTipe::TPP->value;
 
-    public string $sistem_suku_bunga = 'Flat';
+    public string $sistem_suku_bunga = SistemSukuBunga::Flat->value;
 
     public string $plafon = '';
 

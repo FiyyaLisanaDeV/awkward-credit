@@ -7,20 +7,20 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 2.5 | 2026-11-05 |
-| `updated_at` | 2026-11-05T02:52+08:00 | 2026-11-05 |
-| Fase aktif | **11 selesai**; berikutnya 12 (Blade UI) | 2026-11-05 |
-| Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-05 |
-| Branch / last commit | main / `7e11e8e` (Fase 11) | 2026-11-05 |
-| PHP | 8.3.7 (Herd) | 2026-11-05 |
-| Laravel | 13.40.0 | 2026-11-05 |
-| PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-05 |
-| Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-05 |
-| Jumlah route | 63 (42 API v1) | 2026-11-05 |
-| Jumlah test | 26 file (87 test) | 2026-11-05 |
-| `composer.lock` hash | `76cd829130f7` | 2026-11-05 |
-| `ledger:verify` | tersedia (Fase 08B) | 2026-11-05 |
-| Bukti fase terakhir | `docs/evidence/phase-11-post-20261105-024945.txt` | 2026-11-05 |
+| Versi dokumen | 2.6 | 2026-11-06 |
+| `updated_at` | 2026-11-06T00:00+08:00 | 2026-11-06 |
+| Fase aktif | **12 selesai**; berikutnya **12B** (Import & Efisiensi) | 2026-11-06 |
+| Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
+| Branch / last commit | main / `011d856` (UI Livewire + QA + paritas golden) | 2026-11-06 |
+| PHP | 8.3.7 (Herd) | 2026-11-06 |
+| Laravel | 13.40.0 | 2026-11-06 |
+| PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
+| Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-06 |
+| Jumlah route | 73 (42 API v1) | 2026-11-06 |
+| Jumlah test | 31 file (**104 test**, 1616 assertions) | 2026-11-06 |
+| `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
+| `ledger:verify` | tersedia (Fase 08B); chain **OK** (diverifikasi sesi ini) | 2026-11-06 |
+| Bukti fase terakhir | `docs/evidence/phase-12-post-20261106-022557.txt` (verify --phase exit 0) + `docs/evidence/drill-03-20261106-022734.txt` | 2026-11-06 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -51,7 +51,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 09 | Calculation + SimulationService | DONE | 02:59 | 03:06 | `docs/evidence/phase-09-post-20261105-0240.txt` | `1de50be` / `phase-09-done` | golden TPP + replay |
 | 10 | Rules + Scoring | DONE | 03:06 | 03:14 | `docs/evidence/phase-10-post-20261105-0245.txt` | `7e49459` / `phase-10-done` | 15 BR + 5C + red flag |
 | 11 | API | DONE | 03:14 | 03:22 | `docs/evidence/phase-11-post-20261105-024945.txt` | `7e11e8e` / `phase-11-done` | 42 endpoint, scoping cabang |
-| 12 | Blade UI Forms | TODO | — | — | — | — | drill #3 |
+| 12 | Blade UI Forms | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-12-post-20261106-022557.txt` + `docs/evidence/drill-03-20261106-022734.txt` | `feat(phase-12)` / `phase-12-done` | verify --phase exit 0; hardcode:audit 0; pint+phpstan OK; 104 test |
 | 12B | Import & Efisiensi | TODO | — | — | — | — | 8 adapter |
 | 13 | Dashboard + Workflow | TODO | — | — | — | — | pembayaran |
 | 14 | Documents (17) | TODO | — | — | — | — | — |
@@ -77,12 +77,22 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-05 (sesi 14) | FASE: 11 | STATUS: done
-BERUBAH: routes/api.php v1 (42 endpoint), 12 controller API, 2 FormRequest, ScopesByCabang, LoginController; 17 test API
-BUKTI: docs/evidence/phase-11-post-20261105-024945.txt (verify.sh --phase, exit 0; 87 test; phpstan L5+L8 OK)
-KEPUTUSAN: otorisasi via Sanctum + Spatie; scoping cabang lewat trait; tanpa hardcode label
-BLOCKER: Q1–Q7 (lihat §3)
-NEXT: 1) Fase 12: Blade UI + Livewire form wizard; 2) pakai API contract sebagai acuan; 3) jaga hardcode:audit 0
+SESI: 2026-11-06 (sesi 15) | FASE: 12 (IN-PROGRESS) | STATUS: partial
+BERUBAH: commit 011d856 — UI Web (Debitur/Permohonan/Simulasi controller), Livewire
+  (DebiturWizard, PermohonanWizard, Simulator), komponen blade, Support/Validation/*Rules,
+  Services/Debitur+Permohonan+SimulationRunner; fix QA: middleware Spatie (bootstrap/app.php),
+  namespace route API (routes/api.php), NomorService (FOR UPDATE vs agregat PG), default NOT NULL
+  DebiturWizard, validasi Simulator; golden: tests/Fixtures/golden/c002-recomputed.json +
+  tests/Feature/Calculation/GoldenRecomputedParityTest.php
+BUKTI: vendor/bin/pest --compact = 104 passed (1616 assertions); phpstan = no errors;
+  php artisan ledger:verify = chain OK (dijalankan 2026-11-06)
+KEPUTUSAN: fixture C-002 status RECOMPUTED_DRAFT_NOT_VERIFIED (bukan verified); angka IDIR 85,93% /
+  net 2.948.080 / RATE x12 28,88% (efektif 33,02%) dikunci sebagai paritas engine, menunggu
+  RAT-02 (sumber sheet/sel) + tanda tangan
+BLOCKER: Q1–Q7 (§3) + D-01..D-20 & RAT-01/RAT-03 (lihat docs/decisions) + pasal V1/V3/V4 PENDING
+NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seeder
+  (idir_threshold_tpp 0.35 / margin 0.5 / ltv 0.7) vs rekomendasi DRAFT (0.80/0.80/0.80) via D-11/D-07;
+  3) lanjut Fase 12B/13
 ```
 
 ## §5. Log sesi (append-only)
@@ -104,6 +114,8 @@ NEXT: 1) Fase 12: Blade UI + Livewire form wizard; 2) pakai API contract sebagai
 | 2026-11-05 | 12 | 09 | 8 calculator + SimulationEngine/Service + simulasi:replay + golden:extract (TPP: angsuran 2.533.333,33; IDIR 0,8311); 4 test file | `bash scripts/verify.sh --phase` | OK, exit 0 (66 test) | `1de50be` / `phase-09-done` |
 | 2026-11-05 | 13 | 10 | 15 business rule (BR-01..15), engine, Scoring5C (override BR-01), RedFlagEvaluator 7 kategori, RekomendasiService; 10 test | `bash scripts/verify.sh --phase` | OK, exit 0 (79 test) | `7e49459` / `phase-10-done` |
 | 2026-11-05 | 14 | 11 | API Sanctum v1: login/logout/me, debitur+aset, permohonan+submit, slik, analisis (neraca, laba-rugi, kapasitas, scoring, red flag, rekomendasi), simulasi+replay, approval inbox/approve/reject/return, kredit/jadwal, ledger/verify, dashboard; scoping cabang; 17 test API | `bash scripts/verify.sh --phase` | OK, exit 0 (87 test) | `7e11e8e` / `phase-11-done` |
+| 2026-11-06 | 15 | 12 | UI Web + Livewire (DebiturWizard, PermohonanWizard, Simulator), komponen blade, validasi, SimulationRunner; fix QA (middleware Spatie, namespace route API, NomorService PG, default NOT NULL, validasi Simulator); golden C-002 recomputed + GoldenRecomputedParityTest | `vendor/bin/pest --compact`, `vendor/bin/phpstan analyse`, `php artisan ledger:verify` | OK, exit 0; **104 test** lulus, phpstan no errors, chain OK; belum ada evidence phase-12/drill #3 | `011d856` |
+| 2026-11-06 | 16 | 12 | Tutup gate Fase 12: pindahkan literal bisnis UI ke `Konstanta` (step wizard, indeks paste SLIK) + enum `SistemSukuBunga`/`ProdukTipe` (hardcode:audit 0); rapikan pint & phpstan L8 (PermohonanService, SimulationRunner.diff, imports); evidence phase-12 + drill #3 | `bash scripts/verify.sh --phase`, `php artisan hardcode:audit`, `vendor/bin/pint --test` | OK, exit 0 (104 test, hardcode 0) | `feat(phase-12)` / `phase-12-done` |
 
 ## §6. Catatan drift
 
@@ -118,6 +130,9 @@ NEXT: 1) Fase 12: Blade UI + Livewire form wizard; 2) pakai API contract sebagai
 | 2026-11-05 | Waktu ledger disimpan tanpa normalisasi zona → rawan beda hash | hash memakai UTC `Y-m-dTH:i:sZ` + skala kanonik dari config | selesai |
 | 2026-11-05 | Rumus PMT memakai tanda Excel (negatif) → angsuran anuitas negatif | PMT dikembalikan positif; bisection suku bunga efektif dibalik arahnya | selesai |
 | 2026-11-05 | Relasi Eloquent tanpa generics → PHPStan buta tipe properti | seluruh relasi diberi `@return BelongsTo<X,$this>`/HasOne/HasMany | selesai |
+| 2026-11-06 | Snapshot header usang: tercatat 87 test/63 route, padahal live 104 test/73 route | header diperbarui ke angka hasil hitung 2026-11-06 | selesai |
+| 2026-11-06 | Fase 12 tertulis TODO padahal kode UI (Web controller/Livewire/blade) sudah ada di working tree | status diubah ke IN-PROGRESS; evidence phase-12/drill #3 masih perlu dibuat | terbuka |
+| 2026-11-06 | Policy ACTIVE seeder (IDIR 0,35; margin 0,5; LTV 0,7) berbeda dari rekomendasi DRAFT (0,80/0,80/0,80) | jangan ubah diam-diam; putuskan via D-11/D-07 | terbuka |
 
 ## §7. Aturan pengisian
 

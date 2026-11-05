@@ -12,6 +12,7 @@ use App\Models\PermohonanKredit;
 use App\Models\Produk;
 use App\Models\RefKolektibilitas;
 use App\Services\Permohonan\PermohonanService;
+use App\Support\Konstanta;
 use App\Support\Validation\PermohonanRules;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
@@ -35,7 +36,7 @@ final class PermohonanWizard extends Component
 
     public string $tenor_rekomendasi = '';
 
-    public string $sistem_suku_bunga = 'Flat';
+    public string $sistem_suku_bunga = SistemSukuBunga::Flat->value;
 
     public string $tanggal_permohonan = '';
 
@@ -73,7 +74,7 @@ final class PermohonanWizard extends Component
             'plafon_diajukan', 'suku_bunga_tahunan', 'tenor_diajukan', 'sistem_suku_bunga',
             'tanggal_permohonan', 'tanggal_target_realisasi', 'prioritas', 'kegunaan_pinjaman',
         ],
-        3 => [
+        Konstanta::STEP_3 => [
             'sektor', 'tujuan_penggunaan', 'pinjaman_ke',
             'sumber_pembayaran_angsuran', 'sumber_pelunasan_balloon',
             'perkiraan_penerimaan_balloon', 'catatan_ao',
@@ -95,8 +96,8 @@ final class PermohonanWizard extends Component
         match ($this->step) {
             1 => $this->validate(Arr::only(PermohonanRules::rules(), $this->fields[1])),
             2 => $this->validate(Arr::only(PermohonanRules::rules(), $this->fields[2])),
-            3 => $this->validate(Arr::only(PermohonanRules::rules(), $this->fields[3])),
-            4 => $this->saveSlik(),
+            Konstanta::STEP_3 => $this->validate(Arr::only(PermohonanRules::rules(), $this->fields[Konstanta::STEP_3])),
+            Konstanta::STEP_4 => $this->saveSlik(),
             default => null,
         };
 
@@ -104,7 +105,7 @@ final class PermohonanWizard extends Component
             $this->persist($service);
         }
 
-        if ($this->step === 3) {
+        if ($this->step === Konstanta::STEP_3) {
             $this->persist($service);
 
             if ($this->draft() !== null) {
@@ -123,7 +124,7 @@ final class PermohonanWizard extends Component
             }
         }
 
-        $this->step = min(5, $this->step + 1);
+        $this->step = min(Konstanta::STEP_5, $this->step + 1);
     }
 
     public function previous(): void
@@ -167,7 +168,7 @@ final class PermohonanWizard extends Component
 
             $kolom = array_map('trim', preg_split('/[\t;|]/', $line) ?: []);
 
-            if (count($kolom) < 5) {
+            if (count($kolom) < Konstanta::SLIK_PASTE_MIN_COLUMNS) {
                 continue;
             }
 
@@ -175,9 +176,9 @@ final class PermohonanWizard extends Component
                 'nama_lembaga' => $kolom[0],
                 'jenis_fasilitas' => $kolom[1],
                 'plafon' => $kolom[2],
-                'baki_debet' => $kolom[3],
-                'kolektibilitas_id' => (string) ($peta[$kolom[4]] ?? ''),
-                'angsuran_bulanan' => $kolom[5] ?? '',
+                'baki_debet' => $kolom[Konstanta::SLIK_PASTE_BAKI_INDEX],
+                'kolektibilitas_id' => (string) ($peta[$kolom[Konstanta::SLIK_PASTE_KOLEKTIBILITAS_INDEX]] ?? ''),
+                'angsuran_bulanan' => $kolom[Konstanta::SLIK_PASTE_ANGSURAN_INDEX] ?? '',
             ];
         }
 

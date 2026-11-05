@@ -33,7 +33,8 @@ final class PermohonanService
      */
     public function create(array $data, User $user): PermohonanKredit
     {
-        $debitur = Debitur::query()->findOrFail($data['debitur_id']);
+        $debitur = Debitur::query()->findOrFail((string) $data['debitur_id']);
+        /** @var Debitur $debitur */
         $cabang = Cabang::query()->findOrFail($debitur->cabang_id);
         $parameter = $this->parameters->active();
 

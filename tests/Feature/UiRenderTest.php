@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\PermissionRegistrar;
 
 uses(RefreshDatabase::class);
 
@@ -45,7 +46,7 @@ it('menolak pengguna tanpa izin', function () {
     $user = User::query()->where('username', 'admin')->firstOrFail();
     $user->forceFill(['must_change_password' => false])->save();
     $user->syncRoles([]);
-    app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+    app(PermissionRegistrar::class)->forgetCachedPermissions();
 
     $this->actingAs($user->fresh());
     $this->get(route('debitur.index'))->assertForbidden();
