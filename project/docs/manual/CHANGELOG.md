@@ -29,3 +29,10 @@ Semua perubahan manual dicatat di sini (append-oriented). Format: tanggal, versi
 ## 0.1.4 — 2026-11-05 (mockup interaktif + golden readiness)
 - **Mockup interaktif (verifikasi visual):** `mockup-loan-analytic-bpr.html` (standalone) — shell + navigasi (Dasbor, Debitur, Permohonan wizard+SLIK review-first, Workbench Analisis: neraca/LR, rasio/MK, kapasitas/DSCR + demo hard-stop vs soft-score T1, stress, 5C/FSS, rekomendasi, Simulasi Flat/Anuitas/Grace-bullet dengan jadwal + estimasi IRR numerik — tanpa 1,81x, Ledger & integritas, Golden Readiness). Data **dummy**, tanpa PII, tanpa identitas workbook.
 - **Golden checker:** `project/scripts/verify-golden.py` (Decimal) → 29/29 OK, 0 error, 4 negative_test, 0 PII; filled 6/29 (partial/claim), **verified 0/29** (gate F4 tertutup). Evidence/handoff/golden README diperbarui.
+
+## 0.1.5 — 2026-11-06 (Fase 12–15: UI, workflow, dashboard, pembayaran, dokumen, quality gate)
+- **Fase 12–15 selesai** di `loan-analytic-bpr`: Blade UI + Livewire; `ApprovalService` (matriks band, permission ganda, SoD, BR-06) + UI approval & timeline; notifikasi bell; dashboard nyata (cache 300 dtk); pencairan→jadwal→pembayaran ber-ledger; 17 generator dokumen + template; quality gate (arch/guard/performance).
+- **QA live:** `verify.sh --full` exit 0; **138 test** (1779 assertions, 43 file); pint + PHPStan L5/L8 OK; `hardcode:audit` 0; `docs:check --strict` 0; `ledger:verify` OK; 61 migrasi · 77 route.
+- **Golden:** 29 kasus `recomputed` (Decimal) — **0 verified**. TPP-01: IDIR 85,93%, rate×12 28,88%, effective annual 33,02%; tanpa 1,81x.
+- **Remote:** repo app dipush ke GitHub `FiyyaLisanaDeV/awkward-credit` **branch `app`** (+tags `phase-01-done`..`phase-15-done`); `main` remote tetap `commandcode bpr` (tidak ditimpa).
+- **Manual:** Bab 10/11/14/20 disinkronkan dengan implementasi; Bab 20 mencatat sisa gap (Fase 16–18, 12B, template DRAFT, policy divergence).

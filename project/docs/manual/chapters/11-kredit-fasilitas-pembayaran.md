@@ -25,7 +25,7 @@ Mengaitkan kredit ke `debitur_aset` (Bab 5). Kategori POJK: `ref_kategori_agunan
 
 ## 11.6 Memo pencairan `[E]` — `memo_pencairan`
 `{kredit_id(unique), no_memo, tanggal_memo, dana_bersih(15,2), terbilang(500), rekening_tujuan, atas_nama, status(default DRAFT), approved_by?, approved_at?}`; CHECK dana_bersih ≥0.
-Mencatat dana bersih yang dicairkan + terbilang.
+Mencatat dana bersih yang dicairkan + terbilang. Fase 13: `KreditService::cairkan()` membuat memo ini otomatis (terbilang via `App\Support\Terbilang`) bersama `kredit` + `jadwal_angsuran` + ledger `AKAD_DICATAT`/`PENCAIRAN_DICATAT`.
 
 ## 11.7 Pemblokiran tabungan `[E]` — `pemblokiran_tabungan`
 `{kredit_id, no_rekening, nilai_blokir, jangka_waktu_bulan, alasan, tanggal_blokir, tanggal_buka, status(default AKTIF)}`; CHECK nilai ≥0 & jangka ≥1; index parsial aktif.
@@ -34,19 +34,21 @@ Dipakai TPP (blokir sebagai mitigasi/balloon). Perlakuan saldo blokir lama = D-0
 ## 11.8 Pembayaran angsuran `[E]` — `pembayaran_angsuran`
 `{cabang_id, kredit_id, jadwal_angsuran_id?, periode?, tanggal_bayar, pokok, bunga, denda, total, metode(enum MetodePembayaran), no_bukti?, keterangan?, sumber(default MANUAL), dibatalkan_at?, reversal_of?}`; CHECK nilai ≥0; FK `reversal_of` ke dirinya; index `(kredit_id, tanggal_bayar)`.
 `MetodePembayaran` = `TUNAI | TRANSFER | POTONG_TPP | LAINNYA`.
-**Pembatalan** memakai pola **reversal** (`reversal_of` + `dibatalkan_at`), bukan hapus — konsisten dengan audit `[E]`. Alur posting pembayaran penuh & alokasi (denda/bunga/pokok) = fase 13 + D-06 `[K/Rencana]`.
+**Pembatalan** memakai pola **reversal** (`reversal_of` + `dibatalkan_at`), bukan hapus — konsisten dengan audit `[E]`. Fase 13 mengimplementasikan `PembayaranService::catat()` (update jadwal + ledger `ANGSURAN_DIBAYAR`, idempotency key) dan `reversal()` (baris reversal + kembalikan status jadwal + ledger `ANGSURAN_DIREVERSAL`). Alokasi/denda/penalti final tetap D-06 `[K]`.
 
-## 11.9 API kredit `[E]`
+## 11.9 API & Web kredit `[E]`
 | Method | Endpoint | Perilaku |
 |---|---|---|
 | GET | `/api/v1/kredit` | Daftar cabang + `permohonan.debitur`; urut `tanggal_cair` desc |
 | GET | `/api/v1/kredit/{kredit}` | Detail + `permohonan.debitur, jadwal, biaya, asuransi, agunan` |
 | GET | `/api/v1/kredit/{kredit}/jadwal` | Jadwal urut periode |
+| GET (web) | `/kredit` (`kredit.index`) | Daftar kredit + debitur |
+| GET (web) | `/kredit/{kredit}` (`kredit.show`) | Detail + jadwal + form pembayaran (`Livewire\PembayaranForm`) |
 
-Semua scope cabang (`ensureSameCabang`).
+Semua scope cabang (`ensureSameCabang`/`abort_unless`).
 
 ## 11.10 Event ledger terkait `[E]`
-`AKAD_DICATAT`, `PENCAIRAN_DICATAT`, `ANGSURAN_DIBAYAR`, `ANGSURAN_DIREVERSAL`, `DOKUMEN_DIBUAT`, `DOKUMEN_DITANDATANGANI`, `DOKUMEN_DIUNGGAH`, `CHECKLIST_DIVERIFIKASI`, `PEMBLOKIRAN` (via `AKAD_DICATAT`/event terkait).
+`AKAD_DICATAT`, `PENCAIRAN_DICATAT`, `ANGSURAN_DIBAYAR`, `ANGSURAN_DIREVERSAL`, `DOKUMEN_DIBUAT`, `DOKUMEN_DITANDATANGANI`, `DOKUMEN_DIUNGGAH`, `CHECKLIST_DIVERIFIKASI`. Fase 13 kini benar-benar meng-emit `AKAD_DICATAT`/`PENCAIRAN_DICATAT` (`KreditService`) dan `ANGSURAN_DIBAYAR`/`ANGSURAN_DIREVERSAL` (`PembayaranService`).
 
 ## 11.11 Workspace planning `[K]`
 Rencana L4 (CKPN/PPKA/PD-LGD, write-off non-parsial, restrukturisasi) & golden G-WO-01/G-CKP-01 ada di `commandcode bpr/project/` tetapi **belum terimplementasi** (Bab 20).
@@ -54,4 +56,4 @@ Rencana L4 (CKPN/PPKA/PD-LGD, write-off non-parsial, restrukturisasi) & golden G
 ## 11.12 Gap & rencana `[Rencana/K]`
 - Posting pembayaran, alokasi, denda, penalti, payoff: D-06 `[K]` (T10 blokir lama, penalti 10% vs 15%).
 - CKPN/PPKA/PD-LGD, klasifikasi kualitas aset dinamis, write-off, restrukturisasi: L4 `[Rencana]`.
-- Fase 13 (dashboard+workflow+pembayaran) & fase 14 (dokumen) belum dikerjakan `[E PROGRESS]`.
+- Fase 13 (dashboard+workflow+pembayaran) & Fase 14 (dokumen) **selesai** (gate `verify --phase/--full`); Fase 16–18 & 12B masih TODO `[E PROGRESS]`.

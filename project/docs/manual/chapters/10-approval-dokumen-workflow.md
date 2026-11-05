@@ -1,6 +1,6 @@
 # Bab 10 — Approval, Checklist, Dokumen, Tanda Tangan, dan Notifikasi
 
-## 10.1 Approval berjenjang `[E]` — `Api/V1/ApprovalController`
+## 10.1 Approval berjenjang `[E]` — `ApprovalService` (API + Web)
 ### Sumber kewenangan: `RefApprovalMatrix`
 Matriks versi (seeder `v1.0`, `status=ACTIVE`) berisi entri `{plafon_min, plafon_max, level, role}`:
 | plafon_min | plafon_max | level | role |
@@ -11,20 +11,22 @@ Matriks versi (seeder `v1.0`, `status=ACTIVE`) berisi entri `{plafon_min, plafon
 | 50.000.000 | 100.000.000 | 4 | DIRUT |
 | 100.000.000 | (null=∞) | 5 | KOMITE |
 
-**Max level** untuk sebuah permohonan = level tertinggi pada entri yang memuat `plafon` (memakai `plafon_rekomendasi ?? plafon_diajukan`). `roleForLevel(level)` mengembalikan role entri tsb (default ADMIN).
+**Level wajib** untuk sebuah permohonan = seluruh level dari entri matriks yang band `[plafon_min, plafon_max]`-nya memuat `plafon_rekomendasi ?? plafon_diajukan` (band menentukan approver yang relevan; **tidak** memaksa level 1..max). `ApprovalService::requiredLevels()` menjadi satu sumber kebenaran (dipakai juga oleh BR-06). `nextLevel()` = level wajib terkecil yang belum punya `ApprovalLog` aksi `APPROVE`; `roleForLevel()` mengembalikan role entri tsb.
 
-### Alur `approve`
-1. `ensureSameCabang`.
+### Alur `approve` (`ApprovalService`, dipakai API & Web)
+1. `ensureSameCabang` (API) / `abort_unless` cabang (Web).
 2. Validasi `alasan` (nullable).
-3. `level = nextLevel(permohonan)` = `max(level approve yang sudah tercatat) + 1`; bila > max → `409`.
-4. `roleName = roleForLevel(level)`; user harus punya role tsb **atau** `ADMIN`, jika tidak → `403`.
-5. Catat `ApprovalLog` (`cabang_id, permohonan_id, level, role_id, user_id, aksi=Approve, alasan`).
-6. Bila `level === maxLevel` → status `APPROVED`, selain itu `RECOMMENDED`.
-7. Ledger `PERMOHONAN_DISETUJUI` (`{level, role, final}`) + notifikasi ke `ao_id` (`tipe=APPROVAL`).
+3. `level = nextLevel(permohonan)`; `null` → `409` (sudah lengkap/matriks tidak tersedia).
+4. **Kewenangan ganda**: `ADMIN` bypass; selain itu wajib `hasRole(roleForLevel(level))` **dan** `hasPermissionTo('permohonan.approve_level_{level}')`; gagal → `403`.
+5. **SoD**: selain `ADMIN`, `user.id` tidak boleh sama dengan `permohonan.ao_id` (self-approve) → `403`.
+6. Catat `ApprovalLog` (`level, role_id, user_id, aksi=APPROVE, alasan`).
+7. `final = nextLevel(permohonan->refresh()) === null`; status `APPROVED` bila final, selain itu `RECOMMENDED`.
+8. Ledger `PERMOHONAN_DISETUJUI` (`{level, role, final}`) + notifikasi `APPROVAL` ke `ao_id`.
 
 ### `reject` / `returnToAo`
 - `alasan` **required** (max 500). Set status `REJECTED` / `RETURNED`.
-- Ledger `PERMOHONAN_DITOLAK` / `PERMOHONAN_DIKEMBALIKAN`.
+- **Menulis `ApprovalLog`** (aksi `REJECT`/`RETURN`), ledger `PERMOHONAN_DITOLAK` / `PERMOHONAN_DIKEMBALIKAN`, dan notifikasi ke `ao_id`.
+- Aturan SoD juga berlaku (pembuat tidak boleh memutus pengajuannya sendiri; `ADMIN` bypass).
 
 ### `inbox`
 Permohonan cabang user dengan status `SUBMITTED/ANALYZED/RECOMMENDED`, urut `tanggal_permohonan` desc, paginate.
@@ -48,13 +50,13 @@ Permohonan cabang user dengan status `SUBMITTED/ANALYZED/RECOMMENDED`, urut `tan
 Kolom: `cabang_id, permohonan_id, template_id?, jenis_dokumen(enum JenisDokumen), nomor_dokumen, tanggal_dokumen, file_path, file_hash(64), status_ttd(enum StatusTtd, default DRAFT), tanggal_ttd, ukuran_bytes, sumber(default GENERATE), catatan`, softDeletes.
 Unique partial `dokumen_permohonan_jenis_hash_unique (permohonan_id, jenis_dokumen, file_hash)`.
 **BR-07**: dokumen tidak boleh memakai template berstatus ≠ APPROVED.
-Sejumlah **17 jenis** dokumen disemai di `ref_template_dokumen` (seeder `TemplateDokumenSeeder`); generator PDF = DomPDF (fase 14 `[Rencana]`).
+Sejumlah **17 jenis** dokumen disemai di `ref_template_dokumen` (seeder `TemplateDokumenSeeder`). Fase 14 mengimplementasikan **17 generator** (`Services/Document/Generators`) + 17 template Blade, `DocumentService` (DomPDF), hash SHA-256 **konten HTML** (idempoten, dicek sebelum render PDF), file di disk privat. Template seeder berstatus DRAFT → generate ditolak BR-07 sampai disahkan.
 
 ## 10.4 Tanda tangan `[E]` — `signature_log`
 `{dokumen_id, pihak(enum PihakSignature), nama, jabatan, ttd_hash, ttd_file_path, ip_address, timestamp}`.
 
 ## 10.5 Notifikasi `[E]` — `notifikasi`
-`{cabang_id?, user_id, tipe, judul, pesan, entity_type, entity_id, is_read, created_at, read_at}`; index unread parsial. Dipakai approval (kirim ke `ao_id`, `tipe=APPROVAL`).
+`{cabang_id?, user_id, tipe, judul, pesan, entity_type, entity_id, is_read, created_at, read_at}`; index unread parsial. Dipakai approval (approve/reject/return) — kirim ke `ao_id`, `tipe=APPROVAL`. UI: `NotificationBell` (Livewire, `wire:poll.30s`) + `NotifikasiService` (`unreadCount`, `markRead`, `markAllRead`).
 
 ## 10.6 Audit log `[E]` — `audit_log`
 `{cabang_id?, user_id?, entity_type, entity_id?, aksi, old_value(jsonb), new_value(jsonb), ip_address, user_agent, timestamp}` + GIN index + **trigger immutable** (`audit_log_immutable_trigger`) → UPDATE/DELETE ditolak (BR-09).
@@ -70,10 +72,11 @@ DRAFT ──submit(BR-04,BR-08)──► SUBMITTED
 ```
 
 ## 10.8 Web & permission `[E]`
-- Checklist & dokumen belum punya UI web pada fase 00–11 (`[Rencana]` fase 13/14).
-- Permission terkait: `dokumen.view/generate_draft/upload/sign`, `template.review/approve`, `permohonan.approve_level_2..5`, `permohonan.return/reject`, `audit.view`, `ledger.view`, `report.view`.
+- **Web approval (Fase 13)**: `/approval` (`approval.inbox`) + `/approval/{permohonan}` (`approval.show`) — inbox, ringkasan, aksi (`Livewire\ApprovalAction`), timeline `ApprovalLog`. Notifikasi bell di navbar.
+- **Dokumen (Fase 14)**: generator/service tersedia (API/service); halaman daftar dokumen web belum dibuat.
+- Permission terkait: `permohonan.approve_level_1..5` (level 1 ditambahkan untuk role AO), `permohonan.return/reject`, `dokumen.view/generate_draft/upload/sign`, `template.review/approve`, `audit.view`, `ledger.view`, `report.view`.
 
 ## 10.9 Gap & rencana `[Rencana/K]`
-- Maker-checker/SoD formal, authority limits (plafon/tenor/produk/cabang/jabatan) final = D-12 `[K]`.
-- AO tidak boleh self-approve (bukti eksplisit) `[Rencana]`.
-- Generator dokumen (17) & alur TTD = fase 14 `[Rencana]`.
+- Authority limits final (plafon/tenor/produk/cabang/jabatan) = D-12 `[K]`; implementasi saat ini: role matriks + permission level + SoD dasar.
+- Template dokumen seeder masih DRAFT; pengesahan template `[K]` sebelum produksi.
+- Tanda tangan: `signature_log` + hash diimplementasikan; unggah berkas TTD/PSrE & e-meterai = fase lanjut `[K]`.

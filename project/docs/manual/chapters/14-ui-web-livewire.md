@@ -7,7 +7,7 @@ UI web memakai **Blade + Livewire 4** tanpa Vite/npm (ADR-008), satu CSS manual.
 | Route | Nama | View/Host |
 |---|---|---|
 | `/` | — | redirect `dashboard` |
-| `/dashboard` | `dashboard` | `dashboard.index` |
+| `/dashboard` | `dashboard` | `Web\DashboardController` → `dashboard.index` |
 | `/password` | `password.change/update` | `auth.change-password` |
 | `/debitur` | `debitur.index` | `debitur.index` |
 | `/debitur/create` | `debitur.create` | `debitur.create` → `DebiturWizard` |
@@ -19,10 +19,14 @@ UI web memakai **Blade + Livewire 4** tanpa Vite/npm (ADR-008), satu CSS manual.
 | `/simulasi/create` | `simulasi.create` | `simulasi.create` → `Simulator` |
 | `/simulasi/bandingkan` | `simulasi.bandingkan` | `simulasi.bandingkan` |
 | `/simulasi/{simulasi}` | `simulasi.show` | `simulasi.show` |
+| `/approval` | `approval.inbox` | `workflow.index` |
+| `/approval/{permohonan}` | `approval.show` | `workflow.show` → `ApprovalAction` |
+| `/kredit` | `kredit.index` | `kredit.index` |
+| `/kredit/{kredit}` | `kredit.show` | `kredit.show` → `PembayaranForm` |
 | `/login`, `/logout`, `/health` | — | auth/health |
 
 ## 14.3 Dashboard `[E]`
-`resources/views/dashboard/index.blade.php`: 4 kartu KPI (`draft, submitted, approved, active`) yang saat ini menampilkan **placeholder** (`dashboard.kpi.empty`), plus blok `placeholder_title/body`. **Belum menampilkan data nyata** — dashboard API (`/api/v1/dashboard`) mengembalikan data; fase 13 akan menghubungkan `[Rencana]`. Teks dari `lang/id.php` (`__('dashboard.*')`).
+Dashboard **nyata** (Fase 13): `Web\DashboardController` memanggil `DashboardService::ringkasan()` dengan cache 300 dtk. Menampilkan KPI `draft/submitted/approved/kredit aktif`, pipeline (`submitted/analyzed/recommended`), red flag kritis, kelengkapan rata-rata, dan permohonan terbaru. API `/api/v1/dashboard` memakai service yang sama. Teks dari `lang/id.php` (`__('dashboard.*')`).
 
 ## 14.4 `DebiturWizard` (Livewire) `[E]`
 Wizard 3 langkah (Bab 5 §5.5). Props publik per field; `next/previous/save`; validasi per langkah; simpan via `DebiturService`. View: `livewire/debitur-wizard.blade.php`. Opsi enum `JenisKelamin` & `StatusPerkawinan` dari `render()`.
@@ -49,26 +53,34 @@ Wizard/simulator (Bab 8 §8.8): `hitung()` menampilkan `hasil` + `jadwal`; `simp
 | `components/status-badge.blade.php` | Badge status |
 | `components/dscr-display.blade.php` | Tampilan DSCR |
 | `components/diff-simulasi.blade.php` | Diff 2 simulasi |
+| `components/notification-bell.blade.php` | Bell notifikasi (Livewire, poll 30s) |
 | `partials/pagination.blade.php` | Paginasi |
 
 ## 14.8 View per modul `[E]`
 - `debitur/{index,create,show}`.
 - `permohonan/{index,create,show}`.
 - `simulasi/{index,create,show,bandingkan}`.
+- `workflow/{index,show}` — inbox + detail approval + timeline.
+- `kredit/{index,show}` — daftar + jadwal + pembayaran.
+- `documents/base` + `documents/DOC-01..DOC-17` — template PDF.
 - `auth/{login,change-password}`.
 - `dashboard/index`, `welcome`.
 
 ## 14.9 UX & aksesibilitas `[?]`
 - Bahasa antarmuka: Indonesia (`lang/id.php`, `__('…')`).
 - Nominal ditampilkan tanpa desimal (`loan.money.display_decimals=0`).
-- Belum ada audit aksesibilitas/uji UI otomatis di luar `UiRenderTest` `[E]`.
+- Uji UI otomatis: `UiRenderTest` + `UiRenderWorkflowTest`; guard/arch/performance di Fase 15. Audit aksesibilitas menyeluruh tetap `[?]`.
+
+## 14.9b Livewire baru (Fase 13) `[E]`
+- `ApprovalAction` — aksi setujui/tolak/kembalikan dengan alasan; menangani error 403/409 sebagai pesan.
+- `NotificationBell` — unread count + daftar notifikasi + tandai dibaca (`wire:poll.30s`).
+- `PembayaranForm` — catat pembayaran per periode (metode, tanggal, denda).
 
 ## 14.10 Gaya kode & larangan `[E]`
 - **Hindari hardcode** teks/angka label; gunakan `__('…')` & policy (ADR-020). `hardcode:audit` mencakup `app/Http`, `app/Livewire`, `app/Services`, `app/Support`, `app/Domain`.
 - **Class penuh** disarankan (mis. `Livewire\Component`) `[E]` pada komponen Livewire walau belum di-import eksplisit (perhatian PHPStan `Simulator.php:73`).
 
 ## 14.11 Gap & rencana `[Rencana]`
-- Fase 12: Blade UI forms + wizard lengkap (drill #3).
-- Fase 13: dashboard nyata + workflow + pembayaran.
-- Fase 14: dokumen (17) + TTD.
+- **Fase 12–15 selesai** (UI, workflow, dashboard, pembayaran, dokumen, quality gate) — gate `verify.sh --phase/--full` hijau.
+- **Fase 16–18 & 12B masih TODO** (hardening, dokumentasi pengguna, UAT, import).
 - Preview/analisis UI (form-modal grid) untuk analis = `[Rencana]`.
