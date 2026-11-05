@@ -11,7 +11,7 @@
 | `updated_at` | 2026-11-06T00:00+08:00 | 2026-11-06 |
 | Fase aktif | **12 selesai**; berikutnya **12B** (Import & Efisiensi) | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
-| Branch / last commit | main / `011d856` (UI Livewire + QA + paritas golden) | 2026-11-06 |
+| Branch / last commit | main / `phase-12-done` (`5b38403`, Fase 12) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
