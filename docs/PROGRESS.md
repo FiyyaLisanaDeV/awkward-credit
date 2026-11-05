@@ -11,6 +11,7 @@
 | `updated_at` | 2026-11-06T03:15+08:00 | 2026-11-06 |
 | Fase aktif | **15 selesai**; berikutnya **16** (Hardening) | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
+| Remote | `origin` → `awkward-credit`, branch **`app`** (+tags phase-01..15); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
 | Branch / last commit | main / `phase-15-done` (`3fe3e0f`, Fase 15) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
@@ -119,6 +120,7 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | 17 | 13 | Fase 13: `ApprovalService` (matriks band + permission double + SoD + BR-06), UI approval (inbox/detail/timeline/aksi Livewire), `NotifikasiService` + bell poll 30s, `DashboardService` (cache 300 dtk) + web dashboard, `KreditService` (pencairan→kredit+jadwal+memo, ledger AKAD/PENCAIRAN), `PembayaranService` (catat/reversal, ledger ANGSURAN_DIBAYAR/REVERSAL) + UI kredit/jadwal/pembayaran; permission `approve_level_1` | `bash scripts/verify.sh --phase` | OK, exit 0; **124 test**, hardcode 0, pint/phpstan bersih | `feat(phase-13)` / `phase-13-done` |
 | 2026-11-06 | 18 | 14 | Fase 14: `DocumentGenerator` + 17 generator + 17 template Blade, `DocumentService` (BR-07 template APPROVED, hash HTML idempoten, disk privat), nomor dokumen via `NomorService`, tanda tangan (`signature_log`) + ledger `DOKUMEN_DIBUAT`/`DITANDATANGANI`; template seeder DRAFT→APPROVED di test | `bash scripts/verify.sh --phase` | OK, exit 0; **127 test**, hardcode 0, pint/phpstan bersih | `feat(phase-14)` / `phase-14-done` |
 | 2026-11-06 | 19 | 15 | Fase 15: arch test (strict types/no debug/no env), guard Route (nama unik, API sanctum, route utama), guard EventCatalog (semua event di INVENTARIS), performance smoke (health/list/jadwal/PDF); drill #4 + verifier pass 3 klaim | `bash scripts/verify.sh --full` | OK, exit 0; **138 test**, docs:check --strict 0 temuan | `feat(phase-15)` / `phase-15-done` |
+| 2026-11-06 | 20 | — | Push repo app ke GitHub memakai PAT (via GIT_ASKPASS, token tidak ditulis ke config): `main` ditolak non-fast-forward (remote berisi commandcode bpr), lalu dipush ke branch **`app`** + semua tag. `main` remote tidak diubah | `git push origin main:app --tags`, `git ls-remote` | OK, exit 0; `refs/heads/app` = HEAD lokal; `refs/heads/main` tetap `3fd7cb8` | `3e06519` |
 
 ## §6. Catatan drift
 
