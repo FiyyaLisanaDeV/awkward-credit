@@ -19,6 +19,11 @@ final class NomorService
         return $this->berikutnya('kredit', 'no_rekening_kredit', $cabang->kode.'/'.now()->format('Y').'/K/');
     }
 
+    public function dokumen(Cabang $cabang, string $kode): string
+    {
+        return $this->berikutnya('dokumen', 'nomor_dokumen', $kode.'/'.$cabang->kode.'/'.now()->format('Y').'/');
+    }
+
     private function berikutnya(string $table, string $column, string $prefix): string
     {
         /** @phpstan-ignore larastan.noUnnecessaryCollectionCall (PostgreSQL: FOR UPDATE not allowed with aggregate count; rows locked then counted) */

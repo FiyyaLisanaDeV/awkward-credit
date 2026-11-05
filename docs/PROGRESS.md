@@ -7,20 +7,20 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 2.7 | 2026-11-06 |
-| `updated_at` | 2026-11-06T03:00+08:00 | 2026-11-06 |
-| Fase aktif | **13 selesai**; berikutnya **14** (Dokumen) | 2026-11-06 |
+| Versi dokumen | 2.8 | 2026-11-06 |
+| `updated_at` | 2026-11-06T03:10+08:00 | 2026-11-06 |
+| Fase aktif | **14 selesai**; berikutnya **15** (Testing & Quality Gate) | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
-| Branch / last commit | main / `phase-13-done` (`825f449`, Fase 13) | 2026-11-06 |
+| Branch / last commit | main / `phase-14-done` (`67fa560` + Fase 14) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
 | Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-06 |
 | Jumlah route | 77 (42 API v1) | 2026-11-06 |
-| Jumlah test | 38 file (**124 test**, 1676 assertions) | 2026-11-06 |
+| Jumlah test | 39 file (**127 test**, 1735 assertions) | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | tersedia (Fase 08B); chain **OK** | 2026-11-06 |
-| Bukti fase terakhir | `docs/evidence/phase-13-post-20261106-025541.txt` (verify --phase exit 0) | 2026-11-06 |
+| Bukti fase terakhir | `docs/evidence/phase-14-post-20261106-030450.txt` (verify --phase exit 0) | 2026-11-06 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -54,7 +54,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 12 | Blade UI Forms | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-12-post-20261106-022557.txt` + `docs/evidence/drill-03-20261106-022734.txt` | `feat(phase-12)` / `phase-12-done` | verify --phase exit 0; hardcode:audit 0; pint+phpstan OK; 104 test |
 | 12B | Import & Efisiensi | TODO | — | — | — | — | 8 adapter |
 | 13 | Dashboard + Workflow | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-13-post-20261106-025541.txt` | `feat(phase-13)` / `phase-13-done` | ApprovalService + UI approval + notifikasi bell + DashboardService + pencairan/jadwal/pembayaran ber-ledger; 124 test |
-| 14 | Documents (17) | TODO | — | — | — | — | — |
+| 14 | Documents (17) | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-14-post-20261106-030450.txt` | `feat(phase-14)` / `phase-14-done` | 17 generator + 17 template, DocumentService (BR-07, hash HTML idempoten, disk privat), sign + ledger; 127 test |
 | 15 | Testing & Quality Gate | TODO | — | — | — | — | drill #4 |
 | 16 | Hardening | TODO | — | — | — | — | role DB + restore |
 | 17 | Dokumentasi Pengguna & SOP | TODO | — | — | — | — | — |
@@ -117,6 +117,7 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | 15 | 12 | UI Web + Livewire (DebiturWizard, PermohonanWizard, Simulator), komponen blade, validasi, SimulationRunner; fix QA (middleware Spatie, namespace route API, NomorService PG, default NOT NULL, validasi Simulator); golden C-002 recomputed + GoldenRecomputedParityTest | `vendor/bin/pest --compact`, `vendor/bin/phpstan analyse`, `php artisan ledger:verify` | OK, exit 0; **104 test** lulus, phpstan no errors, chain OK; belum ada evidence phase-12/drill #3 | `011d856` |
 | 2026-11-06 | 16 | 12 | Tutup gate Fase 12: pindahkan literal bisnis UI ke `Konstanta` (step wizard, indeks paste SLIK) + enum `SistemSukuBunga`/`ProdukTipe` (hardcode:audit 0); rapikan pint & phpstan L8 (PermohonanService, SimulationRunner.diff, imports); evidence phase-12 + drill #3 | `bash scripts/verify.sh --phase`, `php artisan hardcode:audit`, `vendor/bin/pint --test` | OK, exit 0 (104 test, hardcode 0) | `feat(phase-12)` / `phase-12-done` |
 | 2026-11-06 | 17 | 13 | Fase 13: `ApprovalService` (matriks band + permission double + SoD + BR-06), UI approval (inbox/detail/timeline/aksi Livewire), `NotifikasiService` + bell poll 30s, `DashboardService` (cache 300 dtk) + web dashboard, `KreditService` (pencairan→kredit+jadwal+memo, ledger AKAD/PENCAIRAN), `PembayaranService` (catat/reversal, ledger ANGSURAN_DIBAYAR/REVERSAL) + UI kredit/jadwal/pembayaran; permission `approve_level_1` | `bash scripts/verify.sh --phase` | OK, exit 0; **124 test**, hardcode 0, pint/phpstan bersih | `feat(phase-13)` / `phase-13-done` |
+| 2026-11-06 | 18 | 14 | Fase 14: `DocumentGenerator` + 17 generator + 17 template Blade, `DocumentService` (BR-07 template APPROVED, hash HTML idempoten, disk privat), nomor dokumen via `NomorService`, tanda tangan (`signature_log`) + ledger `DOKUMEN_DIBUAT`/`DITANDATANGANI`; template seeder DRAFT→APPROVED di test | `bash scripts/verify.sh --phase` | OK, exit 0; **127 test**, hardcode 0, pint/phpstan bersih | `feat(phase-14)` / `phase-14-done` |
 
 ## §6. Catatan drift
 
@@ -137,6 +138,9 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | Permission `permohonan.approve_level_1` belum ada padahal level 1 = role AO → aturan kewenangan **double** tak bisa konsisten | ditambah di `RolePermissionSeeder` (AO) sebagai DRAFT tunduk D-12 | terbuka |
 | 2026-11-06 | BR-06 & approve lama memakai `range(1, max)` sehingga plafon 30jt wajib level 1–3 padahal matriks band hanya menuntut level 3 | `requiredLevels()` = level dari band yang memuat plafon; BR-06 memakai sumber yang sama | selesai |
 | 2026-11-06 | Event ledger `AKAD_DICATAT`/`PENCAIRAN_DICATAT`/`ANGSURAN_DIBAYAR`/`ANGSURAN_DIREVERSAL` belum pernah di-emit | kini di-emit oleh `KreditService`/`PembayaranService` | selesai |
+| 2026-11-06 | DomPDF 17 render + suite penuh melebihi `memory_limit` 128M | `phpunit.xml` menetapkan `memory_limit=512M` (kebutuhan resource, bukan pelonggaran tes) + `gc_collect_cycles()` | selesai |
+| 2026-11-06 | Hash dokumen dari byte PDF tidak stabil (DomPDF menyematkan timestamp/ID) | hash = SHA-256 **konten HTML/snapshot**; idempotensi dicek sebelum render PDF | selesai |
+| 2026-11-06 | Template dokumen seeder berstatus DRAFT sehingga generate selalu ditolak BR-07 | test men-set template APPROVED lebih dulu; produksi menunggu pengesahan template `[K]` | terbuka |
 
 ## §7. Aturan pengisian
 
