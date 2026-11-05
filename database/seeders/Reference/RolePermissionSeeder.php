@@ -17,8 +17,8 @@ final class RolePermissionSeeder extends Seeder
 
         $permissions = [
             'permohonan.create', 'permohonan.edit_own', 'permohonan.view', 'permohonan.submit',
-            'permohonan.approve_level_2', 'permohonan.approve_level_3', 'permohonan.approve_level_4',
-            'permohonan.approve_level_5', 'permohonan.return', 'permohonan.reject',
+            'permohonan.approve_level_1', 'permohonan.approve_level_2', 'permohonan.approve_level_3',
+            'permohonan.approve_level_4', 'permohonan.approve_level_5', 'permohonan.return', 'permohonan.reject',
             'dokumen.view', 'dokumen.generate_draft', 'dokumen.upload', 'dokumen.sign',
             'template.review', 'template.approve',
             'audit.view', 'ledger.view', 'report.view',
@@ -33,6 +33,7 @@ final class RolePermissionSeeder extends Seeder
         $map = [
             'AO' => [
                 'permohonan.create', 'permohonan.edit_own', 'permohonan.view', 'permohonan.submit',
+                'permohonan.approve_level_1',
                 'dokumen.view', 'dokumen.generate_draft', 'dokumen.upload',
                 'simulasi.create', 'import.slik', 'import.debitur', 'import.dokumen',
             ],

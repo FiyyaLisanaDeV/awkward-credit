@@ -121,7 +121,8 @@ it('menyimpan simulasi dan replay identik', function () {
 it('menyetujui permohonan sesuai level', function () {
     Sanctum::actingAs(apiUser());
 
-    $permohonan = fixturePermohonan();
+    // Band 0–10jt menuntut level 1 lalu level 2 (matriks v1.0).
+    $permohonan = fixturePermohonan(['plafon_diajukan' => 5000000]);
     $permohonan->update(['status' => StatusPermohonan::SUBMITTED->value]);
 
     $this->postJson('/api/v1/permohonan/'.$permohonan->id.'/approve')
@@ -129,6 +130,12 @@ it('menyetujui permohonan sesuai level', function () {
 
     expect(PermohonanKredit::query()->findOrFail($permohonan->id)->status)
         ->toBe(StatusPermohonan::RECOMMENDED->value);
+
+    $this->postJson('/api/v1/permohonan/'.$permohonan->id.'/approve')
+        ->assertOk();
+
+    expect(PermohonanKredit::query()->findOrFail($permohonan->id)->status)
+        ->toBe(StatusPermohonan::APPROVED->value);
 });
 
 it('memverifikasi ledger lewat API', function () {

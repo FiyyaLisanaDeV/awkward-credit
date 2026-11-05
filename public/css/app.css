@@ -247,3 +247,16 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .negatif { color: var(--bpr-danger); }
 .positif { color: var(--bpr-success); }
 .req { color: var(--bpr-danger); margin-left: .15rem; }
+
+/* Timeline persetujuan */
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline-item { position: relative; padding: 0 0 1rem 1.4rem; border-left: 2px solid var(--bpr-border); }
+.timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+.timeline-dot { position: absolute; left: -.45rem; top: .15rem; width: .7rem; height: .7rem; border-radius: 50%; background: var(--bpr-primary); }
+.timeline-item .badge { margin-left: .35rem; }
+
+/* Notifikasi */
+.notif { position: relative; }
+.notif-panel { position: absolute; right: 0; top: 2.3rem; width: 320px; max-height: 340px; overflow-y: auto; z-index: 20; }
+.notif-item { padding: .5rem 0; border-bottom: 1px solid var(--bpr-border); }
+.notif-item:last-of-type { border-bottom: 0; }

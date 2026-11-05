@@ -5,7 +5,10 @@ declare(strict_types=1);
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\Web\ApprovalController;
+use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DebiturController;
+use App\Http\Controllers\Web\KreditController;
 use App\Http\Controllers\Web\PermohonanController;
 use App\Http\Controllers\Web\SimulasiController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +27,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 Route::middleware(['auth', 'active', 'password.changed'])->group(function (): void {
     Route::get('/', fn () => redirect()->route('dashboard'));
 
-    Route::get('/dashboard', fn () => view('dashboard.index'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/password', [PasswordController::class, 'show'])->name('password.change');
     Route::post('/password', [PasswordController::class, 'update'])->name('password.update');
@@ -39,6 +42,10 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/debitur/{debitur}', [DebiturController::class, 'show'])->name('debitur.show');
         Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
         Route::get('/permohonan/{permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
+        Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.inbox');
+        Route::get('/approval/{permohonan}', [ApprovalController::class, 'show'])->name('approval.show');
+        Route::get('/kredit', [KreditController::class, 'index'])->name('kredit.index');
+        Route::get('/kredit/{kredit}', [KreditController::class, 'show'])->name('kredit.show');
     });
 
     Route::middleware('permission:simulasi.create')->group(function (): void {

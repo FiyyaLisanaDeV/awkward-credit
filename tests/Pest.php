@@ -11,6 +11,7 @@ use App\Models\RefParameterKebijakan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
 pest()->extend(TestCase::class)
@@ -84,4 +85,37 @@ function fixtureKapasitas(PermohonanKredit $permohonan, array $overrides = []): 
         'rasio_kecukupan_balloon' => 1.2,
         'plafon_max_flat' => 90000000,
     ], $overrides));
+}
+
+function workflowUser(string $role, ?string $username = null, ?string $cabangId = null): User
+{
+    $cabang = $cabangId ?? DB::table('cabang')->where('kode', 'KDI')->value('id');
+
+    $user = User::query()->create([
+        'cabang_id' => $cabang,
+        'name' => 'Uji '.$role,
+        'username' => $username ?? 'uji_'.strtolower($role).'_'.Str::lower(Str::random(5)),
+        'email' => Str::lower($role).'_'.Str::lower(Str::random(6)).'@bpr.local',
+        'password' => 'password',
+        'jabatan' => $role,
+        'is_active' => true,
+        'must_change_password' => false,
+    ]);
+
+    $user->assignRole($role);
+
+    return $user;
+}
+
+function assertHttpStatus(callable $callback, int $expected): void
+{
+    try {
+        $callback();
+    } catch (HttpException $exception) {
+        expect($exception->getStatusCode())->toBe($expected);
+
+        return;
+    }
+
+    throw new RuntimeException('Diharapkan HttpException '.$expected.' tetapi tidak dilempar.');
 }

@@ -46,6 +46,8 @@ return [
 
     'ui' => [
         'dashboard_recent' => 10,
+        'dashboard_cache_ttl' => 300,
+        'notifikasi_limit' => 10,
     ],
 
     'golden' => [

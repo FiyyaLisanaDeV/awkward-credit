@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Rules\Rules;
 
 use App\Enums\AksiApproval;
-use App\Enums\StatusVersi;
 use App\Models\ApprovalLog;
 use App\Models\PermohonanKredit;
-use App\Models\RefApprovalMatrix;
+use App\Services\Approval\ApprovalService;
 use App\Services\Rules\AbstractRule;
 use App\Services\Rules\RuleResult;
 
@@ -26,31 +25,9 @@ final class BR06UrutanApproval extends AbstractRule
 
     public function validate(PermohonanKredit $permohonan): RuleResult
     {
-        $matrix = RefApprovalMatrix::query()->where('status', StatusVersi::ACTIVE->value)->first();
+        $wajib = app(ApprovalService::class)->requiredLevels($permohonan);
 
-        if ($matrix === null || ! is_array($matrix->matrix)) {
-            return $this->fail('Matriks persetujuan aktif tidak tersedia.');
-        }
-
-        $plafon = (float) ($permohonan->plafon_rekomendasi ?? $permohonan->plafon_diajukan);
-        $levels = [];
-
-        foreach ($matrix->matrix as $entry) {
-            if (! is_array($entry)) {
-                continue;
-            }
-
-            $min = (float) ($entry['plafon_min'] ?? 0);
-            $max = $entry['plafon_max'] ?? null;
-
-            if ($plafon >= $min && ($max === null || $plafon <= (float) $max)) {
-                $levels[] = (int) $entry['level'];
-            }
-        }
-
-        $wajib = $levels === [] ? 0 : max($levels);
-
-        if ($wajib === 0) {
+        if ($wajib === []) {
             return $this->fail('Tidak ada level persetujuan untuk plafon ini.');
         }
 
@@ -64,8 +41,7 @@ final class BR06UrutanApproval extends AbstractRule
             ->values()
             ->all();
 
-        $harus = range(1, $wajib);
-        $kurang = array_values(array_diff($harus, $sudah));
+        $kurang = array_values(array_diff($wajib, $sudah));
 
         return $kurang === []
             ? $this->pass('Urutan persetujuan lengkap.', ['level' => $wajib])

@@ -42,6 +42,7 @@
             <header class="navbar">
                 <div class="muted">{{ $title ?? __('dashboard.title') }}</div>
                 <div class="flex items-center gap-2">
+                    <livewire:notification-bell />
                     <span class="small">{{ auth()->user()?->name }}</span>
                     <a class="btn btn-sm" href="{{ route('password.change') }}">{{ __('auth.change_password') }}</a>
                     <form method="POST" action="{{ route('logout') }}">

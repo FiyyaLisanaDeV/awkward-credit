@@ -34,5 +34,29 @@ final class Konstanta
 
     public const SLIK_PASTE_ANGSURAN_INDEX = 5;
 
+    public const NOTIFIKASI_TERBARU = 10;
+
+    public const JADWAL_BELUM_BAYAR = 'BELUM_BAYAR';
+
+    public const JADWAL_SUDAH_BAYAR = 'SUDAH_BAYAR';
+
+    public const TERBILANG_SEPULUH = 10;
+
+    public const TERBILANG_DUA_BELAS = 12;
+
+    public const TERBILANG_DUA_PULUH = 20;
+
+    public const TERBILANG_SERATUS = 100;
+
+    public const TERBILANG_DUA_RATUS = 200;
+
+    public const TERBILANG_SERIBU = 1000;
+
+    public const TERBILANG_DUA_RIBU = 2000;
+
+    public const TERBILANG_SEJUTA = 1000000;
+
+    public const TERBILANG_SEMILYAR = 1000000000;
+
     public const MILI_PER_DETIK = 1000;
 }
