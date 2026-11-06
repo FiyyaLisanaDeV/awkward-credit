@@ -83,6 +83,7 @@
     color: #24545f; font-size: 13px;
   }
   .q-text { font-weight: 650; margin: 0 0 12px; }
+  .q-impact { display: block; margin-top: 7px; color: #3f5f66; font-style: italic; }
   .options { display: grid; gap: 8px; }
   .option {
     display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start;
@@ -105,6 +106,18 @@
   .btn.ghost { background: transparent; }
   .btn.danger { color: var(--danger); border-color: #fecdd3; }
   .status { min-height: 20px; font-size: 12px; color: var(--muted); }
+  .legend {
+    margin-top: 14px; padding: 12px 14px; border: 1px solid #b9d7d0; background: #f0faf7;
+    border-radius: 10px; color: #24545f; font-size: 13px;
+  }
+  .legend strong { color: #0f4c5c; }
+  .intro {
+    margin: 8px 0 14px; padding: 12px 14px; background: #f8fafc; border: 1px dashed #cbd5e1;
+    border-radius: 10px; color: #334155; font-size: 13px;
+  }
+  .glossary-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .glossary-table th, .glossary-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .glossary-table th { width: 150px; color: var(--brand); white-space: nowrap; }
   .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .metric { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
   .metric strong { display: block; font-size: 24px; }
@@ -156,6 +169,7 @@
       </div>
       <div class="actions" style="margin:0">
         <button class="btn" type="button" id="btnExport">Ekspor JSON</button>
+        <button class="btn" type="button" id="btnGlossary">Glosarium</button>
         <button class="btn" type="button" id="btnPrint">Cetak</button>
       </div>
     </header>
@@ -179,6 +193,13 @@
         <label class="field">Unit/Cabang<input type="text" id="metaOrg" placeholder="Contoh: KDI / Produk"></label>
       </div>
       <p class="status" id="identityStatus">Data identitas tidak dikirim ke server; tersimpan di browser ini.</p>
+      <div class="legend">
+        <strong>Cara menjawab:</strong> A–C adalah pilihan yang sudah dibakukan.
+        Pilih <strong>D</strong> bila jawaban Anda tidak tercakup; kolom teks D wajib diisi.
+        Untuk pertanyaan status: <strong>A = LULUS/sesuai</strong>, <strong>B = GAGAL/tidak sesuai</strong>,
+        <strong>C = UNKNOWN/perlu bukti</strong>, <strong>D = lainnya</strong>.
+        Istilah asing/singkatan bisa dibuka lewat tombol <strong>Glosarium</strong>.
+      </div>
     </div>
 
     <div id="sectionHost"></div>
@@ -204,6 +225,57 @@
   </main>
 </div>
 
+<dialog id="glossaryDialog">
+  <div class="dialog-body">
+    <h3>Glosarium istilah &amp; singkatan</h3>
+    <p class="muted small">Gunakan ini saat menemukan istilah yang tidak familiar. Istilah dijelaskan dalam konteks aplikasi BPR.</p>
+    <div style="max-height:55vh;overflow:auto;border:1px solid var(--line);border-radius:10px">
+      <table class="glossary-table">
+        <tbody>
+          <tr><th>BPR</th><td>Bank Perekonomian Rakyat.</td></tr>
+          <tr><th>AO</th><td>Account Officer, petugas yang menginisiasi dan menganalisis permohonan.</td></tr>
+          <tr><th>TPP</th><td>Kredit konsumtif yang angsurannya dipotong dari TPP/gaji.</td></tr>
+          <tr><th>SLIK / iDeb</th><td>Informasi riwayat kredit debitur dari OJK; dipakai untuk melihat fasilitas dan kolektibilitas.</td></tr>
+          <tr><th>IDIR</th><td>Installment to Disposable Income Ratio: angsuran baru ÷ penghasilan bersih.</td></tr>
+          <tr><th>DSCR</th><td>Debt Service Coverage Ratio: RPC ÷ total kewajiban bulanan (angsuran baru + SLIK).</td></tr>
+          <tr><th>RPC</th><td>Repayment Capacity: surplus bersih × margin kapasitas bayar.</td></tr>
+          <tr><th>LTV</th><td>Loan to Value: kredit ÷ nilai agunan yang disepakati.</td></tr>
+          <tr><th>PPKA</th><td>Penyisihan Penilaian Kualitas Aset: nilai agunan setelah pengurang.</td></tr>
+          <tr><th>CKPN</th><td>Cadangan Kerugian Penurunan Nilai.</td></tr>
+          <tr><th>BMPK</th><td>Batas Maksimum Pemberian Kredit.</td></tr>
+          <tr><th>WCD</th><td>Working Capital Days: kebutuhan modal kerja karena persediaan.</td></tr>
+          <tr><th>EIR</th><td>Effective Interest Rate: bunga efektif tahunan dari arus kas, dihitung numerik (IRR), bukan faktor 1,81×.</td></tr>
+          <tr><th>IRR</th><td>Internal Rate of Return: tingkat diskonto yang membuat NPV arus kas = 0.</td></tr>
+          <tr><th>Grace period</th><td>Periode pokok ditunda; bunga tetap berjalan; pokok dilunasi di akhir (balloon).</td></tr>
+          <tr><th>Balloon</th><td>Pembayaran pokok besar di periode terakhir.</td></tr>
+          <tr><th>Haircut</th><td>Pengurang nilai agunan; double-haircut berarti pengurangan dilakukan dua kali.</td></tr>
+          <tr><th>Golden vector</th><td>Kasus uji acuan dengan input dan output yang disepakati.</td></tr>
+          <tr><th>Recomputed</th><td>Nilai dihitung ulang oleh skrip, tetapi belum ditandatangani ahli.</td></tr>
+          <tr><th>Verified</th><td>Nilai sudah diverifikasi manusia dengan bukti dan tanda tangan.</td></tr>
+          <tr><th>Boundary</th><td>Nilai tepat di ambang, mis. 35,00%, 35,01%, 80,00%, 80,01%.</td></tr>
+          <tr><th>Hard stop</th><td>Aturan yang menolak transaksi, bukan sekadar peringatan.</td></tr>
+          <tr><th>Soft warning</th><td>Peringatan yang tidak memblokir, tetapi dicatat.</td></tr>
+          <tr><th>Snapshot</th><td>Salinan parameter kebijakan saat permohonan dibuat.</td></tr>
+          <tr><th>Grandfathering</th><td>Permohonan lama tetap memakai snapshot lama meski policy baru aktif.</td></tr>
+          <tr><th>Stage-aware</th><td>Aturan dievaluasi sesuai tahap: submit, analisis, approve.</td></tr>
+          <tr><th>Ledger</th><td>Catatan peristiwa append-only dengan hash chain.</td></tr>
+          <tr><th>Hash chain</th><td>Rantai hash yang menghubungkan setiap baris ke baris sebelumnya.</td></tr>
+          <tr><th>Immutable</th><td>Tidak boleh diubah/dihapus setelah dibuat.</td></tr>
+          <tr><th>Sequence / backfill</th><td>Counter nomor atomik; backfill mengisi counter dari nomor lama.</td></tr>
+          <tr><th>Dedupe</th><td>Menghapus fasilitas ganda agar tidak dihitung dua kali.</td></tr>
+          <tr><th>PII</th><td>Personally Identifiable Information: data pribadi seperti NIK, alamat, nomor HP.</td></tr>
+          <tr><th>SoD</th><td>Segregation of Duties: pembuat tidak boleh menyetujui miliknya sendiri.</td></tr>
+          <tr><th>UAT</th><td>User Acceptance Test: pengujian oleh pengguna sebelum rilis.</td></tr>
+          <tr><th>ACTIVE</th><td>Policy/parameter yang sedang berlaku untuk permohonan baru.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="dialog-actions">
+    <button class="btn primary" type="button" id="btnCloseGlossary">Tutup</button>
+  </div>
+</dialog>
+
 <dialog id="exportDialog">
   <div class="dialog-body">
     <h3>Ekspor jawaban</h3>
@@ -218,11 +290,24 @@
 </dialog>
 
 <script>
+const sectionImpact = {
+  'golden-tpp': 'Jika angka ini salah, plafon atau angsuran yang disetujui bisa keliru dan merugikan bank maupun debitur.',
+  'golden-schedule': 'Kesalahan pembulatan, grace, atau balloon dapat membuat jadwal tidak seimbang dan saldo akhir tidak nol.',
+  'golden-capacity': 'DSCR atau RPC yang salah dapat meloloskan debitur yang sebenarnya tidak mampu membayar.',
+  'golden-collateral': 'Nilai agunan atau bobot 5C yang salah membuat LTV terlalu optimistis dan jaminan tidak cukup.',
+  'golden-negative': 'Jika aturan negatif tidak menolak, pelanggaran BMPK, sektor, CKPN, atau write-off bisa lolos ke produksi.',
+  'app-snapshot': 'Jika snapshot tidak terkunci, hasil analisis lama bisa berubah diam-diam saat policy baru diaktifkan.',
+  'app-stage': 'Jika aturan dijalankan pada tahap yang salah, submit bisa gagal total atau approval meloloskan pelanggaran.',
+  'app-numbering': 'Nomor ganda atau DSCR yang menghilangkan kewajiban SLIK dapat merusak audit dan keputusan kredit.',
+  'app-ui': 'UI yang tidak menjaga cabang dan audit dapat membocorkan data atau menghilangkan jejak keputusan.'
+};
+
 const sections = [
   {
     id: 'golden-tpp',
     title: 'Golden — TPP',
     description: 'Kasus TPP konsumtif. Jawab berdasarkan sumber workbook/sel atau hitung ulang independen.',
+    intro: 'TPP adalah kredit konsumtif yang angsurannya dipotong dari gaji/TPP. Bagian ini menguji apakah Anda memahami komponen angsuran, IDIR, EIR, dan pengaruh fasilitas SLIK. IDIR = angsuran baru ÷ penghasilan bersih. EIR dihitung dari arus kas (IRR), bukan faktor 1,81×. Blokir tabungan dan payoff memengaruhi dana yang diterima.',
     questions: [
       {
         id: 'G-TPP-01-A', context: 'Kasus G-TPP-01 (C-002): plafon Rp80.000.000, bunga flat 18%/tahun, tenor 60 bulan, penghasilan bersih Rp2.948.080.',
@@ -270,6 +355,7 @@ const sections = [
     id: 'golden-schedule',
     title: 'Golden — Jadwal & Grace',
     description: 'Fokus pada amortisasi, pembulatan, EIR, dan balloon.',
+    intro: 'Jadwal angsuran adalah daftar pokok dan bunga per periode. Flat menghitung bunga dari plafon; anuitas menghitung bunga dari saldo; grace menunda pokok; balloon melunasi pokok besar di akhir. Boundary berarti nilai tepat di ambang, misalnya 1,00× atau 1,10×. Selisih pembulatan harus ditempatkan secara eksplisit, biasanya di periode terakhir.',
     questions: [
       {
         id: 'G-SCH-01', context: 'Tenor 1 bulan, bunga flat, tanpa biaya yang memengaruhi jadwal.',
@@ -317,6 +403,7 @@ const sections = [
     id: 'golden-capacity',
     title: 'Golden — Kapasitas & Modal Kerja',
     description: 'RPC, DSCR, plafon maksimum, cash turnover, WCD, dan gap.',
+    intro: 'RPC adalah uang yang tersedia untuk membayar utang setelah surplus dikali margin. DSCR membandingkan RPC dengan total kewajiban bulanan, termasuk fasilitas SLIK yang masih aktif. WCD adalah kebutuhan modal kerja karena persediaan. Gap adalah kekurangan modal kerja setelah dikurangi dana yang tersedia.',
     questions: [
       {
         id: 'G-CAP-01', context: 'RPC = surplus bersih bulanan × margin kapasitas bayar.',
@@ -364,6 +451,7 @@ const sections = [
     id: 'golden-collateral',
     title: 'Golden — Agunan, Scoring & Keputusan',
     description: 'PPKA/LTV, bobot 5C, override SLIK, stress test, dan keputusan.',
+    intro: 'Agunan dinilai dengan beberapa basis: pasar, likuidasi, dan PPKA. LTV harus memakai satu basis yang disepakati agar tidak terjadi double-haircut. Skor 5C memakai bobot Character, Capacity, Capital, Collateral, Condition. SLIK bermasalah dapat memaksa skor Character menjadi 1,0, tetapi override wajib beralasan dan teraudit. Jika IDIR hard stop bertentangan dengan skor tinggi, hard stop yang menang.',
     questions: [
       {
         id: 'G-COL-01', context: 'Agunan memiliki nilai pasar, likuidasi, PPKA, dan basis LTV.',
@@ -411,6 +499,7 @@ const sections = [
     id: 'golden-negative',
     title: 'Golden — Negatif & Lintas Kasus',
     description: 'BMPK, konsentrasi sektor, CKPN, write-off, dan konsistensi antar kasus.',
+    intro: 'Kasus negatif menguji apakah sistem benar-benar menolak pelanggaran, bukan hanya memberi peringatan. BMPK membatasi exposure kepada pihak terkait; konsentrasi sektor membatasi exposure per sektor; CKPN dan PPKA punya arah transisi; write-off parsial tidak diperbolehkan. Jawaban yang benar adalah “ditolak” bila aturan memang hard stop.',
     questions: [
       {
         id: 'G-RAC-01', context: 'BMPK membatasi exposure kepada pihak terkait/borrower group.',
@@ -458,6 +547,7 @@ const sections = [
     id: 'app-snapshot',
     title: 'Aplikasi — Snapshot & Policy',
     description: 'Grandfathering: permohonan mengunci parameter saat dibuat.',
+    intro: 'Snapshot adalah salinan parameter kebijakan (id, versi, dan nilai) yang disimpan saat permohonan dibuat. Grandfathering berarti permohonan lama tetap memakai snapshot lama meskipun policy ACTIVE berubah. Permohonan baru memakai policy baru. Snapshot tidak boleh diubah setelah create; bila snapshot lama tidak ada, sistem memakai FK parameter historis, bukan policy ACTIVE saat ini.',
     questions: [
       {
         id: 'B1-01', context: 'Permohonan baru dibuat saat policy ACTIVE versi tertentu.',
@@ -505,6 +595,7 @@ const sections = [
     id: 'app-stage',
     title: 'Aplikasi — Stage-Aware & IDIR',
     description: 'Aturan dievaluasi sesuai ketersediaan data dan tahap workflow.',
+    intro: 'Stage-aware berarti aturan tidak dijalankan sekaligus. Saat submit, analisis dan approval belum ada, jadi hanya aturan awal yang dievaluasi. Saat analisis, aturan kapasitas/IDIR/DSCR dievaluasi dan dicatat. Saat approve, hard gate menahan persetujuan bila ada pelanggaran. Hard stop menolak; soft warning hanya memberi perhatian. BR-06 (urutan approval) ditangani ApprovalService agar tidak rekursif.',
     questions: [
       {
         id: 'B2-01', context: 'Saat submit, analisis dan approval belum tersedia.',
@@ -552,6 +643,7 @@ const sections = [
     id: 'app-numbering',
     title: 'Aplikasi — Penomoran & DSCR',
     description: 'Sequence atomik, backfill, agregasi SLIK, dan DSCR.',
+    intro: 'Sequence adalah counter nomor yang harus atomik agar dua request tidak mendapat nomor sama. Backfill mengisi counter dari nomor yang sudah terbit, memakai suffix tertinggi dan tidak boleh menurunkan nilai. Dedupe mencegah fasilitas yang sama dihitung dua kali. DSCR memakai total kewajiban: angsuran baru + seluruh angsuran SLIK aktif. Jika angsuran SLIK null, sistem boleh mengestimasi dan menandainya.',
     questions: [
       {
         id: 'B4-01', context: 'Dua request submit bersamaan meminta nomor baru.',
@@ -599,6 +691,7 @@ const sections = [
     id: 'app-ui',
     title: 'Aplikasi — UI, Audit & Rilis',
     description: 'Workbench, isolasi cabang, ledger, keamanan, dan operasional.',
+    intro: 'Workbench adalah layar analisis tempat AO mengisi neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas, dan scoring. Setiap aksi harus dibatasi cabang dan izin. Ledger adalah catatan audit append-only; audit log mencatat aturan yang dievaluasi. UAT adalah pengujian oleh pengguna sebelum rilis. PII adalah data pribadi yang tidak boleh bocor ke log atau pengguna lintas cabang.',
     questions: [
       {
         id: 'B6-01', context: 'Workbench analisis dibuka oleh user cabang lain.',
@@ -711,7 +804,8 @@ function render() {
 
   const head = document.createElement('div');
   head.className = 'section-head';
-  head.innerHTML = '<h2>' + escapeHtml(section.title) + '</h2><p class="muted">' + escapeHtml(section.description) + '</p>';
+  head.innerHTML = '<h2>' + escapeHtml(section.title) + '</h2><p class="muted">' + escapeHtml(section.description) + '</p>' +
+    '<div class="intro">' + escapeHtml(section.intro) + '</div>';
   host.appendChild(head);
 
   section.questions.forEach((q) => {
@@ -729,7 +823,9 @@ function render() {
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
     card.innerHTML =
       '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="small muted">' + escapeHtml(section.title) + '</span></div>' +
-      '<div class="q-context">' + escapeHtml(q.context) + '</div>' +
+      '<div class="q-context">' + escapeHtml(q.context) +
+        '<span class="q-impact"><strong>Mengapa penting:</strong> ' + escapeHtml(sectionImpact[section.id] || '') + '</span>' +
+      '</div>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
       '<div class="options">' + options +
         '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
@@ -850,6 +946,8 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#btnPrev').addEventListener('click', () => { if (currentSection > 0) { currentSection--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
   $('#btnNext').addEventListener('click', () => { if (currentSection < sections.length - 1) { currentSection++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
   $('#btnExport').addEventListener('click', showExport);
+  $('#btnGlossary').addEventListener('click', () => $('#glossaryDialog').showModal());
+  $('#btnCloseGlossary').addEventListener('click', () => $('#glossaryDialog').close());
   $('#btnPrint').addEventListener('click', () => window.print());
   $('#btnCloseDialog').addEventListener('click', () => $('#exportDialog').close());
   $('#btnDownload').addEventListener('click', downloadExport);
