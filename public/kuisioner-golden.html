@@ -78,12 +78,8 @@
   .question { border-left: 4px solid var(--brand); }
   .q-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
   .q-id { font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--brand); letter-spacing: .06em; }
-  .q-context {
-    background: var(--brand-2); border-radius: 8px; padding: 10px 12px; margin: 10px 0 12px;
-    color: #24545f; font-size: 13px;
-  }
+  .q-narrative { margin: 8px 0 10px; color: #334155; }
   .q-text { font-weight: 650; margin: 0 0 12px; }
-  .q-impact { display: block; margin-top: 7px; color: #3f5f66; font-style: italic; }
   .options { display: grid; gap: 8px; }
   .option {
     display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start;
@@ -823,9 +819,7 @@ function render() {
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
     card.innerHTML =
       '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="small muted">' + escapeHtml(section.title) + '</span></div>' +
-      '<div class="q-context">' + escapeHtml(q.context) +
-        '<span class="q-impact"><strong>Mengapa penting:</strong> ' + escapeHtml(sectionImpact[section.id] || '') + '</span>' +
-      '</div>' +
+      '<p class="q-narrative">' + escapeHtml(q.context) + ' ' + escapeHtml(sectionImpact[section.id] || '') + '</p>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
       '<div class="options">' + options +
         '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
