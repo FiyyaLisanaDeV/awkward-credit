@@ -38,6 +38,11 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/permohonan/create', [PermohonanController::class, 'create'])->name('permohonan.create');
     });
 
+    Route::middleware('permission:kredit.cairkan')->group(function (): void {
+        Route::get('/kredit/cairkan/{permohonan}', [KreditController::class, 'create'])->name('kredit.cairkan.create');
+        Route::post('/kredit/cairkan/{permohonan}', [KreditController::class, 'store'])->name('kredit.cairkan.store');
+    });
+
     Route::middleware('permission:permohonan.view')->group(function (): void {
         Route::get('/debitur', [DebiturController::class, 'index'])->name('debitur.index');
         Route::get('/debitur/{debitur}', [DebiturController::class, 'show'])->name('debitur.show');

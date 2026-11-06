@@ -1,0 +1,11 @@
+=== P0 DIAGNOSIS ===
+[V] herd tld = test
+[V] herd which = LaravelValetDriver
+[V] herd link --secure = site loan-analytic-bpr linked (SSL kolom kosong saat link timeout)
+[V] herd secure loan-analytic-bpr.test --silent = cert valid 2027-11-09
+[V] herd restart = 'Restarting DNSMasq/PHP 8.3/Nginx'
+[?] nginx/dnsmasq process: TIDAK berjalan (ps aux + lsof -iTCP:80/443/53 kosong)
+[?] curl https://loan-analytic-bpr.test/health = Resolving timed out
+[V] /Library/LaunchDaemons/de.beyondco.herd.helper.plist + /Library/PrivilegedHelperTools/de.beyondco.herd.helper ada
+[V] helper LaunchDaemon TIDAK termuat (launchctl list tidak memuat de.beyondco.herd.helper)
+[V] sudo -n true = password required (tidak bisa memuat helper tanpa sudo)

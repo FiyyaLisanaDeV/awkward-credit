@@ -1,0 +1,7 @@
+GET|HEAD api/v1/kredit api.kredit.index
+GET|HEAD api/v1/kredit/{kredit} None
+GET|HEAD api/v1/kredit/{kredit}/jadwal None
+GET|HEAD api/v1/ledger None
+GET|HEAD api/v1/ledger/verify None
+GET|HEAD kredit kredit.index
+GET|HEAD kredit/{kredit} kredit.show

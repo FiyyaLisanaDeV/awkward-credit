@@ -20,4 +20,9 @@ return [
     'pokok' => 'Pokok',
     'bunga' => 'Bunga',
     'total' => 'Total',
+    'cairkan' => 'Cairkan',
+    'cairkan_title' => 'Pencairan Kredit',
+    'no_akad' => 'No. Akad',
+    'cairkan_hint' => 'Pencairan hanya untuk permohonan yang telah disetujui.',
+    'cairkan_button' => 'Cairkan',
 ];

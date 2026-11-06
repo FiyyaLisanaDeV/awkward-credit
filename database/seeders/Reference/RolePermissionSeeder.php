@@ -23,6 +23,7 @@ final class RolePermissionSeeder extends Seeder
             'template.review', 'template.approve',
             'audit.view', 'ledger.view', 'report.view',
             'parameter.activate', 'user.manage',
+            'kredit.cairkan',
             'setting.view', 'setting.edit', 'setting.approve', 'setting.apply',
             'simulasi.create', 'import.slik', 'import.debitur', 'import.dokumen', 'import.pembayaran',
         ];
