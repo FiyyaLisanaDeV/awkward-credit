@@ -225,7 +225,7 @@
     <div class="brand">Kuisioner Golden &amp; Fungsi<small>Verifikasi sebelum rilis produksi</small></div>
     <div class="side-progress">
       <div class="bar"><span id="sideBar"></span></div>
-      <p id="sideProgress">0 dari 0 terjawab</p>
+      <p id="sideProgress" role="status" aria-live="polite">0 dari 0 terjawab</p>
     </div>
     <nav id="sectionNav" aria-label="Bagian kuisioner"></nav>
   </aside>
@@ -243,7 +243,7 @@
         </div>
       </div>
       <div class="hero-progress">
-        <div class="progress-orb" id="progressOrb" aria-hidden="true"><span id="orbText">0%</span></div>
+        <div class="progress-orb" id="progressOrb" role="img" aria-label="Progres pengisian 0 persen"><span id="orbText" aria-hidden="true">0%</span></div>
         <small>progres pengisian</small>
       </div>
     </header>
@@ -292,7 +292,7 @@
         <button class="btn" type="button" id="btnPrev">← Sebelumnya</button>
         <button class="btn primary" type="button" id="btnNext">Berikutnya →</button>
         <button class="btn ghost" type="button" id="btnReset">Reset jawaban</button>
-        <span class="status" id="saveStatus"></span>
+        <span class="status" id="saveStatus" role="status" aria-live="polite"></span>
       </div>
     </div>
 
@@ -1072,7 +1072,10 @@ function updateProgress() {
   $('#mTotal').textContent = total;
   $('#mOpen').textContent = total - done;
   const orb = $('#progressOrb');
-  if (orb) orb.style.setProperty('--p', pct);
+  if (orb) {
+    orb.style.setProperty('--p', pct);
+    orb.setAttribute('aria-label', 'Progres pengisian ' + pct + ' persen');
+  }
   const orbText = $('#orbText');
   if (orbText) orbText.textContent = pct + '%';
 }
