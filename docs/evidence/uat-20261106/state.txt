@@ -1,0 +1,20 @@
++---------------------------------------+---------------+--------+
+| Item                                  | Nilai         | Status |
++---------------------------------------+---------------+--------+
+| php                                   | 8.3.7         | OK     |
+| laravel                               | 13.40.0       | OK     |
+| timezone                              | Asia/Makassar | OK     |
+| database                              | pgsql         | OK     |
+| migrasi                               | 62            | OK     |
+| rute                                  | 87            | OK     |
+| file test                             | 48            | OK     |
+| composer.lock                         | 76cd829130f7  | OK     |
+| git                                   | 0817dbf       | OK     |
+| dokumen: docs/RENCANA_IMPLEMENTASI.md | ada           | OK     |
+| dokumen: docs/TEKNIS.md               | ada           | OK     |
+| dokumen: docs/INVENTARIS_DATA.md      | ada           | OK     |
+| dokumen: docs/DSH_PROMPTS_SIMPLE.md   | ada           | OK     |
+| dokumen: docs/PROGRESS.md             | ada           | OK     |
+| dokumen: docs/DECISIONS.md            | ada           | OK     |
+| dokumen: docs/VERIFIKASI.md           | ada           | OK     |
++---------------------------------------+---------------+--------+

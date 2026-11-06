@@ -1,5 +1,8 @@
 # Skenario UAT — 3 Cabang
 
+> **Status 2026-11-06:** hanya **Cabang 1 (KDI)** yang dieksekusi sebagai pilot teknis dengan data dummy.
+> Cabang 2 & 3 belum dijalankan. Hasil: [Hasil Pilot KDI](hasil-pilot-20261106.md).
+
 Gunakan **data dummy** (tanpa PII nyata). Catat hasil: `Lulus / Gagal / Catatan`. Setiap cabang diuji oleh AO, pemutus, dan admin cabang.
 
 ## Cabang 1 — Alur utama (happy path)

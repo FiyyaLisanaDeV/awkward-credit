@@ -1,0 +1,9 @@
+admin token len=40
+draft_redirect=http://127.0.0.1:8000/pengaturan/RATE_JIWA?revision=01a1b083-e689-723b-9451-b1a1f6c3e74a
+revision=01a1b083-e689-723b-9451-b1a1f6c3e74a
+submit=302
+approve=302
+apply=302
+revision_status=APPLIED
+rate_rows=2
+audit_rate=6

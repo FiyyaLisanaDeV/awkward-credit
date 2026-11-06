@@ -28,11 +28,20 @@ final class DashboardService
 
         $ttl = (int) config('loan.ui.dashboard_cache_ttl');
 
-        return Cache::remember(
+        $ringkasan = Cache::remember(
             'dashboard:'.$cabangId,
             $ttl,
             fn (): array => $this->hitung($cabangId),
         );
+
+        $ringkasan['recent'] = PermohonanKredit::query()
+            ->with('debitur')
+            ->where('cabang_id', $cabangId)
+            ->latest('tanggal_permohonan')
+            ->limit((int) config('loan.ui.dashboard_recent'))
+            ->get();
+
+        return $ringkasan;
     }
 
     /**
@@ -95,12 +104,6 @@ final class DashboardService
             'kelengkapan_rata' => round((float) PermohonanKredit::query()
                 ->where('cabang_id', $cabangId)
                 ->avg('kelengkapan_persen'), 2),
-            'recent' => PermohonanKredit::query()
-                ->with('debitur')
-                ->where('cabang_id', $cabangId)
-                ->latest('tanggal_permohonan')
-                ->limit((int) config('loan.ui.dashboard_recent'))
-                ->get(),
         ];
     }
 }

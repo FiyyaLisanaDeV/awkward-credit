@@ -1,5 +1,8 @@
 # Checklist Go-Live
 
+> **Status 2026-11-06:** pilot teknis 1 cabang KDI **LULUS DENGAN CATATAN** di Mac lokal (data dummy).
+> Checklist produksi di bawah **belum** terpenuhi. Bukti & gap: [Hasil Pilot KDI](hasil-pilot-20261106.md).
+
 Centang hanya bila bukti tersedia. Item `[K]` memerlukan keputusan/pengesahan manusia.
 
 ## Teknis

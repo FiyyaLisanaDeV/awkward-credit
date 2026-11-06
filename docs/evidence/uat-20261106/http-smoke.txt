@@ -1,0 +1,27 @@
+PASS /dashboard (200)
+PASS /pengaturan (200)
+PASS /pengaturan/POLICY_PARAMETER (200)
+PASS /pengaturan/CHECKLIST_DOKUMEN (200)
+PASS /pengaturan/RATE_JIWA (200)
+PASS /approval (200)
+PASS /kredit (200)
+PASS /dashboard (200)
+PASS /debitur (200)
+PASS /permohonan (200)
+PASS /simulasi (200)
+PASS /pengaturan (403)
+PASS /permohonan/01a1b07b-5659-721f-9f91-0a5778a65826 (200)
+PASS /pengaturan (200)
+PASS /pengaturan/POLICY_PARAMETER (200)
+PASS /approval (200)
+PASS /kredit (200)
+PASS /approval (200)
+PASS /pengaturan (200)
+PASS /pengaturan (200)
+--- content markers ---
+admin settings title: 1
+auditor editor hidden (0): 0
+rate pilot visible: 1
+kredit rows: 2
+kredit_show=01a1b07b-6cd2-7054-a28c-d87207b79c75
+3

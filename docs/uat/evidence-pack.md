@@ -24,10 +24,10 @@ Kumpulkan output asli (bukan ringkasan) ke folder `docs/evidence/uat-<tanggal>/`
 ## 3. Snapshot teknis (baseline repo, 2026-11-06)
 | Item | Nilai |
 |---|---|
-| Migrasi | 61 |
-| Route | 77 |
-| File test | 44 (termasuk auditor) |
-| Test | 140 passed (1789 assertions) |
+| Migrasi | 62 |
+| Route | 87 |
+| File test | 48 |
+| Test | 162 passed (1864 assertions) |
 | `verify.sh --full` | exit 0 |
 | `ledger:verify` | OK |
 | `hardcode:audit` | 0 |

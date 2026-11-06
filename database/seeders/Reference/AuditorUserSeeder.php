@@ -13,7 +13,14 @@ final class AuditorUserSeeder extends Seeder
 {
     public function run(): void
     {
-        if (User::query()->where('username', 'auditor')->exists()) {
+        $existing = User::query()
+            ->where('username', 'auditor')
+            ->orWhere('email', 'auditor@bpr-bahteramas.local')
+            ->first();
+
+        if ($existing instanceof User) {
+            $existing->assignRole('AUDITOR');
+
             return;
         }
 

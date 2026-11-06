@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,16 @@ it('idempoten saat dijalankan dua kali', function () {
         ->and(DB::table('users')->count())->toBe(2)
         ->and(DB::table('ref_checklist_dokumen')->count())->toBe(28)
         ->and(DB::table('ref_template_dokumen')->count())->toBe(17);
+});
+
+it('memberi role ADMIN dan AUDITOR kepada akun bawaan', function () {
+    $this->seed();
+
+    $admin = User::query()->where('username', 'admin')->firstOrFail();
+    $auditor = User::query()->where('username', 'auditor')->firstOrFail();
+
+    expect($admin->hasRole('ADMIN'))->toBeTrue()
+        ->and($auditor->hasRole('AUDITOR'))->toBeTrue();
 });
 
 it('mengisi sumber pada semua referensi yang memiliki kolom sumber', function () {

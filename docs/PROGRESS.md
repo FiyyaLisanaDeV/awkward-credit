@@ -7,21 +7,21 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 3.1 | 2026-11-06 |
-| `updated_at` | 2026-11-06T18:45+08:00 | 2026-11-06 |
-| Fase aktif | **16 dilewati** (permintaan user); **17 & 18 menunggu review/UAT manusia**; **19 Pengaturan DONE** | 2026-11-06 |
+| Versi dokumen | 3.2 | 2026-11-06 |
+| `updated_at` | 2026-11-06T19:10+08:00 | 2026-11-06 |
+| Fase aktif | **16 dilewati**; **18 pilot KDI selesai** (lulus dengan catatan); **17/18 tanda tangan & UAT 3 cabang PENDING**; **19 Pengaturan DONE** | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
-| Remote | `origin` → `awkward-credit`, branch **`app`** (+tags phase-01..15); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
-| Branch / last commit | main / `phase-15-done` (`3e06519`) + docs 17/18 | 2026-11-06 |
+| Remote | `origin` → `awkward-credit`, branch **`app`** (remote `4de551b`; commit settings/pilot **belum dipush**); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
+| Branch / last commit | main / `0817dbf` (settings) + pilot UAT (lokal) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
 | Jumlah migrasi DB aplikasi | 62 (53 + 7 ledger/simulasi/import + Sanctum + setting_revisions) | 2026-11-06 |
 | Jumlah route | 87 (42 API v1 + 10 admin/pengaturan) | 2026-11-06 |
-| Jumlah test | 48 file (**160 test**, 1860 assertions) | 2026-11-06 |
+| Jumlah test | 48 file (**162 test**, 1864 assertions) | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | tersedia (Fase 08B); chain **OK** | 2026-11-06 |
-| Bukti fase terakhir | `docs/evidence/phase-19-settings-20261106-184318.txt` | 2026-11-06 |
+| Bukti fase terakhir | `docs/uat/hasil-pilot-20261106.md` + `docs/evidence/uat-20261106/` | 2026-11-06 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -59,7 +59,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 15 | Testing & Quality Gate | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-15-post-20261106-030741.txt` + `drill-04-20261106-030835.txt` + `verifier-pass-20261106-030954.txt` | `feat(phase-15)` / `phase-15-done` | arch + guard (Route/EventCatalog) + performance; verify --full exit 0; docs:check --strict; 138 test |
 | 16 | Hardening | TODO | — | — | — | — | **dilewati sementara** (permintaan user 2026-11-06); role DB + restore |
 | 17 | Dokumentasi Pengguna & SOP | IN-PROGRESS | 2026-11-06 | — | `docs/user/*` + `docs/evidence/phase-17-docs-20261106-034530.txt` | — | dokumen lengkap (AO/Admin/Komite/SOP/Pelatihan/FAQ); **review & tanda tangan pemilik proses PENDING `[K]`** |
-| 18 | UAT, Go-Live & Serah Terima | IN-PROGRESS | 2026-11-06 | — | `docs/uat/*` + `docs/evidence/phase-18-uat-package-20261106-034703.txt` | — | paket UAT/checklist/evidence/serah terima siap; **eksekusi UAT & tanda tangan PENDING `[K]`** |
+| 18 | UAT, Go-Live & Serah Terima | IN-PROGRESS | 2026-11-06 | — | `docs/uat/*` + `docs/evidence/uat-20261106/` | — | **pilot teknis KDI LULUS DENGAN CATATAN** (1 cabang, data dummy, `php artisan serve`); UAT 3 cabang, UI pencairan/dokumen/ledger, dan tanda tangan PENDING `[K]` |
 | 19 | Pengaturan (Settings) | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-19-settings-20261106-184318.txt` | `feat(settings)` / `settings-v1` | 9 bagian, revisi draft→approve→apply, SoD, audit, notifikasi; 20 test baru; verify --full exit 0 |
 
 Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hanya sah bila memenuhi gate VERIFIKASI §10.
@@ -119,6 +119,7 @@ NEXT: 1) UAT 3 cabang + berita acara; 2) tanda tangan SOP/manual; 3) Fase 12B im
 | 2026-11-06 | 20 | — | Push repo app ke GitHub memakai PAT (via GIT_ASKPASS, token tidak ditulis ke config): `main` ditolak non-fast-forward (remote berisi commandcode bpr), lalu dipush ke branch **`app`** + semua tag. `main` remote tidak diubah | `git push origin main:app --tags`, `git ls-remote` | OK, exit 0; `refs/heads/app` = HEAD lokal; `refs/heads/main` tetap `3fd7cb8` | `3e06519` |
 | 2026-11-06 | 21 | 17–18 | Fase 16 dilewati; paket dokumen pengguna (AO/Admin/Komite/SOP/Pelatihan/FAQ) + paket UAT/go-live/serah terima dibuat; user auditor ditambahkan (seeder + tes) | `docs:check --strict`, `verify.sh --full`, `ledger:verify`, `hardcode:audit` | OK, exit 0; **140 test**; review pemilik proses & UAT manusia PENDING | `ed864bb` + docs |
 | 2026-11-06 | 22 | 19 | Fitur Pengaturan `/pengaturan`: 9 section (parameter, matriks, 3 tarif asuransi, agunan PPKA, checklist, template, produk), tabel `setting_revisions`, alur DRAFT→PENDING→APPROVED→APPLIED, SoD, audit `setting:<SECTION>`, ledger `PARAMETER_DIAKTIFKAN`, permission `setting.*`, UI index/section/inbox/riwayat, docs/user/07 | `bash scripts/verify.sh --full`; `php artisan test tests/Feature/Setting` | OK, exit 0; **160 test** (1860 assertions), hardcode 0, docs:check --strict 0; evidence phase-19 | `feat(settings)` / `settings-v1` |
+| 2026-11-06 | 23 | 18 | Pilot UAT 1 cabang KDI via `php artisan serve`: 9 user role, 2 permohonan, 2 kredit, 10 ledger; uji login/RBAC, dashboard, pengaturan draft→approve→apply, SoD, approval 2 level, BR-07, pencairan backend, pembayaran/reversal; temuan diperbaiki: cache dashboard menyimpan model, `lang/id.php` non-standar, seeder role tidak idempoten | `bash scripts/verify.sh --full`; `php artisan test --compact`; `ledger:verify` | OK, exit 0; **162 test**; pilot lulus dengan catatan; UI pencairan/dokumen/ledger & UAT 3 cabang belum | `feat(pilot-uat)` |
 
 ## §6. Catatan drift
 
@@ -146,8 +147,10 @@ NEXT: 1) UAT 3 cabang + berita acara; 2) tanda tangan SOP/manual; 3) Fase 12B im
 | 2026-11-06 | Fase 16 (hardening) dilewati sementara atas permintaan user | tetap `TODO`; role DB/restore/PII/index belum dikerjakan | terbuka |
 | 2026-11-06 | Fase 17 & 18 baru menyelesaikan artefak; review pemilik proses & eksekusi UAT butuh manusia | tandai `IN-PROGRESS` sampai tanda tangan/bukti UAT | terbuka |
 | 2026-11-06 | Jumlah test berubah 138→140 (auditor) dan file 43→44 | header disinkronkan | selesai |
-| 2026-11-06 | `lang/id.php` bukan format grup Laravel (`lang/<locale>/<group>.php`), sehingga `__('setting.*')` mengembalikan key | dibuat `lang/id/setting.php`, `setting_section.php`, `status_revision.php`, `form.php` | selesai |
 | 2026-11-06 | SchemaInventory menghitung 55 model, bertambah 1 (`SettingRevision`) | test diperbarui ke 56 model | selesai |
+| 2026-11-06 | `DashboardService` menyimpan Eloquent Collection `recent` ke cache → `__PHP_Incomplete_Class`, dashboard 500 setelah cache terisi | cache hanya agregat; `recent` di-query ulang; regression test | selesai |
+| 2026-11-06 | `lang/id.php` bukan format grup Laravel → seluruh UI menampilkan key | dipecah ke `lang/id/<group>.php` (21 grup) | selesai |
+| 2026-11-06 | Seeder `admin`/`auditor` early-return tanpa re-assign role → user tanpa role setelah re-seed | seeder idempoten + test role | selesai |
 
 ## §7. Aturan pengisian
 

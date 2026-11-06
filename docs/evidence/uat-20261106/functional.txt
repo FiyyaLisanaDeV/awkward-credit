@@ -1,0 +1,12 @@
+PERMOHONAN: KDI/PILOT/0001 status=SUBMITTED
+SoD maker self-approve: HTTP 403 Pembuat permohonan tidak boleh menyetujui pengajuannya sendiri.
+Level 1 (ao2): OK
+Status setelah L1: RECOMMENDED
+Level 2 (mgr): OK
+Status setelah L2: APPROVED
+Approval log: 2
+BR-07 template DRAFT: HTTP 422 Template dokumen belum APPROVED (BR-07).
+Pencairan backend: OK
+Kredit total: 2
+Reversal: OK
+Jadwal setelah reversal: -

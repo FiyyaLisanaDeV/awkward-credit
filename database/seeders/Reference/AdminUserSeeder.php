@@ -13,7 +13,14 @@ final class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        if (User::query()->where('email', 'admin@bpr-bahteramas.local')->exists()) {
+        $existing = User::query()
+            ->where('email', 'admin@bpr-bahteramas.local')
+            ->orWhere('username', 'admin')
+            ->first();
+
+        if ($existing instanceof User) {
+            $existing->assignRole('ADMIN');
+
             return;
         }
 
