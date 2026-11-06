@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kuisioner Verifikasi Golden & Fungsi Aplikasi — BPR</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --ink: #17202a;
+    --muted: #5b6673;
+    --line: #d8dde4;
+    --brand: #0f4c5c;
+    --brand-2: #e8f1f3;
+    --accent: #b45309;
+    --danger: #9f1239;
+    --ok: #166534;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 8px 24px rgba(16, 24, 40, .06);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .app { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100vh; }
+  aside {
+    background: #0d2f38;
+    color: #e8f1f3;
+    padding: 24px 18px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: auto;
+  }
+  .brand { font-size: 18px; font-weight: 700; letter-spacing: .2px; }
+  .brand small { display: block; font-weight: 400; color: #a9c3c9; font-size: 12px; margin-top: 4px; }
+  .side-progress { margin: 20px 0 16px; }
+  .bar { height: 8px; background: rgba(255,255,255,.16); border-radius: 99px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; width: 0; background: #7dd3c7; transition: width .2s ease; }
+  .side-progress p { margin: 8px 0 0; font-size: 12px; color: #b9d1d6; }
+  nav { display: grid; gap: 4px; }
+  nav button {
+    appearance: none; border: 0; text-align: left; width: 100%;
+    padding: 9px 10px; border-radius: 8px; cursor: pointer;
+    background: transparent; color: #cfe1e5; font: inherit; font-size: 13px;
+  }
+  nav button:hover { background: rgba(255,255,255,.08); color: #fff; }
+  nav button.active { background: #f0f7f8; color: #0d2f38; font-weight: 700; }
+  nav button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: #4b6b72; }
+  nav button.active .dot, nav button.done .dot { background: #0f766e; }
+  main { padding: 28px 32px 64px; max-width: 980px; }
+  header.page { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 12px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px;
+  }
+  .identity { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  label.field { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: #334155; }
+  input[type="text"], input[type="date"], textarea, select {
+    width: 100%; border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px;
+    font: inherit; color: var(--ink); background: #fff;
+  }
+  textarea { min-height: 84px; resize: vertical; }
+  input:focus, textarea:focus, select:focus, button:focus-visible {
+    outline: 3px solid #99d5cb; outline-offset: 1px; border-color: #0f766e;
+  }
+  .section-head { margin: 22px 0 10px; }
+  .section-head h2 { margin: 0 0 4px; font-size: 21px; }
+  .question { border-left: 4px solid var(--brand); }
+  .q-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  .q-id { font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--brand); letter-spacing: .06em; }
+  .q-context {
+    background: var(--brand-2); border-radius: 8px; padding: 10px 12px; margin: 10px 0 12px;
+    color: #24545f; font-size: 13px;
+  }
+  .q-text { font-weight: 650; margin: 0 0 12px; }
+  .options { display: grid; gap: 8px; }
+  .option {
+    display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; align-items: start;
+    border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; cursor: pointer;
+    background: #fbfcfd;
+  }
+  .option:hover { border-color: #8fb8bf; background: #f4fafb; }
+  .option input { margin-top: 3px; accent-color: #0f766e; }
+  .option .key { font-weight: 800; color: var(--brand); }
+  .free { margin-top: 10px; }
+  .free[hidden] { display: none; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
+    border-radius: 9px; padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  .btn:hover { border-color: #8fb8bf; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.primary:hover { background: #0b3b47; }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--danger); border-color: #fecdd3; }
+  .status { min-height: 20px; font-size: 12px; color: var(--muted); }
+  .summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .metric { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .metric strong { display: block; font-size: 24px; }
+  .metric span { color: var(--muted); font-size: 12px; }
+  dialog {
+    border: 0; border-radius: 14px; padding: 0; width: min(860px, 92vw);
+    box-shadow: 0 24px 80px rgba(0,0,0,.25);
+  }
+  dialog::backdrop { background: rgba(15, 23, 42, .5); }
+  .dialog-body { padding: 18px 20px; }
+  .dialog-body h3 { margin: 0 0 6px; }
+  .dialog-body pre {
+    background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px;
+    overflow: auto; max-height: 55vh; font-size: 12px;
+  }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 0 20px 18px; }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; }
+    nav { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    main { padding: 18px; }
+    .identity, .summary { grid-template-columns: 1fr; }
+    header.page { flex-direction: column; }
+  }
+  @media print {
+    aside, .actions, .side-progress { display: none; }
+    .app { display: block; }
+    main { max-width: none; padding: 0; }
+    .card { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">Kuisioner Golden &amp; Fungsi<small>Verifikasi sebelum rilis produksi</small></div>
+    <div class="side-progress">
+      <div class="bar"><span id="sideBar"></span></div>
+      <p id="sideProgress">0 dari 0 terjawab</p>
+    </div>
+    <nav id="sectionNav" aria-label="Bagian kuisioner"></nav>
+  </aside>
+
+  <main>
+    <header class="page">
+      <div>
+        <h1>Kuisioner Verifikasi Golden &amp; Fungsi Aplikasi</h1>
+        <div class="muted">Jawaban A–C sudah dibakukan. Pilih <strong>D</strong> bila perlu menjelaskan dengan kata sendiri.</div>
+      </div>
+      <div class="actions" style="margin:0">
+        <button class="btn" type="button" id="btnExport">Ekspor JSON</button>
+        <button class="btn" type="button" id="btnPrint">Cetak</button>
+      </div>
+    </header>
+
+    <div id="identityCard" class="card">
+      <h2 style="margin:0 0 12px;font-size:18px">Identitas pengisi</h2>
+      <div class="identity">
+        <label class="field">Nama<input type="text" id="metaName" autocomplete="name" placeholder="Nama lengkap"></label>
+        <label class="field">Peran
+          <select id="metaRole">
+            <option value="">Pilih peran</option>
+            <option>Ahli Kredit/Produk</option>
+            <option>Reviewer Independen</option>
+            <option>QA/IT</option>
+            <option>Kepatuhan/Audit</option>
+            <option>Manajemen</option>
+            <option>Lainnya</option>
+          </select>
+        </label>
+        <label class="field">Tanggal<input type="date" id="metaDate"></label>
+        <label class="field">Unit/Cabang<input type="text" id="metaOrg" placeholder="Contoh: KDI / Produk"></label>
+      </div>
+      <p class="status" id="identityStatus">Data identitas tidak dikirim ke server; tersimpan di browser ini.</p>
+    </div>
+
+    <div id="sectionHost"></div>
+
+    <div class="card">
+      <div class="actions" style="margin-top:0">
+        <button class="btn" type="button" id="btnPrev">← Sebelumnya</button>
+        <button class="btn primary" type="button" id="btnNext">Berikutnya →</button>
+        <button class="btn ghost" type="button" id="btnReset">Reset jawaban</button>
+        <span class="status" id="saveStatus"></span>
+      </div>
+    </div>
+
+    <div class="card" id="summaryCard">
+      <h2 style="margin:0 0 12px;font-size:18px">Ringkasan</h2>
+      <div class="summary">
+        <div class="metric"><strong id="mAnswered">0</strong><span>terjawab</span></div>
+        <div class="metric"><strong id="mTotal">0</strong><span>total pertanyaan</span></div>
+        <div class="metric"><strong id="mOpen">0</strong><span>belum terjawab</span></div>
+      </div>
+      <p class="muted small" style="margin:12px 0 0">Ekspor JSON untuk dikirim ke reviewer. Jangan mengisi <code>verified=true</code> tanpa bukti dan tanda tangan ahli.</p>
+    </div>
+  </main>
+</div>
+
+<dialog id="exportDialog">
+  <div class="dialog-body">
+    <h3>Ekspor jawaban</h3>
+    <p class="muted small">Salin JSON ini atau unduh sebagai file. Periksa kembali sebelum mengirim.</p>
+    <pre id="exportText"></pre>
+  </div>
+  <div class="dialog-actions">
+    <button class="btn" type="button" id="btnCopy">Salin</button>
+    <button class="btn" type="button" id="btnDownload">Unduh .json</button>
+    <button class="btn primary" type="button" id="btnCloseDialog">Tutup</button>
+  </div>
+</dialog>
+
+<script>
+const sections = [
+  {
+    id: 'golden-tpp',
+    title: 'Golden — TPP',
+    description: 'Kasus TPP konsumtif. Jawab berdasarkan sumber workbook/sel atau hitung ulang independen.',
+    questions: [
+      {
+        id: 'G-TPP-01-A', context: 'Kasus G-TPP-01 (C-002): plafon Rp80.000.000, bunga flat 18%/tahun, tenor 60 bulan, penghasilan bersih Rp2.948.080.',
+        text: 'Berapa angsuran bulanan flat yang benar?',
+        options: [['A', 'Rp2.533.333,33'], ['B', 'Rp2.533.334,00'], ['C', 'Rp2.500.000,00']]
+      },
+      {
+        id: 'G-TPP-01-B', context: 'Pada kasus yang sama, IDIR dihitung dari angsuran baru dibagi penghasilan bersih.',
+        text: 'Berapa IDIR yang benar?',
+        options: [['A', '85,93%'], ['B', '83,11%'], ['C', '80,00%']]
+      },
+      {
+        id: 'G-TPP-01-C', context: 'EIR pada kasus C-002 dilaporkan 28,88% per tahun.',
+        text: 'Metode EIR mana yang menghasilkan 28,88%?',
+        options: [['A', 'RATE/IRR numerik × 12'], ['B', 'Flat × 1,81'], ['C', 'Flat × 0,87']]
+      },
+      {
+        id: 'G-TPP-02', context: 'Debitur memiliki beberapa fasilitas SLIK aktif, sebagian juga tercatat pada pasangan.',
+        text: 'Fasilitas mana yang masuk perhitungan DSR/IDIR?',
+        options: [['A', 'Semua fasilitas aktif, dideduplikasi'], ['B', 'Hanya fasilitas baru'], ['C', 'Hanya fasilitas dengan kolektibilitas 1']]
+      },
+      {
+        id: 'G-TPP-03-A', context: 'Excel memakai formula IF(D34>80%,"DITOLAK","DITERIMA").',
+        text: 'Berapa status IDIR tepat 80,00%?',
+        options: [['A', 'Lolos hard stop, tetapi warning 35%'], ['B', 'Hard stop / ditolak'], ['C', 'Tidak dihitung']]
+      },
+      {
+        id: 'G-TPP-03-B', context: 'Batas hard stop adalah 80%.',
+        text: 'Berapa status IDIR 80,01%?',
+        options: [['A', 'Hard stop / ditolak'], ['B', 'Lolos'], ['C', 'Hanya warning']]
+      },
+      {
+        id: 'G-TPP-04', context: 'Permohonan top-up melunasi kredit lama dengan penalti 10% dari pokok lama.',
+        text: 'Komponen dana bersih diterima adalah...',
+        options: [['A', 'Plafon − biaya − blokir − payoff'], ['B', 'Plafon − biaya'], ['C', 'Plafon + payoff']]
+      },
+      {
+        id: 'G-TPP-05', context: 'Produk TPP memblokir tabungan sebesar 2× angsuran bulanan.',
+        text: 'Dasar perhitungan blokir 2× adalah...',
+        options: [['A', 'Angsuran baru'], ['B', 'Plafon'], ['C', 'Penghasilan bersih']]
+      }
+    ]
+  },
+  {
+    id: 'golden-schedule',
+    title: 'Golden — Jadwal & Grace',
+    description: 'Fokus pada amortisasi, pembulatan, EIR, dan balloon.',
+    questions: [
+      {
+        id: 'G-SCH-01', context: 'Tenor 1 bulan, bunga flat, tanpa biaya yang memengaruhi jadwal.',
+        text: 'Saldo akhir setelah periode ke-1 adalah...',
+        options: [['A', 'Rp0'], ['B', 'Sisa pokok'], ['C', 'Bunga saja']]
+      },
+      {
+        id: 'G-SCH-02', context: 'Plafon kecil menghasilkan pembagian pokok tidak bulat.',
+        text: 'Selisih pembulatan ditempatkan di...',
+        options: [['A', 'Periode terakhir'], ['B', 'Periode pertama'], ['C', 'Dibuang']]
+      },
+      {
+        id: 'G-SCH-03', context: 'Anuitas murni tanpa grace.',
+        text: 'Saldo akhir periode terakhir harus...',
+        options: [['A', 'Tepat Rp0'], ['B', 'Sisa Rp1'], ['C', 'Sisa bunga']]
+      },
+      {
+        id: 'G-SCH-04', context: 'Perbandingan flat vs efektif pada tingkat bunga yang sama.',
+        text: 'EIR harus dihitung dengan...',
+        options: [['A', 'IRR/bisection numerik'], ['B', 'Flat × 1,81'], ['C', 'Flat × 0,87']]
+      },
+      {
+        id: 'G-SCH-05', context: 'Grace period: pokok ditunda, bunga berjalan.',
+        text: 'Pada periode grace, angsuran pokok adalah...',
+        options: [['A', 'Rp0'], ['B', 'Plafon/tenor'], ['C', 'Plafon penuh']]
+      },
+      {
+        id: 'G-SCH-06', context: 'Rasio kecukupan balloon = sumber pelunasan ÷ kewajiban akhir.',
+        text: 'Status pada rasio 1,10× adalah...',
+        options: [['A', 'LAYAK'], ['B', 'PERHATIAN'], ['C', 'TIDAK LAYAK']]
+      },
+      {
+        id: 'G-SCH-07', context: 'Rasio kecukupan balloon tepat 1,00×.',
+        text: 'Status pada 1,00× adalah...',
+        options: [['A', 'PERHATIAN'], ['B', 'LAYAK'], ['C', 'TIDAK LAYAK']]
+      },
+      {
+        id: 'G-SCH-08', context: 'Rasio kecukupan balloon 0,99×.',
+        text: 'Status pada 0,99× adalah...',
+        options: [['A', 'TIDAK LAYAK / mitigasi'], ['B', 'LAYAK'], ['C', 'PERHATIAN']]
+      }
+    ]
+  },
+  {
+    id: 'golden-capacity',
+    title: 'Golden — Kapasitas & Modal Kerja',
+    description: 'RPC, DSCR, plafon maksimum, cash turnover, WCD, dan gap.',
+    questions: [
+      {
+        id: 'G-CAP-01', context: 'RPC = surplus bersih bulanan × margin kapasitas bayar.',
+        text: 'Jika surplus Rp5.000.000 dan margin 80%, RPC adalah...',
+        options: [['A', 'Rp4.000.000'], ['B', 'Rp2.500.000'], ['C', 'Rp5.000.000']]
+      },
+      {
+        id: 'G-CAP-02', context: 'DSCR = RPC ÷ total kewajiban bulanan.',
+        text: 'Total kewajiban bulanan terdiri dari...',
+        options: [['A', 'Angsuran baru + angsuran SLIK aktif'], ['B', 'Angsuran baru saja'], ['C', 'Angsuran SLIK saja']]
+      },
+      {
+        id: 'G-CAP-03', context: 'Grace period memiliki bunga periodik dan balloon akhir.',
+        text: 'DSCR grace period sebaiknya memakai...',
+        options: [['A', 'Bunga periodik; balloon dinilai terpisah'], ['B', 'Total balloon saja'], ['C', 'Pokok saja']]
+      },
+      {
+        id: 'G-MK-01', context: 'Cash turnover = biaya operasional tahunan ÷ perputaran kas per tahun.',
+        text: 'Perputaran kas per tahun dihitung dari...',
+        options: [['A', 'Hari kerja ÷ siklus usaha'], ['B', 'Siklus usaha ÷ 12'], ['C', 'Omzet ÷ laba']]
+      },
+      {
+        id: 'G-MK-02', context: 'WCD = (pembelian bulanan ÷ 30) × hari persediaan.',
+        text: 'Rata-rata kebutuhan modal kerja adalah...',
+        options: [['A', '(cash turnover + WCD) ÷ 2'], ['B', 'cash turnover + WCD'], ['C', 'WCD − cash turnover']]
+      },
+      {
+        id: 'G-MK-03', context: 'Gap modal kerja tidak boleh negatif.',
+        text: 'Jika modal kerja tersedia lebih besar dari kebutuhan, gap adalah...',
+        options: [['A', 'Rp0'], ['B', 'Negatif'], ['C', 'Selisih absolut']]
+      },
+      {
+        id: 'G-CAP-04', context: 'Plafon maksimum Flat memakai RPC, tenor, dan rate.',
+        text: 'Formula plafon maksimum Flat adalah...',
+        options: [['A', 'RPC ÷ (1/tenor + rate/12)'], ['B', 'RPC × tenor'], ['C', 'RPC ÷ rate']]
+      },
+      {
+        id: 'G-CAP-05', context: 'Plafon maksimum Anuitas memakai faktor diskonto.',
+        text: 'Formula plafon maksimum Anuitas adalah...',
+        options: [['A', 'RPC × (1 − (1+i)^−n) ÷ i'], ['B', 'RPC ÷ n'], ['C', 'RPC × (1+i)^n']]
+      }
+    ]
+  },
+  {
+    id: 'golden-collateral',
+    title: 'Golden — Agunan, Scoring & Keputusan',
+    description: 'PPKA/LTV, bobot 5C, override SLIK, stress test, dan keputusan.',
+    questions: [
+      {
+        id: 'G-COL-01', context: 'Agunan memiliki nilai pasar, likuidasi, PPKA, dan basis LTV.',
+        text: 'Agar tidak double-haircut, LTV dihitung dari...',
+        options: [['A', 'Satu basis PPKA yang disepakati'], ['B', 'Pasar × PPKA'], ['C', 'Likuidasi × PPKA']]
+      },
+      {
+        id: 'G-COL-02', context: 'Kategori agunan POJK menentukan persen pengurang PPKA.',
+        text: 'Status LTV tepat di batas maksimum adalah...',
+        options: [['A', 'Lolos (tidak melebihi)'], ['B', 'Ditolak'], ['C', 'Selalu perhatian']]
+      },
+      {
+        id: 'G-SCR-01', context: 'Bobot 5C: Character 25%, Capacity 30%, Capital 15%, Collateral 20%, Condition 10%.',
+        text: 'Total bobot harus...',
+        options: [['A', 'Tepat 1,00'], ['B', 'Kurang dari 1,00'], ['C', 'Bebas']]
+      },
+      {
+        id: 'G-SCR-02', context: 'SLIK bermasalah dapat memaksa skor Character menjadi 1,0.',
+        text: 'Override SLIK wajib memiliki...',
+        options: [['A', 'Alasan, otorisasi, dan audit'], ['B', 'Cukup alasan'], ['C', 'Tidak perlu apa pun']]
+      },
+      {
+        id: 'G-STR-01', context: 'Stress test omzet turun ringan memakai delta dari policy.',
+        text: 'Skenario stres harus memakai...',
+        options: [['A', 'Delta policy, bukan hardcode'], ['B', 'Angka 10% hardcode'], ['C', 'Delta acak']]
+      },
+      {
+        id: 'G-STR-02', context: 'Skenario terburuk menggabungkan penurunan omzet dan kenaikan biaya.',
+        text: 'Jika DSCR baru di bawah minimum, statusnya...',
+        options: [['A', 'TIDAK LAYAK / mitigasi'], ['B', 'LAYAK'], ['C', 'Diabaikan']]
+      },
+      {
+        id: 'G-DEC-01', context: 'IDIR hard stop dapat bertentangan dengan skor 5C yang tinggi.',
+        text: 'Yang menang saat konflik adalah...',
+        options: [['A', 'Hard stop'], ['B', 'Skor 5C'], ['C', 'Nilai plafon terbesar']]
+      },
+      {
+        id: 'G-DEC-02', context: 'Rekomendasi plafon mempertimbangkan pengajuan, plafon maksimum, dan LTV.',
+        text: 'Rekomendasi plafon adalah...',
+        options: [['A', 'MIN(pengajuan, plafon max, batas LTV)'], ['B', 'MAX dari ketiganya'], ['C', 'Plafon pengajuan saja']]
+      }
+    ]
+  },
+  {
+    id: 'golden-negative',
+    title: 'Golden — Negatif & Lintas Kasus',
+    description: 'BMPK, konsentrasi sektor, CKPN, write-off, dan konsistensi antar kasus.',
+    questions: [
+      {
+        id: 'G-RAC-01', context: 'BMPK membatasi exposure kepada pihak terkait/borrower group.',
+        text: 'Jika exposure melebihi limit BMPK, sistem harus...',
+        options: [['A', 'Menolak, tanpa bypass'], ['B', 'Meloloskan dengan warning'], ['C', 'Mengabaikan limit']]
+      },
+      {
+        id: 'G-RAC-02', context: 'Konsentrasi sektor melebihi limit dapat di-override Direksi dengan justifikasi.',
+        text: 'Override sektor wajib...', 
+        options: [['A', 'Berjustifikasi dan teraudit'], ['B', 'Cukup lisan'], ['C', 'Otomatis']]
+      },
+      {
+        id: 'G-CKP-01', context: 'CKPN dan PPKA memiliki arah transisi yang berbeda.',
+        text: 'Jika CKPN lebih kecil dari PPKA, transisi harus...',
+        options: [['A', 'Ditolak'], ['B', 'Diterima'], ['C', 'Diabaikan']]
+      },
+      {
+        id: 'G-WO-01', context: 'Hapus buku parsial tidak diperbolehkan; full write-off harus memenuhi eligibility.',
+        text: 'Status partial write-off adalah...',
+        options: [['A', 'Ditolak'], ['B', 'Diterima'], ['C', 'Diterima dengan catatan']]
+      },
+      {
+        id: 'A3-01', context: 'Semua 29 kasus harus memakai satuan yang sama: rupiah, persen desimal, dan bulan.',
+        text: 'Apakah satuan sudah konsisten di seluruh kasus?',
+        options: [['A', 'Ya, konsisten'], ['B', 'Tidak, ada campuran'], ['C', 'Belum diperiksa']]
+      },
+      {
+        id: 'A3-02', context: 'Beberapa kasus memiliki nilai 0 dan null yang berbeda arti.',
+        text: 'Apakah 0 dan null dibedakan dengan benar?',
+        options: [['A', 'Ya, dibedakan'], ['B', 'Tidak, diperlakukan sama'], ['C', 'Belum diuji']]
+      },
+      {
+        id: 'A3-03', context: 'Hasil harus dapat direproduksi di mesin lain.',
+        text: 'Apakah hasil deterministik dan bebas waktu/acak?',
+        options: [['A', 'Ya'], ['B', 'Tidak'], ['C', 'Sebagian']]
+      },
+      {
+        id: 'A3-04', context: 'Setiap kasus memerlukan pemilik dan tanggal verifikasi.',
+        text: 'Apakah semua kasus punya pemilik dan tanggal?',
+        options: [['A', 'Ya, lengkap'], ['B', 'Belum lengkap'], ['C', 'Tidak diperlukan']]
+      }
+    ]
+  },
+  {
+    id: 'app-snapshot',
+    title: 'Aplikasi — Snapshot & Policy',
+    description: 'Grandfathering: permohonan mengunci parameter saat dibuat.',
+    questions: [
+      {
+        id: 'B1-01', context: 'Permohonan baru dibuat saat policy ACTIVE versi tertentu.',
+        text: 'Apa yang disimpan pada parameter_snapshot?',
+        options: [['A', 'id, version, dan params'], ['B', 'Hanya id'], ['C', 'Tidak disimpan']]
+      },
+      {
+        id: 'B1-02', context: 'Policy ACTIVE diubah setelah permohonan lama dibuat.',
+        text: 'Hasil analisis permohonan lama seharusnya...',
+        options: [['A', 'Tetap memakai snapshot lama'], ['B', 'Ikut policy baru'], ['C', 'Error']]
+      },
+      {
+        id: 'B1-03', context: 'Permohonan baru dibuat setelah policy baru diaktifkan.',
+        text: 'Permohonan baru memakai...',
+        options: [['A', 'Policy baru'], ['B', 'Policy lama'], ['C', 'Tidak ada policy']]
+      },
+      {
+        id: 'B1-04', context: 'Resolver parameter memiliki method forPermohonan().',
+        text: 'Apakah forPermohonan boleh fallback ke active()?',
+        options: [['A', 'Tidak, harus throw'], ['B', 'Boleh'], ['C', 'Boleh jika snapshot kosong']]
+      },
+      {
+        id: 'B1-05', context: 'Snapshot sudah tersimpan pada permohonan.',
+        text: 'Apakah snapshot boleh diubah lewat update biasa?',
+        options: [['A', 'Tidak, immutable'], ['B', 'Boleh'], ['C', 'Boleh oleh admin']]
+      },
+      {
+        id: 'B1-06', context: 'Permohonan lama belum memiliki parameter_snapshot.',
+        text: 'Fallback yang benar adalah...',
+        options: [['A', 'FK parameter_kebijakan_id historis'], ['B', 'Policy ACTIVE'], ['C', 'Nilai default hardcode']]
+      },
+      {
+        id: 'B1-07', context: 'Rule engine mengevaluasi aturan pada permohonan.',
+        text: 'Sumber parameter yang dipakai rule adalah...',
+        options: [['A', 'Snapshot permohonan'], ['B', 'Policy ACTIVE'], ['C', 'Config']]
+      },
+      {
+        id: 'B1-08', context: 'Setting policy memiliki alur draft→approve→apply.',
+        text: 'Perubahan policy sebaiknya...',
+        options: [['A', 'Membuat versi baru, tidak menimpa lama'], ['B', 'Menimpa baris lama'], ['C', 'Langsung edit DB']]
+      }
+    ]
+  },
+  {
+    id: 'app-stage',
+    title: 'Aplikasi — Stage-Aware & IDIR',
+    description: 'Aturan dievaluasi sesuai ketersediaan data dan tahap workflow.',
+    questions: [
+      {
+        id: 'B2-01', context: 'Saat submit, analisis dan approval belum tersedia.',
+        text: 'Aturan yang dievaluasi saat submit adalah...',
+        options: [['A', 'BR-04/08/14/15'], ['B', 'Semua BR'], ['C', 'BR-06 saja']]
+      },
+      {
+        id: 'B2-02', context: 'Analisis kapasitas sudah dihitung.',
+        text: 'Aturan analisis yang dievaluasi mencakup...',
+        options: [['A', 'BR-01/02/03/10/11/11H/12/13'], ['B', 'Hanya BR-11'], ['C', 'Tidak ada']]
+      },
+      {
+        id: 'B2-03', context: 'Approval komite dijalankan.',
+        text: 'Hard gate approve mencakup...',
+        options: [['A', 'BR-01/02/03/05/11H/13'], ['B', 'Semua BR termasuk BR-06'], ['C', 'Hanya BR-06']]
+      },
+      {
+        id: 'B2-04', context: 'BR-06 mengatur urutan approval dan dapat rekursif.',
+        text: 'BR-06 pada approve sebaiknya...',
+        options: [['A', 'Dikecualikan dari engine, ditangani ApprovalService'], ['B', 'Dijalankan di engine'], ['C', 'Dihapus']]
+      },
+      {
+        id: 'B2-05', context: 'User tanpa izin mencoba approve.',
+        text: 'Urutan yang benar adalah...',
+        options: [['A', 'Autorisasi dulu, baru hard gate'], ['B', 'Hard gate dulu, baru autorisasi'], ['C', 'Tidak perlu autorisasi']]
+      },
+      {
+        id: 'B3-01', context: 'IDIR 35% adalah batas warning; 80% batas hard stop.',
+        text: 'Status IDIR 35,01% adalah...',
+        options: [['A', 'PERHATIAN'], ['B', 'TIDAK LAYAK'], ['C', 'LAYAK']]
+      },
+      {
+        id: 'B3-02', context: 'Batas hard stop 80%.',
+        text: 'Status IDIR 80,00% adalah...',
+        options: [['A', 'Lolos hard stop, warning'], ['B', 'Hard stop'], ['C', 'Tidak dihitung']]
+      },
+      {
+        id: 'B3-03', context: 'IDIR belum dihitung saat approve TPP.',
+        text: 'Yang benar adalah...',
+        options: [['A', 'Tolak approve'], ['B', 'Loloskan'], ['C', 'Anggap 0']]
+      }
+    ]
+  },
+  {
+    id: 'app-numbering',
+    title: 'Aplikasi — Penomoran & DSCR',
+    description: 'Sequence atomik, backfill, agregasi SLIK, dan DSCR.',
+    questions: [
+      {
+        id: 'B4-01', context: 'Dua request submit bersamaan meminta nomor baru.',
+        text: 'Mekanisme yang benar adalah...',
+        options: [['A', 'INSERT ... ON CONFLICT ... RETURNING'], ['B', 'COUNT() + lock'], ['C', 'Random']]
+      },
+      {
+        id: 'B4-02', context: 'Scope penomoran harus sama untuk service dan backfill.',
+        text: 'Scope yang benar adalah...',
+        options: [['A', 'lowercase jenis:cabang:tahun'], ['B', 'UPPERCASE'], ['C', 'Tanpa tahun']]
+      },
+      {
+        id: 'B4-03', context: 'Format nomor kredit berbeda dari permohonan.',
+        text: 'Format kredit yang benar adalah...',
+        options: [['A', 'KDI/2026/K/0001'], ['B', 'KDI/2026/0001'], ['C', '0001']]
+      },
+      {
+        id: 'B4-04', context: 'Backfill membaca nomor lama.',
+        text: 'Nilai sequence diambil dari...',
+        options: [['A', 'MAX(suffix)'], ['B', 'COUNT(rows)'], ['C', 'MIN(suffix)']]
+      },
+      {
+        id: 'B4-05', context: 'Backfill dijalankan dua kali.',
+        text: 'Sequence harus...',
+        options: [['A', 'Tidak turun (GREATEST)'], ['B', 'Reset'], ['C', 'Naik dua kali']]
+      },
+      {
+        id: 'B5-01', context: 'SLIK memuat fasilitas dengan baki 0 dan baki > 0.',
+        text: 'Fasilitas yang masuk DSCR adalah...',
+        options: [['A', 'baki_debet > 0'], ['B', 'Semua'], ['C', 'baki = 0']]
+      },
+      {
+        id: 'B5-02', context: 'Fasilitas yang sama tercatat di debitur dan pasangan.',
+        text: 'Dedupe dilakukan dengan...',
+        options: [['A', 'no_fasilitas (fallback natural key)'], ['B', 'Nama debitur'], ['C', 'Tidak didedupe']]
+      },
+      {
+        id: 'B5-03', context: 'Angsuran SLIK null.',
+        text: 'Perlakuan yang benar adalah...',
+        options: [['A', 'Estimasi flat + flag is_angsuran_estimated'], ['B', 'Anggap 0'], ['C', 'Abaikan fasilitas']]
+      }
+    ]
+  },
+  {
+    id: 'app-ui',
+    title: 'Aplikasi — UI, Audit & Rilis',
+    description: 'Workbench, isolasi cabang, ledger, keamanan, dan operasional.',
+    questions: [
+      {
+        id: 'B6-01', context: 'Workbench analisis dibuka oleh user cabang lain.',
+        text: 'Respons yang benar adalah...',
+        options: [['A', '403'], ['B', '200'], ['C', 'Redirect dashboard']]
+      },
+      {
+        id: 'B6-02', context: 'Neraca tidak seimbang.',
+        text: 'Perilaku yang benar adalah...',
+        options: [['A', 'Submit tetap aktif + banner/audit'], ['B', 'Blokir submit'], ['C', 'Abaikan']]
+      },
+      {
+        id: 'B6-03', context: 'Workbench memiliki tab analisis.',
+        text: 'Tab minimum yang benar adalah...',
+        options: [['A', 'Neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas, scoring'], ['B', 'Hanya neraca'], ['C', 'Hanya scoring']]
+      },
+      {
+        id: 'B7-01', context: 'Setiap analisis disimpan.',
+        text: 'Jejak yang wajib dibuat adalah...',
+        options: [['A', 'Ledger + buku besar + audit'], ['B', 'Cukup DB'], ['C', 'Tidak perlu']]
+      },
+      {
+        id: 'B7-02', context: 'Trigger immutability aktif.',
+        text: 'UPDATE/DELETE pada ledger/register harus...',
+        options: [['A', 'Ditolak'], ['B', 'Diizinkan'], ['C', 'Diizinkan admin']]
+      },
+      {
+        id: 'B8-01', context: 'Deployment mengubah skema dan sequence.',
+        text: 'Urutan yang benar adalah...',
+        options: [['A', 'Backup → migrasi → backfill → aktifkan'], ['B', 'Migrasi → aktifkan'], ['C', 'Aktifkan → migrasi']]
+      },
+      {
+        id: 'B9-01', context: 'Sebelum rilis produksi.',
+        text: 'Gate yang wajib lulus adalah...',
+        options: [['A', 'verify --full, backup/restore, UAT'], ['B', 'Cukup test unit'], ['C', 'Cukup manual']]
+      },
+      {
+        id: 'B10-01', context: 'File token GitHub ditemukan di direktori spesifikasi.',
+        text: 'Tindakan yang benar adalah...',
+        options: [['A', 'Rotasi dan hapus'], ['B', 'Biarkan'], ['C', 'Commit agar tim tahu']]
+      }
+    ]
+  }
+];
+
+const STORAGE_KEY = 'bpr-kuisioner-golden-v1';
+let answers = {};
+let meta = { name: '', role: '', date: '', org: '' };
+let currentSection = 0;
+let storageAvailable = true;
+
+const $ = (sel) => document.querySelector(sel);
+const allQuestions = () => sections.flatMap((s) => s.questions.map((q) => ({ ...q, section: s.id, sectionTitle: s.title })));
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    answers = parsed.answers || {};
+    meta = parsed.meta || meta;
+    storageAvailable = true;
+  } catch (e) {
+    storageAvailable = false;
+  }
+}
+
+function saveState() {
+  if (!storageAvailable) return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, meta }));
+    $('#saveStatus').textContent = 'Tersimpan lokal ' + new Date().toLocaleTimeString('id-ID');
+  } catch (e) {
+    storageAvailable = false;
+    $('#saveStatus').textContent = 'Mode memori: gunakan Ekspor JSON';
+  }
+}
+
+function isAnswered(q) {
+  const a = answers[q.id];
+  if (!a || !a.choice) return false;
+  if (a.choice === 'D') return (a.text || '').trim().length > 0;
+  return true;
+}
+
+function progress() {
+  const total = allQuestions().length;
+  const done = allQuestions().filter(isAnswered).length;
+  return { total, done };
+}
+
+function renderNav() {
+  const nav = $('#sectionNav');
+  nav.innerHTML = '';
+  sections.forEach((section, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    const done = section.questions.filter(isAnswered).length;
+    button.className = (index === currentSection ? 'active ' : '') + (done === section.questions.length ? 'done' : '');
+    button.innerHTML = '<span class="dot"></span>' + escapeHtml(section.title) + ' (' + done + '/' + section.questions.length + ')';
+    button.addEventListener('click', () => { currentSection = index; render(); });
+    nav.appendChild(button);
+  });
+}
+
+function render() {
+  const section = sections[currentSection];
+  const host = $('#sectionHost');
+  host.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'section-head';
+  head.innerHTML = '<h2>' + escapeHtml(section.title) + '</h2><p class="muted">' + escapeHtml(section.description) + '</p>';
+  host.appendChild(head);
+
+  section.questions.forEach((q) => {
+    const a = answers[q.id] || { choice: '', text: '' };
+    const card = document.createElement('div');
+    card.className = 'card question';
+    card.dataset.qid = q.id;
+
+    const options = q.options.map(([key, text]) => {
+      const checked = a.choice === key ? ' checked' : '';
+      return '<label class="option"><input type="radio" name="' + q.id + '" value="' + key + '"' + checked + '>' +
+        '<span><span class="key">' + key + '.</span> ' + escapeHtml(text) + '</span></label>';
+    }).join('');
+
+    const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
+    card.innerHTML =
+      '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="small muted">' + escapeHtml(section.title) + '</span></div>' +
+      '<div class="q-context">' + escapeHtml(q.context) + '</div>' +
+      '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+      '<div class="options">' + options +
+        '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
+        '<span><span class="key">D.</span> Lainnya — jelaskan dengan kata sendiri</span></label>' +
+      '</div>' +
+      '<div class="free"' + (a.choice === 'D' ? '' : ' hidden') + '>' +
+        '<label class="field">Jawaban D<textarea data-free="' + q.id + '" placeholder="Tulis jawaban, sumber, atau alasan...">' + freeValue + '</textarea></label>' +
+      '</div>';
+    host.appendChild(card);
+  });
+
+  host.querySelectorAll('input[type="radio"]').forEach((input) => {
+    input.addEventListener('change', (event) => {
+      const qid = event.target.name;
+      const value = event.target.value;
+      answers[qid] = answers[qid] || { text: '' };
+      answers[qid].choice = value;
+      const card = event.target.closest('.question');
+      const free = card.querySelector('.free');
+      free.hidden = value !== 'D';
+      if (value === 'D') free.querySelector('textarea').focus();
+      saveState();
+      updateProgress();
+      renderNav();
+    });
+  });
+
+  host.querySelectorAll('textarea[data-free]').forEach((textarea) => {
+    textarea.addEventListener('input', (event) => {
+      const qid = event.target.dataset.free;
+      answers[qid] = answers[qid] || { choice: 'D', text: '' };
+      answers[qid].text = event.target.value;
+      saveState();
+      updateProgress();
+      renderNav();
+    });
+  });
+
+  updateProgress();
+  renderNav();
+  $('#btnPrev').disabled = currentSection === 0;
+  $('#btnNext').disabled = currentSection === sections.length - 1;
+}
+
+function updateProgress() {
+  const { total, done } = progress();
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  $('#sideBar').style.width = pct + '%';
+  $('#sideProgress').textContent = done + ' dari ' + total + ' terjawab (' + pct + '%)';
+  $('#mAnswered').textContent = done;
+  $('#mTotal').textContent = total;
+  $('#mOpen').textContent = total - done;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function exportPayload() {
+  const rows = allQuestions().map((q) => {
+    const a = answers[q.id] || {};
+    return {
+      id: q.id,
+      section: q.sectionTitle,
+      context: q.context,
+      question: q.text,
+      choice: a.choice || '',
+      free_text: a.choice === 'D' ? (a.text || '') : '',
+      answered: isAnswered(q)
+    };
+  });
+  return {
+    form: 'Kuisioner Verifikasi Golden & Fungsi Aplikasi',
+    version: '1.0',
+    exported_at: new Date().toISOString(),
+    meta,
+    progress: progress(),
+    answers: rows
+  };
+}
+
+function showExport() {
+  const payload = exportPayload();
+  $('#exportText').textContent = JSON.stringify(payload, null, 2);
+  $('#exportDialog').showModal();
+}
+
+function downloadExport() {
+  const blob = new Blob([JSON.stringify(exportPayload(), null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'kuisioner-golden-' + new Date().toISOString().slice(0, 10) + '.json';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function initMeta() {
+  $('#metaName').value = meta.name || '';
+  $('#metaRole').value = meta.role || '';
+  $('#metaDate').value = meta.date || new Date().toISOString().slice(0, 10);
+  $('#metaOrg').value = meta.org || '';
+  if (!meta.date) meta.date = $('#metaDate').value;
+
+  [['metaName', 'name'], ['metaRole', 'role'], ['metaDate', 'date'], ['metaOrg', 'org']].forEach(([id, key]) => {
+    $('#' + id).addEventListener('change', (event) => {
+      meta[key] = event.target.value;
+      saveState();
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  initMeta();
+  render();
+
+  $('#btnPrev').addEventListener('click', () => { if (currentSection > 0) { currentSection--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  $('#btnNext').addEventListener('click', () => { if (currentSection < sections.length - 1) { currentSection++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  $('#btnExport').addEventListener('click', showExport);
+  $('#btnPrint').addEventListener('click', () => window.print());
+  $('#btnCloseDialog').addEventListener('click', () => $('#exportDialog').close());
+  $('#btnDownload').addEventListener('click', downloadExport);
+  $('#btnCopy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText($('#exportText').textContent);
+      $('#btnCopy').textContent = 'Tersalin';
+      setTimeout(() => { $('#btnCopy').textContent = 'Salin'; }, 1200);
+    } catch (e) {
+      $('#exportText').focus();
+    }
+  });
+  $('#btnReset').addEventListener('click', () => {
+    if (!confirm('Hapus semua jawaban di browser ini?')) return;
+    answers = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    render();
+  });
+
+  if (!storageAvailable) {
+    $('#saveStatus').textContent = 'Mode memori: gunakan Ekspor JSON sebelum menutup halaman.';
+  }
+});
+</script>
+</body>
+</html>
