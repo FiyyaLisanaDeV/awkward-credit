@@ -48,6 +48,7 @@ CHAPTERS = [
     ("23-glosarium-indeks.md", "Bab-23-Glosarium-Indeks", "Glosarium & Indeks"),
     ("24-workflow-peran-wewenang.md", "Bab-24-Workflow-Peran-Wewenang", "Workflow, Peran & Wewenang"),
     ("25-analisis-fungsi-komparasi-excel-web.md", "Bab-25-Analisis-Fungsi-Komparasi-Excel-Web", "Analisis Fungsi: Komparasi Excel–Web"),
+    ("26-workflow-master-excel-breakdown.md", "Bab-26-Workflow-Master-Excel-Breakdown", "Workflow Master Excel: Breakdown Teknis"),
 ]
 
 EXTRA = [
@@ -80,7 +81,7 @@ GROUPS = [
     ("Struktur Data & Gap", CHAPTERS[18:20]),
     ("Operasional & Pemeliharaan", CHAPTERS[20:23]),
     ("Tata Kelola & Peran", CHAPTERS[23:24]),
-    ("Analisis & Kesesuaian", CHAPTERS[24:25]),
+    ("Analisis & Kesesuaian", CHAPTERS[24:26]),
 ]
 
 # target relatif (dari manual/) -> slug wiki
@@ -221,6 +222,13 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-14-UI-Web-Livewire", "UI web aktual"),
         ("Bab-17-Import-Ekstraksi-Data-Quality", "gap import"),
         ("Bab-20-Known-Issues-Gap-Rencana", "keputusan terbuka"),
+    ],
+    "Bab-26-Workflow-Master-Excel-Breakdown": [
+        ("Bab-25-Analisis-Fungsi-Komparasi-Excel-Web", "komparasi fungsi"),
+        ("Bab-07-Analisis-Kredit", "kalkulasi analisis"),
+        ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "jadwal & EIR"),
+        ("Bab-10-Approval-Dokumen-Workflow", "dokumen & workflow"),
+        ("Bab-24-Workflow-Peran-Wewenang", "peran & keputusan"),
     ],
 }
 
