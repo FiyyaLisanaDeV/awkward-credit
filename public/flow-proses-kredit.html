@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flow Proses Kredit BPR — End to End</title>
+<style>
+  :root {
+    --bg:#f5f6f8; --surface:#ffffff; --ink:#17202a; --muted:#5b6673;
+    --line:#d8dde4; --brand:#0f4c5c; --accent:#b45309;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:
+      radial-gradient(900px 420px at 85% -10%, #e3f2ef 0%, rgba(227,242,239,0) 70%),
+      var(--bg);
+    color:var(--ink); line-height:1.55;
+  }
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 80px; }
+  header { margin-bottom: 20px; }
+  .eyebrow { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); }
+  h1 { margin:4px 0 8px; font-size:28px; letter-spacing:-.02em; }
+  h2 { margin:28px 0 10px; font-size:20px; }
+  p.muted { color:var(--muted); }
+  .card {
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    box-shadow:0 1px 2px rgba(16,24,40,.06), 0 8px 24px rgba(16,24,40,.06);
+    padding:18px 20px; margin-bottom:18px; overflow-x:auto;
+  }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+  .chip {
+    font-size:12px; font-weight:650; color:#24545f; background:#e7f3f1;
+    border:1px solid #cfe5e1; border-radius:999px; padding:5px 10px;
+  }
+  .note {
+    margin-top:10px; padding:10px 12px; background:#fef3c7; border:1px solid #fcd34d;
+    border-radius:8px; color:#92400e; font-size:13px;
+  }
+  pre.mermaid { background:transparent; text-align:center; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:7px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--brand); white-space:nowrap; }
+  footer { margin-top:28px; font-size:12px; color:var(--muted); }
+  .mermaid-fallback { font-size:12px; color:var(--muted); white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <span class="eyebrow">PT BPR Bahteramas Kendari</span>
+    <h1>Flow Proses Kredit — End to End</h1>
+    <p class="muted">Dari calon nasabah mendaftar sampai dana kredit masuk rekening, atau permohonan ditolak.</p>
+    <div class="chips">
+      <span class="chip">3 cabang: KDI · BOM · KOL</span>
+      <span class="chip">Laravel 13 + PostgreSQL 16</span>
+      <span class="chip">Stage-aware rules</span>
+      <span class="chip">Ledger hash-chain</span>
+    </div>
+    <div class="note">Semua angka contoh berstatus <strong>klaim/recomputed, belum verified</strong>. Diagram menggambarkan desain, bukan klaim hasil audit.</div>
+  </header>
+
+  <section class="card">
+    <h2>1 · Flowchart end-to-end</h2>
+    <pre class="mermaid">
+flowchart TD
+  Start(["Calon nasabah datang ke cabang (KDI/BOM/KOL)"]) --> CIF
+  subgraph F1["Fase 1 · Pendaftaran Nasabah (CIF)"]
+    CIF["AO input data KYC"] --> Dup{"NIK duplikat lintas cabang?"}
+    Dup -- "Ya" --> TolakDup["Tolak pendaftaran + alasan"] --> EndDup(["Arsip penolakan"])
+    Dup -- "Tidak" --> NewCIF["CIF atomik: CIF-KDI-000001 + hash dokumen"]
+  end
+  NewCIF --> F2Start
+  subgraph F2["Fase 2 · Permohonan Kredit"]
+    F2Start["Pilih produk/metode"] --> Snap["Snapshot parameter kebijakan (grandfathering)"]
+    Snap --> NoPerm["Nomor atomik: KDI/2026/0001"]
+    NoPerm --> Dok{"Dokumen, consent SLIK, agunan lengkap?"}
+    Dok -- "Belum" --> Kembali["Kembali ke nasabah"] --> Dok
+    Dok -- "Lengkap" --> F3Start
+  end
+  subgraph F3["Fase 3 · Analisis (Workbench)"]
+    F3Start["Neraca & laba rugi"] --> Imb{"Selisih > toleransi?"}
+    Imb -- "Ya" --> Warn["Soft warning: banner + audit (tidak blokir)"] --> Ratios
+    Imb -- "Tidak" --> Ratios
+    Ratios["Rasio & modal kerja: WCD, cash turnover"] --> Kap
+    Kap["RPC = surplus × margin; DSCR = RPC ÷ (angsuran baru + SLIK dedupe)"] --> IDIR{"IDIR?"}
+    IDIR -- "≤ 35%" --> Agunan
+    IDIR -- "35–80%" --> BannerIDIR["Banner PERHATIAN (batas internal)"] --> Agunan
+    IDIR -- "> 80%" --> HardIDIR["HARD STOP — tidak layak"] --> Tolak1(["Ditolak + audit"])
+    Agunan["Agunan: PPKA single-basis, LTV tanpa double-haircut"] --> LTV{"LTV > batas maksimum?"}
+    LTV -- "Ya" --> TolakLTV["Tolak / mitigasi agunan"] --> Tolak1
+    LTV -- "Tidak" --> Score["Scoring 5C (bobot 1,00; override SLIK teraudit)"]
+    Score --> Stress["Sensitivitas 6 skenario"]
+  end
+  Stress --> F4Start
+  subgraph F4["Fase 4 · Rekomendasi"]
+    F4Start["MIN(pengajuan, plafon maksimum, batas LTV)"] --> F5Start
+  end
+  subgraph F5["Fase 5 · Persetujuan Berjenjang"]
+    F5Start["AO ajukan persetujuan"] --> Sod{"SoD & cabang terpenuhi?"}
+    Sod -- "Tidak" --> Forbid["403"] --> Tolak2(["Ditolak + audit"])
+    Sod -- "Ya" --> Ladder["MGR Pemasaran → Komite sesuai limit"]
+    Ladder --> Gate{"Hard gate approve lulus?"}
+    Gate -- "Tidak" --> Tolak3(["Tolak approve + alasan"])
+    Gate -- "Ya" --> Approved["Persetujuan final"]
+  end
+  Approved --> F6Start
+  subgraph F6["Fase 6 · Pencairan"]
+    F6Start["SPK: SPK/KDI/2026/0001"] --> NoKredit["Nomor kredit: KDI/2026/K/0001"]
+    NoKredit --> Memo["Memo cair: biaya, payoff + penalti, blokir 2× (TPP)"]
+    Memo --> Cair["Dana masuk rekening nasabah"]
+  end
+  Cair --> F7Start
+  subgraph F7["Fase 7 · Pasca-Pencairan"]
+    F7Start["Buku besar + buku agunan (agunan_key)"] --> Monitor["Monitoring angsuran"]
+    Monitor --> CKPN["CKPN/PPKA; write-off parsial ditolak"]
+  end
+  Tolak1 -.-> EndTolak(["Permohonan ditolak — semua jejak diaudit"])
+  Tolak2 -.-> EndTolak
+  Tolak3 -.-> EndTolak
+    </pre>
+    <p class="mermaid-fallback">Jika diagram tidak muncul, buka docs/FLOW-PROSES-KREDIT.md (Mermaid dirender otomatis di GitHub).</p>
+  </section>
+
+  <section class="card">
+    <h2>2 · Sequence — skenario C-002 (TPP flat)</h2>
+    <pre class="mermaid">
+sequenceDiagram
+  participant N as Calon Nasabah
+  participant AO as AO (KDI)
+  participant S as Sistem
+  participant M as MGR / Komite
+  N->>AO: Mengajukan kredit TPP
+  AO->>S: Plafon Rp80.000.000, 18%/tahun, 60 bulan
+  S->>S: Snapshot + nomor KDI/2026/0001
+  S->>S: Angsuran flat = 80jt/60 + 80jt×18%/12 = Rp2.533.333,33
+  S->>S: IDIR = 2.533.333,33 ÷ 2.948.080 = 85,93%
+  S-->>AO: Banner: IDIR > 80% (hard stop)
+  AO->>M: Ajukan keputusan
+  M->>S: Approve
+  S-->>M: Hard gate MENOLAK
+  M-->>N: Surat penolakan + alasan (audit)
+  Note over S: Angka C-002 = klaim/recomputed, belum verified.
+  Note over S: Alternatif: IDIR ≤ 80% → scoring/agunan → komite → SPK → dana cair.
+    </pre>
+  </section>
+
+  <section class="card">
+    <h2>3 · Keputusan kunci per gate</h2>
+    <table>
+      <tr><th>Gate</th><th>Kondisi</th><th>Keluaran</th></tr>
+      <tr><td>CIF</td><td>NIK duplikat lintas cabang</td><td>Tolak pendaftaran</td></tr>
+      <tr><td>Neraca</td><td>Selisih &gt; toleransi</td><td>Soft warning, tidak blokir</td></tr>
+      <tr><td>IDIR</td><td>≤ 35% / 35–80% / &gt; 80%</td><td>Lanjut / banner / hard stop</td></tr>
+      <tr><td>LTV</td><td>&gt; batas maksimum</td><td>Tolak / mitigasi</td></tr>
+      <tr><td>Persetujuan</td><td>Pembuat = penyetuju / lintas cabang</td><td>403</td></tr>
+      <tr><td>Approve</td><td>Hard gate gagal</td><td>Tolak approve</td></tr>
+      <tr><td>Write-off</td><td>Parsial</td><td>Ditolak</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    Sumber: docs/FLOW-PROSES-KREDIT.md · Kasus golden: commandcode bpr/project/tests/golden/cases/ ·
+    Sistem: Laravel 13 + PostgreSQL 16 (SoR) · Livewire + CSS native.
+  </footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#e8f1f3',
+        primaryBorderColor: '#0f4c5c',
+        primaryTextColor: '#17202a',
+        lineColor: '#0f766e',
+        fontSize: '13px'
+      },
+      flowchart: { useMaxWidth: true, htmlLabels: true },
+      sequence: { useMaxWidth: true }
+    });
+  }
+</script>
+</body>
+</html>
