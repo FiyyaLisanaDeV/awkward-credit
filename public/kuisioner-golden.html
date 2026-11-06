@@ -79,6 +79,10 @@
   .q-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
   .q-id { font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--brand); letter-spacing: .06em; }
   .q-narrative { margin: 8px 0 10px; color: #334155; }
+  .q-reason {
+    margin: 0 0 10px; padding: 8px 10px; border-left: 3px solid #d97706;
+    background: #fffbeb; border-radius: 6px; color: #7c4a03; font-size: 13px;
+  }
   .q-text { font-weight: 650; margin: 0 0 12px; }
   .options { display: grid; gap: 8px; }
   .option {
@@ -286,16 +290,79 @@
 </dialog>
 
 <script>
-const sectionImpact = {
-  'golden-tpp': 'Jika angka ini salah, plafon atau angsuran yang disetujui bisa keliru dan merugikan bank maupun debitur.',
-  'golden-schedule': 'Kesalahan pembulatan, grace, atau balloon dapat membuat jadwal tidak seimbang dan saldo akhir tidak nol.',
-  'golden-capacity': 'DSCR atau RPC yang salah dapat meloloskan debitur yang sebenarnya tidak mampu membayar.',
-  'golden-collateral': 'Nilai agunan atau bobot 5C yang salah membuat LTV terlalu optimistis dan jaminan tidak cukup.',
-  'golden-negative': 'Jika aturan negatif tidak menolak, pelanggaran BMPK, sektor, CKPN, atau write-off bisa lolos ke produksi.',
-  'app-snapshot': 'Jika snapshot tidak terkunci, hasil analisis lama bisa berubah diam-diam saat policy baru diaktifkan.',
-  'app-stage': 'Jika aturan dijalankan pada tahap yang salah, submit bisa gagal total atau approval meloloskan pelanggaran.',
-  'app-numbering': 'Nomor ganda atau DSCR yang menghilangkan kewajiban SLIK dapat merusak audit dan keputusan kredit.',
-  'app-ui': 'UI yang tidak menjaga cabang dan audit dapat membocorkan data atau menghilangkan jejak keputusan.'
+const questionReason = {
+  'G-TPP-01-A': 'Memastikan angsuran flat dihitung dari pokok + bunga yang benar, bukan angka warisan.',
+  'G-TPP-01-B': 'Memastikan IDIR memakai angsuran baru dan penghasilan bersih yang benar.',
+  'G-TPP-01-C': 'Memastikan EIR dihitung numerik, bukan faktor 1,81×.',
+  'G-TPP-02': 'Memastikan kewajiban SLIK tidak hilang dari DSR/IDIR.',
+  'G-TPP-03-A': 'Memastikan batas 80,00% tidak salah diperlakukan sebagai hard stop.',
+  'G-TPP-03-B': 'Memastikan 80,01% benar-benar ditolak.',
+  'G-TPP-04': 'Memastikan payoff/top-up tidak menghilangkan komponen biaya/penalti.',
+  'G-TPP-05': 'Memastikan dana diterima dan blokir 2× konsisten dengan memo cair.',
+  'G-SCH-01': 'Memastikan edge case tenor 1 tidak menghasilkan saldo sisa.',
+  'G-SCH-02': 'Memastikan selisih pembulatan tidak hilang.',
+  'G-SCH-03': 'Memastikan anuitas berakhir di saldo nol.',
+  'G-SCH-04': 'Memastikan EIR tidak memakai aproksimasi 1,81×.',
+  'G-SCH-05': 'Memastikan grace period tidak menagih pokok sebelum waktunya.',
+  'G-SCH-06': 'Memastikan status buffer 1,10× benar.',
+  'G-SCH-07': 'Memastikan boundary 1,00× masuk PERHATIAN, bukan LAYAK.',
+  'G-SCH-08': 'Memastikan 0,99× benar-benar TIDAK LAYAK/mitigasi.',
+  'G-CAP-01': 'Memastikan RPC memakai margin policy, bukan asumsi.',
+  'G-CAP-02': 'Memastikan DSCR memasukkan kewajiban SLIK.',
+  'G-CAP-03': 'Memastikan DSCR grace tidak mencampur bunga periodik dengan balloon.',
+  'G-MK-01': 'Memastikan cash turnover memakai hari kerja/siklus yang benar.',
+  'G-MK-02': 'Memastikan WCD dan rata-rata kebutuhan tidak salah rumus.',
+  'G-MK-03': 'Memastikan gap tidak negatif.',
+  'G-CAP-04': 'Memastikan plafon max flat memakai formula yang benar.',
+  'G-CAP-05': 'Memastikan plafon max anuitas memakai diskonto yang benar.',
+  'G-COL-01': 'Memastikan LTV tidak memakai dua basis/haircut.',
+  'G-COL-02': 'Memastikan boundary LTV tidak salah lolos.',
+  'G-SCR-01': 'Memastikan bobot 5C berjumlah 1,00.',
+  'G-SCR-02': 'Memastikan override SLIK punya alasan/otorisasi/audit.',
+  'G-STR-01': 'Memastikan delta stres dari policy, bukan hardcode.',
+  'G-STR-02': 'Memastikan skenario terburuk benar-benar diuji.',
+  'G-DEC-01': 'Memastikan hard stop menang atas skor tinggi.',
+  'G-DEC-02': 'Memastikan rekomendasi plafon tidak melebihi batas.',
+  'G-RAC-01': 'Memastikan pelanggaran BMPK ditolak.',
+  'G-RAC-02': 'Memastikan override sektor teraudit.',
+  'G-CKP-01': 'Memastikan arah CKPN/PPKA tidak terbalik.',
+  'G-WO-01': 'Memastikan write-off parsial ditolak.',
+  'A3-01': 'Memastikan satuan konsisten agar angka tidak salah tafsir.',
+  'A3-02': 'Memastikan 0 dan null tidak diperlakukan sama.',
+  'A3-03': 'Memastikan hasil deterministik dan bisa direproduksi.',
+  'A3-04': 'Memastikan akuntabilitas kasus.',
+  'B1-01': 'Memastikan snapshot menyimpan id/versi/params.',
+  'B1-02': 'Memastikan permohonan lama tidak berubah.',
+  'B1-03': 'Memastikan permohonan baru memakai policy baru.',
+  'B1-04': 'Memastikan resolver tidak fallback ke ACTIVE.',
+  'B1-05': 'Memastikan snapshot immutable.',
+  'B1-06': 'Memastikan fallback lama memakai FK historis.',
+  'B1-07': 'Memastikan rule memakai snapshot.',
+  'B1-08': 'Memastikan policy baru membuat versi baru.',
+  'B2-01': 'Memastikan submit tidak mengevaluasi aturan yang datanya belum ada.',
+  'B2-02': 'Memastikan analisis mengevaluasi aturan kapasitas.',
+  'B2-03': 'Memastikan approve memakai hard gate yang benar.',
+  'B2-04': 'Memastikan BR-06 tidak rekursif.',
+  'B2-05': 'Memastikan 403 tidak berubah menjadi error aturan.',
+  'B3-01': 'Memastikan warning 35% tidak memblokir.',
+  'B3-02': 'Memastikan 80% lolos hard stop.',
+  'B3-03': 'Memastikan approve tanpa IDIR ditolak.',
+  'B4-01': 'Memastikan penomoran atomik.',
+  'B4-02': 'Memastikan scope service/backfill sama.',
+  'B4-03': 'Memastikan format kredit benar.',
+  'B4-04': 'Memastikan backfill memakai suffix tertinggi.',
+  'B4-05': 'Memastikan sequence tidak turun.',
+  'B5-01': 'Memastikan fasilitas baki 0 tidak dihitung.',
+  'B5-02': 'Memastikan duplikasi tidak menggandakan kewajiban.',
+  'B5-03': 'Memastikan estimasi ditandai.',
+  'B6-01': 'Memastikan isolasi cabang.',
+  'B6-02': 'Memastikan neraca tidak seimbang tidak memblokir tetapi tercatat.',
+  'B6-03': 'Memastikan workbench lengkap.',
+  'B7-01': 'Memastikan jejak audit lengkap.',
+  'B7-02': 'Memastikan immutability.',
+  'B8-01': 'Memastikan urutan deploy aman.',
+  'B9-01': 'Memastikan gate rilis lengkap.',
+  'B10-01': 'Memastikan kredensial tidak bocor.'
 };
 
 const sections = [
@@ -819,7 +886,8 @@ function render() {
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
     card.innerHTML =
       '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="small muted">' + escapeHtml(section.title) + '</span></div>' +
-      '<p class="q-narrative">' + escapeHtml(q.context) + ' ' + escapeHtml(sectionImpact[section.id] || '') + '</p>' +
+      '<p class="q-narrative">' + escapeHtml(q.context) + '</p>' +
+      '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
       '<div class="options">' + options +
         '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
