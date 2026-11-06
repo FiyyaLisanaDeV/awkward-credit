@@ -41,6 +41,7 @@
 27. [Buku besar kredit, buku agunan & nomor CIF](chapters/27-buku-besar-kredit-agunan-cif.md)
 28. [Catatan perubahan produksi (2026-11-07)](chapters/28-catatan-perubahan-produksi-20261107.md)
 29. [Formulir wawancara golden vectors (grill-me)](chapters/29-formulir-wawancara-golden-vectors.md)
+30. [Daftar pertanyaan verifikasi golden & fungsi aplikasi](chapters/30-daftar-pertanyaan-verifikasi-golden-fungsi.md)
 
 ## Aset pendukung
 - [MANIFEST.md](MANIFEST.md) — kartu kendali versi manual & snapshot target

@@ -52,6 +52,7 @@ CHAPTERS = [
     ("27-buku-besar-kredit-agunan-cif.md", "Bab-27-Buku-Besar-Kredit-Agunan-CIF", "Buku Besar Kredit, Buku Agunan & Nomor CIF"),
     ("28-catatan-perubahan-produksi-20261107.md", "Bab-28-Catatan-Perubahan-Produksi-20261107", "Catatan Perubahan Produksi (2026-11-07)"),
     ("29-formulir-wawancara-golden-vectors.md", "Bab-29-Formulir-Wawancara-Golden-Vectors", "Formulir Wawancara Golden Vectors (Grill-Me)"),
+    ("30-daftar-pertanyaan-verifikasi-golden-fungsi.md", "Bab-30-Daftar-Pertanyaan-Verifikasi-Golden-Fungsi", "Daftar Pertanyaan Verifikasi Golden & Fungsi Aplikasi"),
 ]
 
 EXTRA = [
@@ -87,7 +88,7 @@ GROUPS = [
     ("Analisis & Kesesuaian", CHAPTERS[24:26]),
     ("Register & Identitas", CHAPTERS[26:27]),
     ("Catatan Rilis", CHAPTERS[27:28]),
-    ("Verifikasi Golden", CHAPTERS[28:29]),
+    ("Verifikasi Golden", CHAPTERS[28:30]),
 ]
 
 # target relatif (dari manual/) -> slug wiki
@@ -251,6 +252,13 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "jadwal & EIR"),
         ("Bab-09-Business-Rules-Validasi", "ambang & validasi"),
         ("Bab-20-Known-Issues-Gap-Rencana", "gap golden & RAT-02"),
+        ("Bab-28-Catatan-Perubahan-Produksi-20261107", "checkpoint produksi"),
+        ("Bab-30-Daftar-Pertanyaan-Verifikasi-Golden-Fungsi", "daftar pertanyaan lengkap"),
+    ],
+    "Bab-30-Daftar-Pertanyaan-Verifikasi-Golden-Fungsi": [
+        ("Bab-29-Formulir-Wawancara-Golden-Vectors", "formulir grill-me"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap & RAT-02"),
+        ("Bab-12-Ledger-Audit-Integritas", "ledger & audit"),
         ("Bab-28-Catatan-Perubahan-Produksi-20261107", "checkpoint produksi"),
     ],
 }
