@@ -42,6 +42,7 @@
 28. [Catatan perubahan produksi (2026-11-07)](chapters/28-catatan-perubahan-produksi-20261107.md)
 29. [Formulir wawancara golden vectors (grill-me)](chapters/29-formulir-wawancara-golden-vectors.md)
 30. [Daftar pertanyaan verifikasi golden & fungsi aplikasi](chapters/30-daftar-pertanyaan-verifikasi-golden-fungsi.md)
+31. [Bank pertanyaan review kode & peningkatan mutu](chapters/31-bank-pertanyaan-review-kode.md)
 
 ## Aset pendukung
 - [MANIFEST.md](MANIFEST.md) — kartu kendali versi manual & snapshot target
