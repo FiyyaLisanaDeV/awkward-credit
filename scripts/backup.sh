@@ -9,13 +9,14 @@ DB_USER=$(grep -E '^DB_USERNAME=' .env | head -1 | cut -d= -f2- | tr -d '"')
 DB_HOST=${DB_HOST:-127.0.0.1}
 
 TS=$(date +%Y%m%d-%H%M%S)
-mkdir -p backups
+BACKUP_DIR="${BACKUP_DIR:-../_pilot_backups}"
+mkdir -p "$BACKUP_DIR"
 
-DUMP="backups/${DB_NAME}-${TS}.dump"
+DUMP="$BACKUP_DIR/${DB_NAME}-${TS}.dump"
 pg_dump -h "$DB_HOST" -U "$DB_USER" -Fc -d "$DB_NAME" -f "$DUMP"
 echo "database  -> $DUMP"
 
-TAR="backups/storage-private-${TS}.tar.gz"
+TAR="$BACKUP_DIR/storage-private-${TS}.tar.gz"
 tar -czf "$TAR" -C storage/app private
 echo "storage   -> $TAR"
 

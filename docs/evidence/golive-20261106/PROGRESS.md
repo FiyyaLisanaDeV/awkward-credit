@@ -55,3 +55,9 @@
 | 20:40:00 | P3A role DB | CREATE ROLE loan_bpr_app + GRANT + .env | 0 | [V] NOSUPERUSER; ledger/audit_log SELECT+INSERT |
 | 20:41:00 | P3A smoke | curl https health/dashboard/dokumen | 0 | [V] 200 |
 | 20:42:00 | P3A gate | verify --full | 0 | [V] SELESAI |
+| 20:50:00 | P3B backup | pg_dump luar repo + tar storage | 0 | [V] |
+| 20:51:00 | P3B restore drill | pg_restore scratch + count + ledger:verify | 0 | [V] semua baris cocok, ledger OK |
+| 20:52:00 | P3C masker | pii:masker + test | 0 | [V] 2 test |
+| 20:53:00 | P3C index | slow_query log | 0 | [V] tidak ada data produksi, tidak ada index spekulatif |
+| 20:54:00 | P3C scheduler | schedule:list | 0 | [V] ledger:verify 00:30 |
+| 20:55:00 | P3 GATE | verify --full | 0 | [V] SELESAI |

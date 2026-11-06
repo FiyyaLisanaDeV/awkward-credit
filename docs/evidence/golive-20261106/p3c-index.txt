@@ -1,0 +1,1 @@
+Index tuning: tidak ada slow query produksi. Log performance hanya berisi 3 baris dari env testing (migrasi/seed), bukan produksi. Tidak ada index spekulatif ditambahkan. [V]

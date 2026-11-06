@@ -99,6 +99,7 @@ return [
         'admin_initial_password' => env('ADMIN_INITIAL_PASSWORD'),
         'auditor_initial_password' => env('AUDITOR_INITIAL_PASSWORD'),
         'pilot_initial_password' => env('PILOT_INITIAL_PASSWORD'),
+        'pii_mask_allow_production' => env('PII_MASK_ALLOW_PRODUCTION', false),
     ],
 
 ];
