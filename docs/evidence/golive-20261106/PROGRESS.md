@@ -61,3 +61,5 @@
 | 20:53:00 | P3C index | slow_query log | 0 | [V] tidak ada data produksi, tidak ada index spekulatif |
 | 20:54:00 | P3C scheduler | schedule:list | 0 | [V] ledger:verify 00:30 |
 | 20:55:00 | P3 GATE | verify --full | 0 | [V] SELESAI |
+| 20:56:00 | P4 materi UAT | buat skenario/berita acara/checklist/lembar K | 0 | [V] kolom hasil/keputusan kosong |
+| 20:56:00 | P4 docs check | docs:check --strict | 0 | [V] |
