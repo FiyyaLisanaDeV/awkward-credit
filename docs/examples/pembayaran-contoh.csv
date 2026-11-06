@@ -1,0 +1,3 @@
+no_rekening_kredit,periode,tanggal_bayar,metode,no_bukti,keterangan
+KDI/2026/000001,1,2026-12-06,TUNAI,BUKTI-001,Angsuran periode 1
+KDI/2026/000002,2,2026-12-06,TRANSFER,BUKTI-002,Angsuran periode 2

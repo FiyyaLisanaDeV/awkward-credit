@@ -77,4 +77,6 @@ final class Konstanta
     public const SETTING_PER_PAGE = 20;
 
     public const MILI_PER_DETIK = 1000;
+
+    public const KILOBYTE = 1024;
 }

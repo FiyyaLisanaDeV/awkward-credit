@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\ApprovalController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DebiturController;
 use App\Http\Controllers\Web\DokumenController;
+use App\Http\Controllers\Web\ImportController;
 use App\Http\Controllers\Web\KreditController;
 use App\Http\Controllers\Web\LedgerController;
 use App\Http\Controllers\Web\PermohonanController;
@@ -62,6 +63,13 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger.index');
         Route::get('/ledger/verify', [LedgerController::class, 'verify'])->name('ledger.verify');
         Route::get('/ledger/{ledger}', [LedgerController::class, 'show'])->name('ledger.show');
+    });
+
+    Route::middleware('permission:import.pembayaran')->group(function (): void {
+        Route::get('/import', [ImportController::class, 'index'])->name('import.index');
+        Route::get('/import/create', [ImportController::class, 'create'])->name('import.create');
+        Route::post('/import', [ImportController::class, 'store'])->name('import.store');
+        Route::get('/import/{batch}', [ImportController::class, 'show'])->name('import.show');
     });
 
     Route::middleware('permission:permohonan.view')->group(function (): void {
