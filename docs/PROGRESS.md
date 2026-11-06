@@ -12,7 +12,7 @@
 | Fase aktif | **16 dilewati**; **18 pilot KDI selesai** (lulus dengan catatan); **17/18 tanda tangan & UAT 3 cabang PENDING**; **19 Pengaturan DONE** | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
 | Remote | `origin` → `awkward-credit`, branch **`app`** (remote `4de551b`; commit settings/pilot **belum dipush**); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
-| Branch / last commit | main / `0817dbf` (settings) + pilot UAT (lokal) | 2026-11-06 |
+| Branch / last commit | main / `82927b5` (pilot UAT; settings `0817dbf`) | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
