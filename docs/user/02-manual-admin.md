@@ -16,23 +16,38 @@ php artisan tinker --execute="\$u=App\\Models\\User::where('username','auditor')
 
 > Buat user per cabang dengan `cabang_id` yang benar; jangan memakai role `ADMIN` untuk operasional harian.
 
-## 2. Parameter kebijakan `[E]`
-- Tersimpan di `ref_parameter_kebijakan` (versi `v1.0`, status ACTIVE) — 34 kunci analitik (margin, DSCR, LTV, bobot 5C, band, balloon, dll.).
-- Perubahan parameter harus lewat **versi baru** + pengesahan; jangan edit langsung di DB produksi.
-- UI aktivasi parameter `[Rencana]`; saat ini via seeder/CLI.
+## 2. Pengaturan (UI) — parameter, matriks, referensi
+
+- Buka `/pengaturan` (nav **Administrasi**); perlu permission `setting.view`.
+- Data **ACTIVE bersifat read-only**. Perubahan lewat alur **Draft → Ajukan → Setujui → Terapkan**.
+- `setting.edit` (ADMIN) membuat/mengubah draft; `setting.approve` (KOMITE/DIRUT) menyetujui; `setting.apply` (ADMIN) menerapkan.
+- **SoD:** pembuat tidak boleh menyetujui revisinya sendiri.
+- Setiap aksi tercatat di `audit_log` (`setting:<SECTION>`); aktivasi parameter/matriks juga menulis ledger `PARAMETER_DIAKTIFKAN`.
+- Bagian yang dapat dikonfigurasi: parameter kebijakan (34 kunci), matriks persetujuan, tarif asuransi jiwa/kebakaran/kendaraan, kategori agunan PPKA, checklist dokumen, template dokumen, dan produk.
+- Validasi utama: total bobot 5C = 1.0; bobot kelengkapan = 100; urutan rating & rasio balloon; band skor monoton; band matriks bersambung dari 0 dan hanya band teratas tanpa batas maksimum.
+- Detail prosedur & contoh: [07-pengaturan.md](07-pengaturan.md).
+
+### 2.1 Fallback seeder `[E]`
 
 ```bash
 php artisan db:seed --class="Database\\Seeders\\Reference\\ParameterKebijakanSeeder"
+php artisan db:seed --class="Database\\Seeders\\Reference\\ApprovalMatrixSeeder"
 php artisan test --filter=PolicyParametersTest
 ```
 
+> Jangan edit `ref_parameter_kebijakan` / `ref_approval_matrix` langsung di DB produksi. Seeder hanya untuk bootstrap.
+
 ## 3. Matriks approval `[E]`
+
 - `ref_approval_matrix` versi `v1.0` ACTIVE (level 1–5 per band plafon). Hanya satu versi ACTIVE.
-- Perubahan matriks = versi baru + pengesahan; lihat Bab 24 pada wiki manual book (Workflow, Peran & Wewenang).
+- Ubah melalui `/pengaturan/APPROVAL_MATRIX`; revisi harus disetujui lalu diterapkan. Validasi menolak band bercelah/tumpang tindih, level duplikat per band, dan role yang tidak ada.
+- Lihat Bab 24 pada wiki manual book (Workflow, Peran & Wewenang).
 
 ## 4. Template dokumen `[E]`
+
 - `ref_template_dokumen` berisi 17 template (DOC-01..17), status awal **DRAFT**.
 - **BR-07:** generate dokumen ditolak bila template belum `APPROVED`. Sahkan template sebelum produksi.
+- Status template dapat diubah lewat `/pengaturan/TEMPLATE_DOKUMEN` (revisi + persetujuan), atau seeder/CLI untuk bootstrap.
 - Generator: 17 generator + `DocumentService` (hash HTML idempoten, disk privat).
 
 ## 5. Backup & restore `[E]`

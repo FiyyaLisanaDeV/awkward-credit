@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DebiturController;
 use App\Http\Controllers\Web\KreditController;
 use App\Http\Controllers\Web\PermohonanController;
+use App\Http\Controllers\Web\SettingController;
 use App\Http\Controllers\Web\SimulasiController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,5 +54,27 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/simulasi/create', [SimulasiController::class, 'create'])->name('simulasi.create');
         Route::get('/simulasi/bandingkan', [SimulasiController::class, 'bandingkan'])->name('simulasi.bandingkan');
         Route::get('/simulasi/{simulasi}', [SimulasiController::class, 'show'])->name('simulasi.show');
+    });
+
+    Route::middleware('permission:setting.view')->group(function (): void {
+        Route::get('/pengaturan', [SettingController::class, 'index'])->name('admin.index');
+        Route::get('/pengaturan/persetujuan', [SettingController::class, 'inbox'])->name('admin.inbox');
+        Route::get('/pengaturan/riwayat', [SettingController::class, 'history'])->name('admin.history');
+        Route::get('/pengaturan/{section}', [SettingController::class, 'section'])->name('admin.section');
+    });
+
+    Route::middleware('permission:setting.edit')->group(function (): void {
+        Route::post('/pengaturan/{section}', [SettingController::class, 'store'])->name('admin.store');
+        Route::patch('/pengaturan/revisi/{revision}', [SettingController::class, 'update'])->name('admin.update');
+        Route::post('/pengaturan/revisi/{revision}/submit', [SettingController::class, 'submit'])->name('admin.submit');
+    });
+
+    Route::middleware('permission:setting.approve')->group(function (): void {
+        Route::post('/pengaturan/revisi/{revision}/approve', [SettingController::class, 'approve'])->name('admin.approve');
+        Route::post('/pengaturan/revisi/{revision}/reject', [SettingController::class, 'reject'])->name('admin.reject');
+    });
+
+    Route::middleware('permission:setting.apply')->group(function (): void {
+        Route::post('/pengaturan/revisi/{revision}/apply', [SettingController::class, 'apply'])->name('admin.apply');
     });
 });

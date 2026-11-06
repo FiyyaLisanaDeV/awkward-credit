@@ -58,5 +58,23 @@ final class Konstanta
 
     public const TERBILANG_SEMILYAR = 1000000000;
 
+    public const SETTING_MAX_LEVEL = 10;
+
+    public const SETTING_MAX_UMUR = 120;
+
+    public const SETTING_MAX_TENOR = 360;
+
+    public const SETTING_MAX_HARI_KERJA = 366;
+
+    public const SETTING_BOBOT_TOTAL = 100;
+
+    public const SETTING_TOLERANCE = 0.0001;
+
+    public const SETTING_MAX_TEXT = 150;
+
+    public const SETTING_MAX_NAME = 200;
+
+    public const SETTING_PER_PAGE = 20;
+
     public const MILI_PER_DETIK = 1000;
 }

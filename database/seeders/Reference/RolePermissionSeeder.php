@@ -23,6 +23,7 @@ final class RolePermissionSeeder extends Seeder
             'template.review', 'template.approve',
             'audit.view', 'ledger.view', 'report.view',
             'parameter.activate', 'user.manage',
+            'setting.view', 'setting.edit', 'setting.approve', 'setting.apply',
             'simulasi.create', 'import.slik', 'import.debitur', 'import.dokumen', 'import.pembayaran',
         ];
 
@@ -46,16 +47,18 @@ final class RolePermissionSeeder extends Seeder
             ],
             'DIRUT' => [
                 'permohonan.view', 'permohonan.approve_level_4', 'permohonan.reject', 'report.view',
+                'setting.view', 'setting.approve',
             ],
             'KOMITE' => [
                 'permohonan.view', 'permohonan.approve_level_5', 'report.view',
+                'setting.view', 'setting.approve',
             ],
             'ADMIN' => $permissions,
             'LEGAL' => [
-                'dokumen.view', 'template.review', 'template.approve',
+                'dokumen.view', 'template.review', 'template.approve', 'setting.view',
             ],
             'AUDITOR' => [
-                'audit.view', 'ledger.view', 'report.view', 'permohonan.view',
+                'audit.view', 'ledger.view', 'report.view', 'permohonan.view', 'setting.view',
             ],
         ];
 

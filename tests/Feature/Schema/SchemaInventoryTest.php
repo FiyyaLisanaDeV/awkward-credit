@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Schema;
 
 uses(RefreshDatabase::class);
 
-it('memiliki 55 model dan setiap model menunjuk tabel yang ada', function () {
+it('memiliki 56 model dan setiap model menunjuk tabel yang ada', function () {
     $files = glob(app_path('Models/*.php')) ?: [];
 
-    expect(count($files))->toBe(55);
+    expect(count($files))->toBe(56);
 
     foreach ($files as $file) {
         $class = 'App\\Models\\'.basename($file, '.php');

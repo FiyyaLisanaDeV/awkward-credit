@@ -7,21 +7,21 @@
 
 | Item | Nilai | Diperbarui |
 |---|---|---|
-| Versi dokumen | 3.0 | 2026-11-06 |
-| `updated_at` | 2026-11-06T03:50+08:00 | 2026-11-06 |
-| Fase aktif | **16 dilewati** (permintaan user); **17 & 18 paket siap** — menunggu review/UAT manusia | 2026-11-06 |
+| Versi dokumen | 3.1 | 2026-11-06 |
+| `updated_at` | 2026-11-06T18:45+08:00 | 2026-11-06 |
+| Fase aktif | **16 dilewati** (permintaan user); **17 & 18 menunggu review/UAT manusia**; **19 Pengaturan DONE** | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
 | Remote | `origin` → `awkward-credit`, branch **`app`** (+tags phase-01..15); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
 | Branch / last commit | main / `phase-15-done` (`3e06519`) + docs 17/18 | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
-| Jumlah migrasi DB aplikasi | 61 (53 + 7 ledger/simulasi/import + Sanctum) | 2026-11-06 |
-| Jumlah route | 77 (42 API v1) | 2026-11-06 |
-| Jumlah test | 44 file (**140 test**, 1789 assertions) | 2026-11-06 |
+| Jumlah migrasi DB aplikasi | 62 (53 + 7 ledger/simulasi/import + Sanctum + setting_revisions) | 2026-11-06 |
+| Jumlah route | 87 (42 API v1 + 10 admin/pengaturan) | 2026-11-06 |
+| Jumlah test | 48 file (**160 test**, 1860 assertions) | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | tersedia (Fase 08B); chain **OK** | 2026-11-06 |
-| Bukti fase terakhir | `docs/evidence/phase-17-docs-20261106-034530.txt` + `docs/evidence/phase-18-uat-package-20261106-034703.txt` | 2026-11-06 |
+| Bukti fase terakhir | `docs/evidence/phase-19-settings-20261106-184318.txt` | 2026-11-06 |
 | Bukti baseline | [evidence/00-baseline-2026-11-05.txt](evidence/00-baseline-2026-11-05.txt) | 2026-11-05 |
 
 **Cara memperbarui header:** jalankan perintah, tempel hasilnya, jangan mengetik dari ingatan.
@@ -60,6 +60,7 @@ php artisan ledger:verify --quiet && echo "chain: OK"
 | 16 | Hardening | TODO | — | — | — | — | **dilewati sementara** (permintaan user 2026-11-06); role DB + restore |
 | 17 | Dokumentasi Pengguna & SOP | IN-PROGRESS | 2026-11-06 | — | `docs/user/*` + `docs/evidence/phase-17-docs-20261106-034530.txt` | — | dokumen lengkap (AO/Admin/Komite/SOP/Pelatihan/FAQ); **review & tanda tangan pemilik proses PENDING `[K]`** |
 | 18 | UAT, Go-Live & Serah Terima | IN-PROGRESS | 2026-11-06 | — | `docs/uat/*` + `docs/evidence/phase-18-uat-package-20261106-034703.txt` | — | paket UAT/checklist/evidence/serah terima siap; **eksekusi UAT & tanda tangan PENDING `[K]`** |
+| 19 | Pengaturan (Settings) | DONE | 2026-11-06 | 2026-11-06 | `docs/evidence/phase-19-settings-20261106-184318.txt` | `feat(settings)` / `settings-v1` | 9 bagian, revisi draft→approve→apply, SoD, audit, notifikasi; 20 test baru; verify --full exit 0 |
 
 Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hanya sah bila memenuhi gate VERIFIKASI §10.
 
@@ -78,22 +79,17 @@ Status yang dipakai: `TODO` · `IN-PROGRESS` · `BLOCKED` · `DONE`. `DONE` hany
 ## §4. Handoff terakhir
 
 ```
-SESI: 2026-11-06 (sesi 15) | FASE: 12 (IN-PROGRESS) | STATUS: partial
-BERUBAH: commit 011d856 — UI Web (Debitur/Permohonan/Simulasi controller), Livewire
-  (DebiturWizard, PermohonanWizard, Simulator), komponen blade, Support/Validation/*Rules,
-  Services/Debitur+Permohonan+SimulationRunner; fix QA: middleware Spatie (bootstrap/app.php),
-  namespace route API (routes/api.php), NomorService (FOR UPDATE vs agregat PG), default NOT NULL
-  DebiturWizard, validasi Simulator; golden: tests/Fixtures/golden/c002-recomputed.json +
-  tests/Feature/Calculation/GoldenRecomputedParityTest.php
-BUKTI: vendor/bin/pest --compact = 104 passed (1616 assertions); phpstan = no errors;
-  php artisan ledger:verify = chain OK (dijalankan 2026-11-06)
-KEPUTUSAN: fixture C-002 status RECOMPUTED_DRAFT_NOT_VERIFIED (bukan verified); angka IDIR 85,93% /
-  net 2.948.080 / RATE x12 28,88% (efektif 33,02%) dikunci sebagai paritas engine, menunggu
-  RAT-02 (sumber sheet/sel) + tanda tangan
-BLOCKER: Q1–Q7 (§3) + D-01..D-20 & RAT-01/RAT-03 (lihat docs/decisions) + pasal V1/V3/V4 PENDING
-NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seeder
-  (idir_threshold_tpp 0.35 / margin 0.5 / ltv 0.7) vs rekomendasi DRAFT (0.80/0.80/0.80) via D-11/D-07;
-  3) lanjut Fase 12B/13
+SESI: 2026-11-06 (sesi 22) | FASE: 19 (DONE) | STATUS: selesai
+BERUBAH: fitur Pengaturan `/pengaturan` — 9 section (parameter kebijakan, matriks, 3 tarif
+  asuransi, agunan PPKA, checklist, template, produk); tabel `setting_revisions`; alur
+  DRAFT→PENDING→APPROVED→APPLIED; SoD; audit `setting:<SECTION>`; ledger PARAMETER_DIAKTIFKAN;
+  permission setting.view/edit/approve/apply; UI kartu/section/inbox/riwayat; docs/user/07.
+BUKTI: bash scripts/verify.sh --full = OK (pint, phpstan L5+L8, 160 test, hardcode 0,
+  docs:check --strict 0); php artisan test tests/Feature/Setting = 19 passed.
+KEPUTUSAN: scope v1 = referensi & kebijakan inti; governance = draft→approve→activate;
+  data ACTIVE tidak diedit langsung; parameter/matriks menjadi versi baru saat apply.
+BLOCKER: review pemilik proses & UAT manusia (Fase 17/18); D-01..D-20/RAT; V1/V3/V4.
+NEXT: 1) UAT 3 cabang + berita acara; 2) tanda tangan SOP/manual; 3) Fase 12B import.
 ```
 
 ## §5. Log sesi (append-only)
@@ -122,6 +118,7 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | 19 | 15 | Fase 15: arch test (strict types/no debug/no env), guard Route (nama unik, API sanctum, route utama), guard EventCatalog (semua event di INVENTARIS), performance smoke (health/list/jadwal/PDF); drill #4 + verifier pass 3 klaim | `bash scripts/verify.sh --full` | OK, exit 0; **138 test**, docs:check --strict 0 temuan | `feat(phase-15)` / `phase-15-done` |
 | 2026-11-06 | 20 | — | Push repo app ke GitHub memakai PAT (via GIT_ASKPASS, token tidak ditulis ke config): `main` ditolak non-fast-forward (remote berisi commandcode bpr), lalu dipush ke branch **`app`** + semua tag. `main` remote tidak diubah | `git push origin main:app --tags`, `git ls-remote` | OK, exit 0; `refs/heads/app` = HEAD lokal; `refs/heads/main` tetap `3fd7cb8` | `3e06519` |
 | 2026-11-06 | 21 | 17–18 | Fase 16 dilewati; paket dokumen pengguna (AO/Admin/Komite/SOP/Pelatihan/FAQ) + paket UAT/go-live/serah terima dibuat; user auditor ditambahkan (seeder + tes) | `docs:check --strict`, `verify.sh --full`, `ledger:verify`, `hardcode:audit` | OK, exit 0; **140 test**; review pemilik proses & UAT manusia PENDING | `ed864bb` + docs |
+| 2026-11-06 | 22 | 19 | Fitur Pengaturan `/pengaturan`: 9 section (parameter, matriks, 3 tarif asuransi, agunan PPKA, checklist, template, produk), tabel `setting_revisions`, alur DRAFT→PENDING→APPROVED→APPLIED, SoD, audit `setting:<SECTION>`, ledger `PARAMETER_DIAKTIFKAN`, permission `setting.*`, UI index/section/inbox/riwayat, docs/user/07 | `bash scripts/verify.sh --full`; `php artisan test tests/Feature/Setting` | OK, exit 0; **160 test** (1860 assertions), hardcode 0, docs:check --strict 0; evidence phase-19 | `feat(settings)` / `settings-v1` |
 
 ## §6. Catatan drift
 
@@ -149,6 +146,8 @@ NEXT: 1) hasilkan evidence phase-12 + drill #3; 2) selaraskan policy ACTIVE seed
 | 2026-11-06 | Fase 16 (hardening) dilewati sementara atas permintaan user | tetap `TODO`; role DB/restore/PII/index belum dikerjakan | terbuka |
 | 2026-11-06 | Fase 17 & 18 baru menyelesaikan artefak; review pemilik proses & eksekusi UAT butuh manusia | tandai `IN-PROGRESS` sampai tanda tangan/bukti UAT | terbuka |
 | 2026-11-06 | Jumlah test berubah 138→140 (auditor) dan file 43→44 | header disinkronkan | selesai |
+| 2026-11-06 | `lang/id.php` bukan format grup Laravel (`lang/<locale>/<group>.php`), sehingga `__('setting.*')` mengembalikan key | dibuat `lang/id/setting.php`, `setting_section.php`, `status_revision.php`, `form.php` | selesai |
+| 2026-11-06 | SchemaInventory menghitung 55 model, bertambah 1 (`SettingRevision`) | test diperbarui ke 56 model | selesai |
 
 ## §7. Aturan pengisian
 
