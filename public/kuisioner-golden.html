@@ -379,42 +379,42 @@ const sections = [
     intro: 'TPP adalah kredit konsumtif yang angsurannya dipotong dari gaji/TPP. Bagian ini menguji apakah Anda memahami komponen angsuran, IDIR, EIR, dan pengaruh fasilitas SLIK. IDIR = angsuran baru ÷ penghasilan bersih. EIR dihitung dari arus kas (IRR), bukan faktor 1,81×. Blokir tabungan dan payoff memengaruhi dana yang diterima.',
     questions: [
       {
-        id: 'G-TPP-01-A', context: 'Kasus G-TPP-01 (C-002): plafon Rp80.000.000, bunga flat 18%/tahun, tenor 60 bulan, penghasilan bersih Rp2.948.080.',
+        id: 'G-TPP-01-A', context: '[Kasus/asal] C-002 dummy, X1 `hitungan`/`analisis kredit`. [Produk/metode] TPP flat. [Asal angka] Plafon 80 jt, rate 18%, tenor 60 dari kasus; angsuran dihitung. [Status] `[K]` klaim C-002. Kasus G-TPP-01 (C-002): plafon Rp80.000.000, bunga flat 18%/tahun, tenor 60 bulan, penghasilan bersih Rp2.948.080.',
         text: 'Berapa angsuran bulanan flat yang benar?',
         options: [['A', 'Rp2.533.333,33'], ['B', 'Rp2.533.334,00'], ['C', 'Rp2.500.000,00']]
       },
       {
-        id: 'G-TPP-01-B', context: 'Pada kasus yang sama, IDIR dihitung dari angsuran baru dibagi penghasilan bersih.',
+        id: 'G-TPP-01-B', context: '[Kasus/asal] C-002. [Produk/metode] TPP flat. [Asal angka] Net 2.948.080 klaim C-002; IDIR dihitung. [Status] `[K]`. Pada kasus yang sama, IDIR dihitung dari angsuran baru dibagi penghasilan bersih.',
         text: 'Berapa IDIR yang benar?',
         options: [['A', '85,93%'], ['B', '83,11%'], ['C', '80,00%']]
       },
       {
-        id: 'G-TPP-01-C', context: 'EIR pada kasus C-002 dilaporkan 28,88% per tahun.',
+        id: 'G-TPP-01-C', context: '[Kasus/asal] C-002 / G-TPP-01. [Produk/metode] TPP flat. [Asal angka] 28,88% klaim JSON; EIR recompute; 1,81× dari X1 FLAT-ANN-EFF. [Status] `[K]`. EIR pada kasus C-002 dilaporkan 28,88% per tahun.',
         text: 'Metode EIR mana yang menghasilkan 28,88%?',
         options: [['A', 'RATE/IRR numerik × 12'], ['B', 'Flat × 1,81'], ['C', 'Flat × 0,87']]
       },
       {
-        id: 'G-TPP-02', context: 'Debitur memiliki beberapa fasilitas SLIK aktif, sebagian juga tercatat pada pasangan.',
+        id: 'G-TPP-02', context: '[Kasus/asal] G-TPP-02 JSON. [Produk/metode] TPP. [Asal angka] Input SLIK TBD; dedupe/agregasi dari desain. [Status] `[K]` recomputed. Debitur memiliki beberapa fasilitas SLIK aktif, sebagian juga tercatat pada pasangan.',
         text: 'Fasilitas mana yang masuk perhitungan DSR/IDIR?',
         options: [['A', 'Semua fasilitas aktif, dideduplikasi'], ['B', 'Hanya fasilitas baru'], ['C', 'Hanya fasilitas dengan kolektibilitas 1']]
       },
       {
-        id: 'G-TPP-03-A', context: 'Excel memakai formula IF(D34>80%,"DITOLAK","DITERIMA").',
+        id: 'G-TPP-03-A', context: '[Kasus/asal] G-TPP-03 + X1 D35. [Produk/metode] TPP flat. [Asal angka] Ambang 80% dari formula Excel; 80,00 boundary sintetis. [Status] `[K]` / boundary. Excel memakai formula IF(D34>80%,"DITOLAK","DITERIMA").',
         text: 'Berapa status IDIR tepat 80,00%?',
         options: [['A', 'Lolos hard stop, tetapi warning 35%'], ['B', 'Hard stop / ditolak'], ['C', 'Tidak dihitung']]
       },
       {
-        id: 'G-TPP-03-B', context: 'Batas hard stop adalah 80%.',
+        id: 'G-TPP-03-B', context: '[Kasus/asal] G-TPP-03. [Produk/metode] TPP flat. [Asal angka] 80,01 sintetis, bukan sel. [Status] `[K]` / boundary. Batas hard stop adalah 80%.',
         text: 'Berapa status IDIR 80,01%?',
         options: [['A', 'Hard stop / ditolak'], ['B', 'Lolos'], ['C', 'Hanya warning']]
       },
       {
-        id: 'G-TPP-04', context: 'Permohonan top-up melunasi kredit lama dengan penalti 10% dari pokok lama.',
+        id: 'G-TPP-04', context: '[Kasus/asal] G-TPP-04 JSON / X1 Y17. [Produk/metode] TPP flat. [Asal angka] Penalti 10% dari rumus X1; nilai dummy. [Status] `[K]`. Permohonan top-up melunasi kredit lama dengan penalti 10% dari pokok lama.',
         text: 'Komponen dana bersih diterima adalah...',
         options: [['A', 'Plafon − biaya − blokir − payoff'], ['B', 'Plafon − biaya'], ['C', 'Plafon + payoff']]
       },
       {
-        id: 'G-TPP-05', context: 'Produk TPP memblokir tabungan sebesar 2× angsuran bulanan.',
+        id: 'G-TPP-05', context: '[Kasus/asal] G-TPP-05 JSON / X1 E22. [Produk/metode] TPP flat. [Asal angka] Blokir 2× dari rumus X1; nilai dummy. [Status] `[K]`. Produk TPP memblokir tabungan sebesar 2× angsuran bulanan.',
         text: 'Dasar perhitungan blokir 2× adalah...',
         options: [['A', 'Angsuran baru'], ['B', 'Plafon'], ['C', 'Penghasilan bersih']]
       }
@@ -427,42 +427,42 @@ const sections = [
     intro: 'Jadwal angsuran adalah daftar pokok dan bunga per periode. Flat menghitung bunga dari plafon; anuitas menghitung bunga dari saldo; grace menunda pokok; balloon melunasi pokok besar di akhir. Boundary berarti nilai tepat di ambang, misalnya 1,00× atau 1,10×. Selisih pembulatan harus ditempatkan secara eksplisit, biasanya di periode terakhir.',
     questions: [
       {
-        id: 'G-SCH-01', context: 'Tenor 1 bulan, bunga flat, tanpa biaya yang memengaruhi jadwal.',
+        id: 'G-SCH-01', context: '[Kasus/asal] G-SCH-01 JSON. [Produk/metode] Flat. [Asal angka] Input null; tenor 1 sintetis. [Status] `[K]`. Tenor 1 bulan, bunga flat, tanpa biaya yang memengaruhi jadwal.',
         text: 'Saldo akhir setelah periode ke-1 adalah...',
         options: [['A', 'Rp0'], ['B', 'Sisa pokok'], ['C', 'Bunga saja']]
       },
       {
-        id: 'G-SCH-02', context: 'Plafon kecil menghasilkan pembagian pokok tidak bulat.',
+        id: 'G-SCH-02', context: '[Kasus/asal] G-SCH-02 JSON. [Produk/metode] Flat. [Asal angka] Plafon kecil sintetis; rounding D-05. [Status] `[K]`. Plafon kecil menghasilkan pembagian pokok tidak bulat.',
         text: 'Selisih pembulatan ditempatkan di...',
         options: [['A', 'Periode terakhir'], ['B', 'Periode pertama'], ['C', 'Dibuang']]
       },
       {
-        id: 'G-SCH-03', context: 'Anuitas murni tanpa grace.',
+        id: 'G-SCH-03', context: '[Kasus/asal] G-SCH-03 JSON. [Produk/metode] Anuitas. [Asal angka] PMT dari formula. [Status] `[K]`. Anuitas murni tanpa grace.',
         text: 'Saldo akhir periode terakhir harus...',
         options: [['A', 'Tepat Rp0'], ['B', 'Sisa Rp1'], ['C', 'Sisa bunga']]
       },
       {
-        id: 'G-SCH-04', context: 'Perbandingan flat vs efektif pada tingkat bunga yang sama.',
+        id: 'G-SCH-04', context: '[Kasus/asal] G-SCH-04 / X1 FLAT-ANN-EFF. [Produk/metode] Anuitas. [Asal angka] EIR numerik; 1,81× dari X1. [Status] `[K]`. Perbandingan flat vs efektif pada tingkat bunga yang sama.',
         text: 'EIR harus dihitung dengan...',
         options: [['A', 'IRR/bisection numerik'], ['B', 'Flat × 1,81'], ['C', 'Flat × 0,87']]
       },
       {
-        id: 'G-SCH-05', context: 'Grace period: pokok ditunda, bunga berjalan.',
+        id: 'G-SCH-05', context: '[Kasus/asal] G-SCH-05 / X3. [Produk/metode] Grace. [Asal angka] Formula grace X3. [Status] `[K]`. Grace period: pokok ditunda, bunga berjalan.',
         text: 'Pada periode grace, angsuran pokok adalah...',
         options: [['A', 'Rp0'], ['B', 'Plafon/tenor'], ['C', 'Plafon penuh']]
       },
       {
-        id: 'G-SCH-06', context: 'Rasio kecukupan balloon = sumber pelunasan ÷ kewajiban akhir.',
+        id: 'G-SCH-06', context: '[Kasus/asal] G-SCH-06 + seeder. [Produk/metode] Grace. [Asal angka] 1,10 dari `rasio_balloon_layak`. [Status] `[E]` seeder / `[K]` policy. Rasio kecukupan balloon = sumber pelunasan ÷ kewajiban akhir.',
         text: 'Status pada rasio 1,10× adalah...',
         options: [['A', 'LAYAK'], ['B', 'PERHATIAN'], ['C', 'TIDAK LAYAK']]
       },
       {
-        id: 'G-SCH-07', context: 'Rasio kecukupan balloon tepat 1,00×.',
+        id: 'G-SCH-07', context: '[Kasus/asal] G-SCH-07 + seeder. [Produk/metode] Grace. [Asal angka] 1,00 dari `rasio_balloon_perhatian`. [Status] `[E]` / `[K]`. Rasio kecukupan balloon tepat 1,00×.',
         text: 'Status pada 1,00× adalah...',
         options: [['A', 'PERHATIAN'], ['B', 'LAYAK'], ['C', 'TIDAK LAYAK']]
       },
       {
-        id: 'G-SCH-08', context: 'Rasio kecukupan balloon 0,99×.',
+        id: 'G-SCH-08', context: '[Kasus/asal] G-SCH-08 JSON. [Produk/metode] Grace. [Asal angka] 0,99 sintetis. [Status] `[K]`. Rasio kecukupan balloon 0,99×.',
         text: 'Status pada 0,99× adalah...',
         options: [['A', 'TIDAK LAYAK / mitigasi'], ['B', 'LAYAK'], ['C', 'PERHATIAN']]
       }
@@ -475,42 +475,42 @@ const sections = [
     intro: 'RPC adalah uang yang tersedia untuk membayar utang setelah surplus dikali margin. DSCR membandingkan RPC dengan total kewajiban bulanan, termasuk fasilitas SLIK yang masih aktif. WCD adalah kebutuhan modal kerja karena persediaan. Gap adalah kekurangan modal kerja setelah dikurangi dana yang tersedia.',
     questions: [
       {
-        id: 'G-CAP-01', context: 'RPC = surplus bersih bulanan × margin kapasitas bayar.',
+        id: 'G-CAP-01', context: '[Kasus/asal] G-CAP-01 JSON + ilustrasi. [Produk/metode] Modal kerja flat. [Asal angka] Surplus 5 jt/margin 80% **ilustrasi**; ACTIVE margin 0,50 dari seeder. [Status] `ILUSTRASI` / `[K]`. RPC = surplus bersih bulanan × margin kapasitas bayar.',
         text: 'Jika surplus Rp5.000.000 dan margin 80%, RPC adalah...',
         options: [['A', 'Rp4.000.000'], ['B', 'Rp2.500.000'], ['C', 'Rp5.000.000']]
       },
       {
-        id: 'G-CAP-02', context: 'DSCR = RPC ÷ total kewajiban bulanan.',
+        id: 'G-CAP-02', context: '[Kasus/asal] Desain. [Produk/metode] Modal kerja. [Asal angka] Tidak ada angka; aturan total SLIK. [Status] `[E]` kode. DSCR = RPC ÷ total kewajiban bulanan.',
         text: 'Total kewajiban bulanan terdiri dari...',
         options: [['A', 'Angsuran baru + angsuran SLIK aktif'], ['B', 'Angsuran baru saja'], ['C', 'Angsuran SLIK saja']]
       },
       {
-        id: 'G-CAP-03', context: 'Grace period memiliki bunga periodik dan balloon akhir.',
+        id: 'G-CAP-03', context: '[Kasus/asal] X3/desain. [Produk/metode] Grace. [Asal angka] Bunga periodik + balloon. [Status] `[K]`. Grace period memiliki bunga periodik dan balloon akhir.',
         text: 'DSCR grace period sebaiknya memakai...',
         options: [['A', 'Bunga periodik; balloon dinilai terpisah'], ['B', 'Total balloon saja'], ['C', 'Pokok saja']]
       },
       {
-        id: 'G-MK-01', context: 'Cash turnover = biaya operasional tahunan ÷ perputaran kas per tahun.',
+        id: 'G-MK-01', context: '[Kasus/asal] X2/desain. [Produk/metode] Modal kerja. [Asal angka] Formula CT; input ilustrasi. [Status] `[K]`. Cash turnover = biaya operasional tahunan ÷ perputaran kas per tahun.',
         text: 'Perputaran kas per tahun dihitung dari...',
         options: [['A', 'Hari kerja ÷ siklus usaha'], ['B', 'Siklus usaha ÷ 12'], ['C', 'Omzet ÷ laba']]
       },
       {
-        id: 'G-MK-02', context: 'WCD = (pembelian bulanan ÷ 30) × hari persediaan.',
+        id: 'G-MK-02', context: '[Kasus/asal] X2/desain. [Produk/metode] Modal kerja. [Asal angka] Formula WCD. [Status] `[K]`. WCD = (pembelian bulanan ÷ 30) × hari persediaan.',
         text: 'Rata-rata kebutuhan modal kerja adalah...',
         options: [['A', '(cash turnover + WCD) ÷ 2'], ['B', 'cash turnover + WCD'], ['C', 'WCD − cash turnover']]
       },
       {
-        id: 'G-MK-03', context: 'Gap modal kerja tidak boleh negatif.',
+        id: 'G-MK-03', context: '[Kasus/asal] Desain. [Produk/metode] Modal kerja. [Asal angka] Gap `max(0)`, tanpa angka. [Status] `[E]` kode. Gap modal kerja tidak boleh negatif.',
         text: 'Jika modal kerja tersedia lebih besar dari kebutuhan, gap adalah...',
         options: [['A', 'Rp0'], ['B', 'Negatif'], ['C', 'Selisih absolut']]
       },
       {
-        id: 'G-CAP-04', context: 'Plafon maksimum Flat memakai RPC, tenor, dan rate.',
+        id: 'G-CAP-04', context: '[Kasus/asal] X2. [Produk/metode] Flat. [Asal angka] Formula plafon max; nilai belum verified. [Status] `[K]`. Plafon maksimum Flat memakai RPC, tenor, dan rate.',
         text: 'Formula plafon maksimum Flat adalah...',
         options: [['A', 'RPC ÷ (1/tenor + rate/12)'], ['B', 'RPC × tenor'], ['C', 'RPC ÷ rate']]
       },
       {
-        id: 'G-CAP-05', context: 'Plafon maksimum Anuitas memakai faktor diskonto.',
+        id: 'G-CAP-05', context: '[Kasus/asal] X2. [Produk/metode] Anuitas. [Asal angka] Formula plafon max; nilai belum verified. [Status] `[K]`. Plafon maksimum Anuitas memakai faktor diskonto.',
         text: 'Formula plafon maksimum Anuitas adalah...',
         options: [['A', 'RPC × (1 − (1+i)^−n) ÷ i'], ['B', 'RPC ÷ n'], ['C', 'RPC × (1+i)^n']]
       }
@@ -523,42 +523,42 @@ const sections = [
     intro: 'Agunan dinilai dengan beberapa basis: pasar, likuidasi, dan PPKA. LTV harus memakai satu basis yang disepakati agar tidak terjadi double-haircut. Skor 5C memakai bobot Character, Capacity, Capital, Collateral, Condition. SLIK bermasalah dapat memaksa skor Character menjadi 1,0, tetapi override wajib beralasan dan teraudit. Jika IDIR hard stop bertentangan dengan skor tinggi, hard stop yang menang.',
     questions: [
       {
-        id: 'G-COL-01', context: 'Agunan memiliki nilai pasar, likuidasi, PPKA, dan basis LTV.',
+        id: 'G-COL-01', context: '[Kasus/asal] X1 appraisal/X2 S1-S2/D-07. [Produk/metode] Agunan. [Asal angka] Empat nilai; angka belum verified. [Status] `[K]`. Agunan memiliki nilai pasar, likuidasi, PPKA, dan basis LTV.',
         text: 'Agar tidak double-haircut, LTV dihitung dari...',
         options: [['A', 'Satu basis PPKA yang disepakati'], ['B', 'Pasar × PPKA'], ['C', 'Likuidasi × PPKA']]
       },
       {
-        id: 'G-COL-02', context: 'Kategori agunan POJK menentukan persen pengurang PPKA.',
+        id: 'G-COL-02', context: '[Kasus/asal] D-07/POJK. [Produk/metode] Agunan. [Asal angka] LTV max 0,70 dari seeder; basis POJK `[K]`. [Status] `[K]`. Kategori agunan POJK menentukan persen pengurang PPKA.',
         text: 'Status LTV tepat di batas maksimum adalah...',
         options: [['A', 'Lolos (tidak melebihi)'], ['B', 'Ditolak'], ['C', 'Selalu perhatian']]
       },
       {
-        id: 'G-SCR-01', context: 'Bobot 5C: Character 25%, Capacity 30%, Capital 15%, Collateral 20%, Condition 10%.',
+        id: 'G-SCR-01', context: '[Kasus/asal] Seeder. [Produk/metode] 5C. [Asal angka] Bobot 25/30/15/20/10 dari seeder. [Status] `[E]` seed / `[K]` policy. Bobot 5C: Character 25%, Capacity 30%, Capital 15%, Collateral 20%, Condition 10%.',
         text: 'Total bobot harus...',
         options: [['A', 'Tepat 1,00'], ['B', 'Kurang dari 1,00'], ['C', 'Bebas']]
       },
       {
-        id: 'G-SCR-02', context: 'SLIK bermasalah dapat memaksa skor Character menjadi 1,0.',
+        id: 'G-SCR-02', context: '[Kasus/asal] BR-01/T4. [Produk/metode] 5C. [Asal angka] Aturan override; tanpa angka. [Status] `[K]`. SLIK bermasalah dapat memaksa skor Character menjadi 1,0.',
         text: 'Override SLIK wajib memiliki...',
         options: [['A', 'Alasan, otorisasi, dan audit'], ['B', 'Cukup alasan'], ['C', 'Tidak perlu apa pun']]
       },
       {
-        id: 'G-STR-01', context: 'Stress test omzet turun ringan memakai delta dari policy.',
+        id: 'G-STR-01', context: '[Kasus/asal] Seeder. [Produk/metode] Stress. [Asal angka] Delta 0,10 dari seeder. [Status] `[E]` / `[K]`. Stress test omzet turun ringan memakai delta dari policy.',
         text: 'Skenario stres harus memakai...',
         options: [['A', 'Delta policy, bukan hardcode'], ['B', 'Angka 10% hardcode'], ['C', 'Delta acak']]
       },
       {
-        id: 'G-STR-02', context: 'Skenario terburuk menggabungkan penurunan omzet dan kenaikan biaya.',
+        id: 'G-STR-02', context: '[Kasus/asal] Seeder. [Produk/metode] Stress. [Asal angka] Delta 0,20 dan 0,10. [Status] `[E]` / `[K]`. Skenario terburuk menggabungkan penurunan omzet dan kenaikan biaya.',
         text: 'Jika DSCR baru di bawah minimum, statusnya...',
         options: [['A', 'TIDAK LAYAK / mitigasi'], ['B', 'LAYAK'], ['C', 'Diabaikan']]
       },
       {
-        id: 'G-DEC-01', context: 'IDIR hard stop dapat bertentangan dengan skor 5C yang tinggi.',
+        id: 'G-DEC-01', context: '[Kasus/asal] T1/desain. [Produk/metode] Keputusan. [Asal angka] Tanpa angka. [Status] `[K]`. IDIR hard stop dapat bertentangan dengan skor 5C yang tinggi.',
         text: 'Yang menang saat konflik adalah...',
         options: [['A', 'Hard stop'], ['B', 'Skor 5C'], ['C', 'Nilai plafon terbesar']]
       },
       {
-        id: 'G-DEC-02', context: 'Rekomendasi plafon mempertimbangkan pengajuan, plafon maksimum, dan LTV.',
+        id: 'G-DEC-02', context: '[Kasus/asal] Desain. [Produk/metode] Keputusan. [Asal angka] MIN rule; belum tentu ada di kode. [Status] `[Rencana]`. Rekomendasi plafon mempertimbangkan pengajuan, plafon maksimum, dan LTV.',
         text: 'Rekomendasi plafon adalah...',
         options: [['A', 'MIN(pengajuan, plafon max, batas LTV)'], ['B', 'MAX dari ketiganya'], ['C', 'Plafon pengajuan saja']]
       }
@@ -571,42 +571,42 @@ const sections = [
     intro: 'Kasus negatif menguji apakah sistem benar-benar menolak pelanggaran, bukan hanya memberi peringatan. BMPK membatasi exposure kepada pihak terkait; konsentrasi sektor membatasi exposure per sektor; CKPN dan PPKA punya arah transisi; write-off parsial tidak diperbolehkan. Jawaban yang benar adalah “ditolak” bila aturan memang hard stop.',
     questions: [
       {
-        id: 'G-RAC-01', context: 'BMPK membatasi exposure kepada pihak terkait/borrower group.',
+        id: 'G-RAC-01', context: '[Kasus/asal] D-13. [Produk/metode] BMPK. [Asal angka] Tanpa angka; policy. [Status] `[K]`. BMPK membatasi exposure kepada pihak terkait/borrower group.',
         text: 'Jika exposure melebihi limit BMPK, sistem harus...',
         options: [['A', 'Menolak, tanpa bypass'], ['B', 'Meloloskan dengan warning'], ['C', 'Mengabaikan limit']]
       },
       {
-        id: 'G-RAC-02', context: 'Konsentrasi sektor melebihi limit dapat di-override Direksi dengan justifikasi.',
+        id: 'G-RAC-02', context: '[Kasus/asal] D-14. [Produk/metode] Sektor. [Asal angka] Tanpa angka; policy. [Status] `[K]`. Konsentrasi sektor melebihi limit dapat di-override Direksi dengan justifikasi.',
         text: 'Override sektor wajib...', 
         options: [['A', 'Berjustifikasi dan teraudit'], ['B', 'Cukup lisan'], ['C', 'Otomatis']]
       },
       {
-        id: 'G-CKP-01', context: 'CKPN dan PPKA memiliki arah transisi yang berbeda.',
+        id: 'G-CKP-01', context: '[Kasus/asal] D-16. [Produk/metode] CKPN. [Asal angka] Tanpa angka; policy. [Status] `[K]`. CKPN dan PPKA memiliki arah transisi yang berbeda.',
         text: 'Jika CKPN lebih kecil dari PPKA, transisi harus...',
         options: [['A', 'Ditolak'], ['B', 'Diterima'], ['C', 'Diabaikan']]
       },
       {
-        id: 'G-WO-01', context: 'Hapus buku parsial tidak diperbolehkan; full write-off harus memenuhi eligibility.',
+        id: 'G-WO-01', context: '[Kasus/asal] D-16. [Produk/metode] Write-off. [Asal angka] Tanpa angka; policy. [Status] `[K]`. Hapus buku parsial tidak diperbolehkan; full write-off harus memenuhi eligibility.',
         text: 'Status partial write-off adalah...',
         options: [['A', 'Ditolak'], ['B', 'Diterima'], ['C', 'Diterima dengan catatan']]
       },
       {
-        id: 'A3-01', context: 'Semua 29 kasus harus memakai satuan yang sama: rupiah, persen desimal, dan bulan.',
+        id: 'A3-01', context: '[Kasus/asal] Meta 29 kasus. [Produk/metode] Semua. [Asal angka] Satuan dari tiap JSON. [Status] `[E]` pemeriksaan. Semua 29 kasus harus memakai satuan yang sama: rupiah, persen desimal, dan bulan.',
         text: 'Apakah satuan sudah konsisten di seluruh kasus?',
         options: [['A', 'Ya, konsisten'], ['B', 'Tidak, ada campuran'], ['C', 'Belum diperiksa']]
       },
       {
-        id: 'A3-02', context: 'Beberapa kasus memiliki nilai 0 dan null yang berbeda arti.',
+        id: 'A3-02', context: '[Kasus/asal] Meta 29 kasus. [Produk/metode] Semua. [Asal angka] 0/null dari tiap JSON. [Status] `[E]`. Beberapa kasus memiliki nilai 0 dan null yang berbeda arti.',
         text: 'Apakah 0 dan null dibedakan dengan benar?',
         options: [['A', 'Ya, dibedakan'], ['B', 'Tidak, diperlakukan sama'], ['C', 'Belum diuji']]
       },
       {
-        id: 'A3-03', context: 'Hasil harus dapat direproduksi di mesin lain.',
+        id: 'A3-03', context: '[Kasus/asal] Meta 29 kasus. [Produk/metode] Semua. [Asal angka] Determinisme dari test. [Status] `[E]`. Hasil harus dapat direproduksi di mesin lain.',
         text: 'Apakah hasil deterministik dan bebas waktu/acak?',
         options: [['A', 'Ya'], ['B', 'Tidak'], ['C', 'Sebagian']]
       },
       {
-        id: 'A3-04', context: 'Setiap kasus memerlukan pemilik dan tanggal verifikasi.',
+        id: 'A3-04', context: '[Kasus/asal] Meta 29 kasus. [Produk/metode] Semua. [Asal angka] Pemilik/tanggal. [Status] `[K]` pending. Setiap kasus memerlukan pemilik dan tanggal verifikasi.',
         text: 'Apakah semua kasus punya pemilik dan tanggal?',
         options: [['A', 'Ya, lengkap'], ['B', 'Belum lengkap'], ['C', 'Tidak diperlukan']]
       }
@@ -619,42 +619,42 @@ const sections = [
     intro: 'Snapshot adalah salinan parameter kebijakan (id, versi, dan nilai) yang disimpan saat permohonan dibuat. Grandfathering berarti permohonan lama tetap memakai snapshot lama meskipun policy ACTIVE berubah. Permohonan baru memakai policy baru. Snapshot tidak boleh diubah setelah create; bila snapshot lama tidak ada, sistem memakai FK parameter historis, bukan policy ACTIVE saat ini.',
     questions: [
       {
-        id: 'B1-01', context: 'Permohonan baru dibuat saat policy ACTIVE versi tertentu.',
+        id: 'B1-01', context: '[Kasus/asal] Kode/migrasi. [Produk/metode] Snapshot. [Asal angka] Skema `parameter_snapshot`. [Status] `[E]`. Permohonan baru dibuat saat policy ACTIVE versi tertentu.',
         text: 'Apa yang disimpan pada parameter_snapshot?',
         options: [['A', 'id, version, dan params'], ['B', 'Hanya id'], ['C', 'Tidak disimpan']]
       },
       {
-        id: 'B1-02', context: 'Policy ACTIVE diubah setelah permohonan lama dibuat.',
+        id: 'B1-02', context: '[Kasus/asal] Kode/test. [Produk/metode] Snapshot. [Asal angka] `GrandfatheringTest`. [Status] `[E]`. Policy ACTIVE diubah setelah permohonan lama dibuat.',
         text: 'Hasil analisis permohonan lama seharusnya...',
         options: [['A', 'Tetap memakai snapshot lama'], ['B', 'Ikut policy baru'], ['C', 'Error']]
       },
       {
-        id: 'B1-03', context: 'Permohonan baru dibuat setelah policy baru diaktifkan.',
+        id: 'B1-03', context: '[Kasus/asal] Kode/test. [Produk/metode] Snapshot. [Asal angka] Snapshot baru. [Status] `[E]`. Permohonan baru dibuat setelah policy baru diaktifkan.',
         text: 'Permohonan baru memakai...',
         options: [['A', 'Policy baru'], ['B', 'Policy lama'], ['C', 'Tidak ada policy']]
       },
       {
-        id: 'B1-04', context: 'Resolver parameter memiliki method forPermohonan().',
+        id: 'B1-04', context: '[Kasus/asal] Kode. [Produk/metode] Snapshot. [Asal angka] `forPermohonan`. [Status] `[E]`. Resolver parameter memiliki method forPermohonan().',
         text: 'Apakah forPermohonan boleh fallback ke active()?',
         options: [['A', 'Tidak, harus throw'], ['B', 'Boleh'], ['C', 'Boleh jika snapshot kosong']]
       },
       {
-        id: 'B1-05', context: 'Snapshot sudah tersimpan pada permohonan.',
+        id: 'B1-05', context: '[Kasus/asal] Kode/test. [Produk/metode] Snapshot. [Asal angka] Guard immutable. [Status] `[E]`. Snapshot sudah tersimpan pada permohonan.',
         text: 'Apakah snapshot boleh diubah lewat update biasa?',
         options: [['A', 'Tidak, immutable'], ['B', 'Boleh'], ['C', 'Boleh oleh admin']]
       },
       {
-        id: 'B1-06', context: 'Permohonan lama belum memiliki parameter_snapshot.',
+        id: 'B1-06', context: '[Kasus/asal] Kode. [Produk/metode] Snapshot. [Asal angka] Fallback FK. [Status] `[E]`. Permohonan lama belum memiliki parameter_snapshot.',
         text: 'Fallback yang benar adalah...',
         options: [['A', 'FK parameter_kebijakan_id historis'], ['B', 'Policy ACTIVE'], ['C', 'Nilai default hardcode']]
       },
       {
-        id: 'B1-07', context: 'Rule engine mengevaluasi aturan pada permohonan.',
+        id: 'B1-07', context: '[Kasus/asal] Kode 15 rule. [Produk/metode] Snapshot. [Asal angka] `params($permohonan)`. [Status] `[E]`. Rule engine mengevaluasi aturan pada permohonan.',
         text: 'Sumber parameter yang dipakai rule adalah...',
         options: [['A', 'Snapshot permohonan'], ['B', 'Policy ACTIVE'], ['C', 'Config']]
       },
       {
-        id: 'B1-08', context: 'Setting policy memiliki alur draft→approve→apply.',
+        id: 'B1-08', context: '[Kasus/asal] Setting design. [Produk/metode] Policy. [Asal angka] Versi baru. [Status] `[E]`. Setting policy memiliki alur draft→approve→apply.',
         text: 'Perubahan policy sebaiknya...',
         options: [['A', 'Membuat versi baru, tidak menimpa lama'], ['B', 'Menimpa baris lama'], ['C', 'Langsung edit DB']]
       }
@@ -667,42 +667,42 @@ const sections = [
     intro: 'Stage-aware berarti aturan tidak dijalankan sekaligus. Saat submit, analisis dan approval belum ada, jadi hanya aturan awal yang dievaluasi. Saat analisis, aturan kapasitas/IDIR/DSCR dievaluasi dan dicatat. Saat approve, hard gate menahan persetujuan bila ada pelanggaran. Hard stop menolak; soft warning hanya memberi perhatian. BR-06 (urutan approval) ditangani ApprovalService agar tidak rekursif.',
     questions: [
       {
-        id: 'B2-01', context: 'Saat submit, analisis dan approval belum tersedia.',
+        id: 'B2-01', context: '[Kasus/asal] Kode/test. [Produk/metode] Stage submit. [Asal angka] `STAGE_SUBMIT`. [Status] `[E]`. Saat submit, analisis dan approval belum tersedia.',
         text: 'Aturan yang dievaluasi saat submit adalah...',
         options: [['A', 'BR-04/08/14/15'], ['B', 'Semua BR'], ['C', 'BR-06 saja']]
       },
       {
-        id: 'B2-02', context: 'Analisis kapasitas sudah dihitung.',
+        id: 'B2-02', context: '[Kasus/asal] Kode/test. [Produk/metode] Stage analisis. [Asal angka] `STAGE_ANALISIS`. [Status] `[E]`. Analisis kapasitas sudah dihitung.',
         text: 'Aturan analisis yang dievaluasi mencakup...',
         options: [['A', 'BR-01/02/03/10/11/11H/12/13'], ['B', 'Hanya BR-11'], ['C', 'Tidak ada']]
       },
       {
-        id: 'B2-03', context: 'Approval komite dijalankan.',
+        id: 'B2-03', context: '[Kasus/asal] Kode/test. [Produk/metode] Stage approve. [Asal angka] `STAGE_APPROVE`. [Status] `[E]`. Approval komite dijalankan.',
         text: 'Hard gate approve mencakup...',
         options: [['A', 'BR-01/02/03/05/11H/13'], ['B', 'Semua BR termasuk BR-06'], ['C', 'Hanya BR-06']]
       },
       {
-        id: 'B2-04', context: 'BR-06 mengatur urutan approval dan dapat rekursif.',
+        id: 'B2-04', context: '[Kasus/asal] Kode. [Produk/metode] Stage approve. [Asal angka] BR-06 di ApprovalService. [Status] `[E]`. BR-06 mengatur urutan approval dan dapat rekursif.',
         text: 'BR-06 pada approve sebaiknya...',
         options: [['A', 'Dikecualikan dari engine, ditangani ApprovalService'], ['B', 'Dijalankan di engine'], ['C', 'Dihapus']]
       },
       {
-        id: 'B2-05', context: 'User tanpa izin mencoba approve.',
+        id: 'B2-05', context: '[Kasus/asal] Kode/test. [Produk/metode] Approve. [Asal angka] Autorization sebelum gate. [Status] `[E]`. User tanpa izin mencoba approve.',
         text: 'Urutan yang benar adalah...',
         options: [['A', 'Autorisasi dulu, baru hard gate'], ['B', 'Hard gate dulu, baru autorisasi'], ['C', 'Tidak perlu autorisasi']]
       },
       {
-        id: 'B3-01', context: 'IDIR 35% adalah batas warning; 80% batas hard stop.',
+        id: 'B3-01', context: '[Kasus/asal] Seeder. [Produk/metode] IDIR. [Asal angka] 0,35 `idir_threshold_tpp`. [Status] `[E]` seed / `[K]` policy. IDIR 35% adalah batas warning; 80% batas hard stop.',
         text: 'Status IDIR 35,01% adalah...',
         options: [['A', 'PERHATIAN'], ['B', 'TIDAK LAYAK'], ['C', 'LAYAK']]
       },
       {
-        id: 'B3-02', context: 'Batas hard stop 80%.',
+        id: 'B3-02', context: '[Kasus/asal] X1 D35 + policy. [Produk/metode] IDIR. [Asal angka] 0,80 hard stop. [Status] `[K]`. Batas hard stop 80%.',
         text: 'Status IDIR 80,00% adalah...',
         options: [['A', 'Lolos hard stop, warning'], ['B', 'Hard stop'], ['C', 'Tidak dihitung']]
       },
       {
-        id: 'B3-03', context: 'IDIR belum dihitung saat approve TPP.',
+        id: 'B3-03', context: '[Kasus/asal] Kode. [Produk/metode] IDIR. [Asal angka] `BR11IdirHardStop`. [Status] `[E]`. IDIR belum dihitung saat approve TPP.',
         text: 'Yang benar adalah...',
         options: [['A', 'Tolak approve'], ['B', 'Loloskan'], ['C', 'Anggap 0']]
       }
@@ -715,42 +715,42 @@ const sections = [
     intro: 'Sequence adalah counter nomor yang harus atomik agar dua request tidak mendapat nomor sama. Backfill mengisi counter dari nomor yang sudah terbit, memakai suffix tertinggi dan tidak boleh menurunkan nilai. Dedupe mencegah fasilitas yang sama dihitung dua kali. DSCR memakai total kewajiban: angsuran baru + seluruh angsuran SLIK aktif. Jika angsuran SLIK null, sistem boleh mengestimasi dan menandainya.',
     questions: [
       {
-        id: 'B4-01', context: 'Dua request submit bersamaan meminta nomor baru.',
+        id: 'B4-01', context: '[Kasus/asal] Kode/test. [Produk/metode] Sequence. [Asal angka] SQL upsert. [Status] `[E]`. Dua request submit bersamaan meminta nomor baru.',
         text: 'Mekanisme yang benar adalah...',
         options: [['A', 'INSERT ... ON CONFLICT ... RETURNING'], ['B', 'COUNT() + lock'], ['C', 'Random']]
       },
       {
-        id: 'B4-02', context: 'Scope penomoran harus sama untuk service dan backfill.',
+        id: 'B4-02', context: '[Kasus/asal] Kode/test. [Produk/metode] Sequence. [Asal angka] Scope lowercase. [Status] `[E]`. Scope penomoran harus sama untuk service dan backfill.',
         text: 'Scope yang benar adalah...',
         options: [['A', 'lowercase jenis:cabang:tahun'], ['B', 'UPPERCASE'], ['C', 'Tanpa tahun']]
       },
       {
-        id: 'B4-03', context: 'Format nomor kredit berbeda dari permohonan.',
+        id: 'B4-03', context: '[Kasus/asal] Kode/test. [Produk/metode] Sequence. [Asal angka] Format kredit. [Status] `[E]`. Format nomor kredit berbeda dari permohonan.',
         text: 'Format kredit yang benar adalah...',
         options: [['A', 'KDI/2026/K/0001'], ['B', 'KDI/2026/0001'], ['C', '0001']]
       },
       {
-        id: 'B4-04', context: 'Backfill membaca nomor lama.',
+        id: 'B4-04', context: '[Kasus/asal] Seeder. [Produk/metode] Backfill. [Asal angka] `MAX(suffix)`. [Status] `[E]`. Backfill membaca nomor lama.',
         text: 'Nilai sequence diambil dari...',
         options: [['A', 'MAX(suffix)'], ['B', 'COUNT(rows)'], ['C', 'MIN(suffix)']]
       },
       {
-        id: 'B4-05', context: 'Backfill dijalankan dua kali.',
+        id: 'B4-05', context: '[Kasus/asal] Seeder/test. [Produk/metode] Backfill. [Asal angka] `GREATEST`. [Status] `[E]`. Backfill dijalankan dua kali.',
         text: 'Sequence harus...',
         options: [['A', 'Tidak turun (GREATEST)'], ['B', 'Reset'], ['C', 'Naik dua kali']]
       },
       {
-        id: 'B5-01', context: 'SLIK memuat fasilitas dengan baki 0 dan baki > 0.',
+        id: 'B5-01', context: '[Kasus/asal] Kode/test. [Produk/metode] DSCR. [Asal angka] Baki > 0. [Status] `[E]`. SLIK memuat fasilitas dengan baki 0 dan baki > 0.',
         text: 'Fasilitas yang masuk DSCR adalah...',
         options: [['A', 'baki_debet > 0'], ['B', 'Semua'], ['C', 'baki = 0']]
       },
       {
-        id: 'B5-02', context: 'Fasilitas yang sama tercatat di debitur dan pasangan.',
+        id: 'B5-02', context: '[Kasus/asal] Kode/test. [Produk/metode] DSCR. [Asal angka] Dedupe no_fasilitas. [Status] `[E]`. Fasilitas yang sama tercatat di debitur dan pasangan.',
         text: 'Dedupe dilakukan dengan...',
         options: [['A', 'no_fasilitas (fallback natural key)'], ['B', 'Nama debitur'], ['C', 'Tidak didedupe']]
       },
       {
-        id: 'B5-03', context: 'Angsuran SLIK null.',
+        id: 'B5-03', context: '[Kasus/asal] Kode/test. [Produk/metode] DSCR. [Asal angka] Estimasi + flag. [Status] `[E]`. Angsuran SLIK null.',
         text: 'Perlakuan yang benar adalah...',
         options: [['A', 'Estimasi flat + flag is_angsuran_estimated'], ['B', 'Anggap 0'], ['C', 'Abaikan fasilitas']]
       }
@@ -763,42 +763,42 @@ const sections = [
     intro: 'Workbench adalah layar analisis tempat AO mengisi neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas, dan scoring. Setiap aksi harus dibatasi cabang dan izin. Ledger adalah catatan audit append-only; audit log mencatat aturan yang dievaluasi. UAT adalah pengujian oleh pengguna sebelum rilis. PII adalah data pribadi yang tidak boleh bocor ke log atau pengguna lintas cabang.',
     questions: [
       {
-        id: 'B6-01', context: 'Workbench analisis dibuka oleh user cabang lain.',
+        id: 'B6-01', context: '[Kasus/asal] Kode/test. [Produk/metode] UI. [Asal angka] 403 lintas cabang. [Status] `[E]`. Workbench analisis dibuka oleh user cabang lain.',
         text: 'Respons yang benar adalah...',
         options: [['A', '403'], ['B', '200'], ['C', 'Redirect dashboard']]
       },
       {
-        id: 'B6-02', context: 'Neraca tidak seimbang.',
+        id: 'B6-02', context: '[Kasus/asal] Workbench/plan. [Produk/metode] UI. [Asal angka] Banner; submit tetap aktif. [Status] `[E]` banner / `[K]` submit. Neraca tidak seimbang.',
         text: 'Perilaku yang benar adalah...',
         options: [['A', 'Submit tetap aktif + banner/audit'], ['B', 'Blokir submit'], ['C', 'Abaikan']]
       },
       {
-        id: 'B6-03', context: 'Workbench memiliki tab analisis.',
+        id: 'B6-03', context: '[Kasus/asal] Kode/test. [Produk/metode] UI. [Asal angka] Tab workbench. [Status] `[E]`. Workbench memiliki tab analisis.',
         text: 'Tab minimum yang benar adalah...',
         options: [['A', 'Neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas, scoring'], ['B', 'Hanya neraca'], ['C', 'Hanya scoring']]
       },
       {
-        id: 'B7-01', context: 'Setiap analisis disimpan.',
+        id: 'B7-01', context: '[Kasus/asal] Kode/test. [Produk/metode] Audit. [Asal angka] Ledger + buku besar. [Status] `[E]`. Setiap analisis disimpan.',
         text: 'Jejak yang wajib dibuat adalah...',
         options: [['A', 'Ledger + buku besar + audit'], ['B', 'Cukup DB'], ['C', 'Tidak perlu']]
       },
       {
-        id: 'B7-02', context: 'Trigger immutability aktif.',
+        id: 'B7-02', context: '[Kasus/asal] Migrasi/test. [Produk/metode] Audit. [Asal angka] Trigger immutability. [Status] `[E]`. Trigger immutability aktif.',
         text: 'UPDATE/DELETE pada ledger/register harus...',
         options: [['A', 'Ditolak'], ['B', 'Diizinkan'], ['C', 'Diizinkan admin']]
       },
       {
-        id: 'B8-01', context: 'Deployment mengubah skema dan sequence.',
+        id: 'B8-01', context: '[Kasus/asal] Runbook/plan. [Produk/metode] Deploy. [Asal angka] Backup → migrasi → backfill. [Status] `[Rencana]` drill. Deployment mengubah skema dan sequence.',
         text: 'Urutan yang benar adalah...',
         options: [['A', 'Backup → migrasi → backfill → aktifkan'], ['B', 'Migrasi → aktifkan'], ['C', 'Aktifkan → migrasi']]
       },
       {
-        id: 'B9-01', context: 'Sebelum rilis produksi.',
+        id: 'B9-01', context: '[Kasus/asal] Evidence. [Produk/metode] Rilis. [Asal angka] verify full; backup/UAT pending. [Status] `[E]` verify / `[K]` UAT. Sebelum rilis produksi.',
         text: 'Gate yang wajib lulus adalah...',
         options: [['A', 'verify --full, backup/restore, UAT'], ['B', 'Cukup test unit'], ['C', 'Cukup manual']]
       },
       {
-        id: 'B10-01', context: 'File token GitHub ditemukan di direktori spesifikasi.',
+        id: 'B10-01', context: '[Kasus/asal] Temuan file. [Produk/metode] Keamanan. [Asal angka] Token ditemukan. [Status] `[E]` temuan / `[K]` rotasi. File token GitHub ditemukan di direktori spesifikasi.',
         text: 'Tindakan yang benar adalah...',
         options: [['A', 'Rotasi dan hapus'], ['B', 'Biarkan'], ['C', 'Commit agar tim tahu']]
       }
