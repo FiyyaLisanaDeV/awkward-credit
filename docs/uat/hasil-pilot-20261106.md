@@ -11,17 +11,18 @@
 
 | Username | Role | Email | Password |
 |---|---|---|---|
-| `ao.pilot` | AO | `ao.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `ao2.pilot` | AO | `ao2.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `mgr.pilot` | MGR_PEMASARAN | `mgr.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `koordinator.pilot` | KOORDINATOR | `koordinator.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `dirut.pilot` | DIRUT | `dirut.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `komite.pilot` | KOMITE | `komite.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `admin.pilot` | ADMIN | `admin.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `legal.pilot` | LEGAL | `legal.pilot@bpr-pilot.local` | `Pilot#2026!` |
-| `auditor.pilot` | AUDITOR | `auditor.pilot@bpr-pilot.local` | `Pilot#2026!` |
+| `ao.pilot` | AO | `ao.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `ao2.pilot` | AO | `ao2.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `mgr.pilot` | MGR_PEMASARAN | `mgr.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `koordinator.pilot` | KOORDINATOR | `koordinator.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `dirut.pilot` | DIRUT | `dirut.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `komite.pilot` | KOMITE | `komite.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `admin.pilot` | ADMIN | `admin.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `legal.pilot` | LEGAL | `legal.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
+| `auditor.pilot` | AUDITOR | `auditor.pilot@bpr-pilot.local` | env `PILOT_INITIAL_PASSWORD` |
 
 Dibuat oleh `Database\Seeders\Local\PilotUatSeeder` (menolak berjalan bila `APP_ENV=production`).
+Password **tidak** disimpan di repo; isi `PILOT_INITIAL_PASSWORD` di `.env` lokal sebelum seeding.
 
 ## 2. Data pilot
 

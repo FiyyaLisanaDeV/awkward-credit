@@ -98,6 +98,7 @@ return [
         'slow_query_ms' => (int) env('SLOW_QUERY_MS', 500),
         'admin_initial_password' => env('ADMIN_INITIAL_PASSWORD'),
         'auditor_initial_password' => env('AUDITOR_INITIAL_PASSWORD'),
+        'pilot_initial_password' => env('PILOT_INITIAL_PASSWORD'),
     ],
 
 ];

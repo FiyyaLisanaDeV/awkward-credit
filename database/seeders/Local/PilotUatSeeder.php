@@ -18,6 +18,7 @@ use App\Services\Kredit\PembayaranService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * Data pilot/UAT 1 cabang (KDI). Hanya untuk lingkungan lokal.
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  */
 final class PilotUatSeeder extends Seeder
 {
-    private const PILOT_PASSWORD = 'Pilot#2026!';
+    private string $password = '';
 
     public function run(): void
     {
@@ -34,6 +35,8 @@ final class PilotUatSeeder extends Seeder
 
             return;
         }
+
+        $this->password = (string) (config('loan.security.pilot_initial_password') ?: Str::password(16));
 
         $cabangId = DB::table('cabang')->where('kode', 'KDI')->value('id');
 
@@ -70,7 +73,7 @@ final class PilotUatSeeder extends Seeder
 
         $this->approveAndCash($approved, $users);
 
-        $this->command?->info('Pilot UAT siap. Login password: '.self::PILOT_PASSWORD);
+        $this->command?->info('Pilot UAT siap. Password user baru: '.$this->password.' (dari PILOT_INITIAL_PASSWORD; user lama tidak diubah).');
         $this->command?->table(['username', 'role', 'nama'], array_map(
             static fn (User $user): array => [$user->username, $user->getRoleNames()->implode(','), $user->name],
             $users,
@@ -106,7 +109,7 @@ final class PilotUatSeeder extends Seeder
                     'cabang_id' => $cabangId,
                     'name' => $name,
                     'email' => $username.'@bpr-pilot.local',
-                    'password' => self::PILOT_PASSWORD,
+                    'password' => $this->password,
                     'jabatan' => $role,
                     'is_active' => true,
                     'must_change_password' => false,
