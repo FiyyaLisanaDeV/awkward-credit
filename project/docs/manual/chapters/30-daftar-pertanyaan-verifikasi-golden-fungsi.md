@@ -234,7 +234,107 @@ Format jawaban:
 | B10.5 | Apakah audit akses PII tercatat? | DB |
 | B10.6 | Apakah tidak ada SQLite/ledger lokal? | code review |
 
-## 30.4 Status & keputusan
+### B11. Performance & reliability
+
+| ID | Pertanyaan | Insight | Bukti |
+|---|---|---|---|
+| B11.1 | Berapa query per halaman workbench? | Deteksi N+1 | query log |
+| B11.2 | Apakah index dipakai untuk filter cabang/status? | Query cepat | EXPLAIN |
+| B11.3 | Apakah jadwal 360 periode tetap responsif? | UI tidak timeout | profiling |
+| B11.4 | Apakah PDF/dokumen berat memakai memori wajar? | Tidak 500 | memory log |
+| B11.5 | Apakah import memakai chunk? | Tidak OOM | kode |
+| B11.6 | Apakah cache punya invalidasi? | Data segar | test |
+| B11.7 | Apakah lock contention diukur? | Throughput | test beban |
+| B11.8 | Apakah slow query dipantau? | Proaktif | log |
+| B11.9 | Apakah retry aman (idempoten)? | Tidak duplikat | test |
+| B11.10 | Apakah health check tersedia? | Monitoring | curl |
+
+### B12. Integritas data & migrasi
+
+| ID | Pertanyaan | Insight | Bukti |
+|---|---|---|---|
+| B12.1 | Apakah migrasi reversible? | Rollback aman | `down()` |
+| B12.2 | Apakah FK/index baru lengkap? | Integritas | skema |
+| B12.3 | Apakah unique constraint tidak bentrok soft delete? | Data valid | index |
+| B12.4 | Apakah backfill idempoten? | Aman diulang | test |
+| B12.5 | Apakah snapshot/ledger tidak bisa diubah? | Audit | trigger |
+| B12.6 | Apakah timezone konsisten? | Hash/tanggal | test |
+| B12.7 | Apakah data lama tetap terbaca? | Kompatibilitas | query |
+| B12.8 | Apakah seed referensi punya provenance? | Audit | seeder |
+| B12.9 | Apakah skema cocok dengan INVENTARIS? | Dokumen akurat | diff |
+| B12.10 | Apakah rollback diuji di DB salinan? | Aman | log |
+
+### B13. Deployment & rollback
+
+| ID | Pertanyaan | Insight | Bukti |
+|---|---|---|---|
+| B13.1 | Apakah backup dijalankan sebelum migrasi? | Recovery | log |
+| B13.2 | Apakah restore drill lulus? | Backup valid | log |
+| B13.3 | Apakah rollback plan ada? | Aman | runbook |
+| B13.4 | Apakah urutan migrasi aman? | Tidak downtime | log |
+| B13.5 | Apakah seeder backfill dijalankan sebelum aktif? | Tidak duplikat | log |
+| B13.6 | Apakah env produksi benar? | Tidak debug | config |
+| B13.7 | Apakah versi/tag rilis jelas? | Traceable | git |
+| B13.8 | Apakah deployment terdokumentasi? | Konsisten | runbook |
+| B13.9 | Apakah health check pasca-deploy? | Cepat deteksi | curl |
+| B13.10 | Apakah UAT/sign-off ada? | Kesiapan | berita acara |
+
+### B14. Observability & operasional
+
+| ID | Pertanyaan | Insight | Bukti |
+|---|---|---|---|
+| B14.1 | Apakah error penting masuk log? | Debug | log |
+| B14.2 | Apakah log tidak memuat PII? | Privasi | sample |
+| B14.3 | Apakah alert untuk kegagalan ledger? | Deteksi | config |
+| B14.4 | Apakah scheduler `ledger:verify` berjalan? | Integritas | log |
+| B14.5 | Apakah job gagal bisa di-retry? | Resilien | kode |
+| B14.6 | Apakah disk/memori dipantau? | Stabil | monitoring |
+| B14.7 | Apakah audit akses PII tercatat? | Kepatuhan | DB |
+| B14.8 | Apakah notifikasi kegagalan sampai ke admin? | Respons | test |
+| B14.9 | Apakah runbook insiden ada? | Reaksi cepat | dokumen |
+| B14.10 | Apakah waktu operasi tercatat? | SLA | log |
+
+### B15. UX, aksesibilitas & pelatihan
+
+| ID | Pertanyaan | Insight | Bukti |
+|---|---|---|---|
+| B15.1 | Apakah label form selalu terlihat? | Tidak salah isi | UI |
+| B15.2 | Apakah error validasi jelas? | Bisa diperbaiki | UI |
+| B15.3 | Apakah status memakai teks+ikon, bukan warna saja? | Aksesibel | UI |
+| B15.4 | Apakah angka diformat Indonesia? | Tidak salah baca | UI |
+| B15.5 | Apakah tombol utama jelas? | Alur cepat | UI |
+| B15.6 | Apakah konfirmasi untuk aksi irreversible? | Cegah salah | UI |
+| B15.7 | Apakah loading state mencegah double submit? | Data tidak ganda | UI |
+| B15.8 | Apakah empty state memberi arahan? | User mandiri | UI |
+| B15.9 | Apakah manual/FAQ memperbarui fitur baru? | Adopsi | docs |
+| B15.10 | Apakah pelatihan/UAT mencakup alur baru? | Kesiapan | berita acara |
+
+## 30.4 Pertanyaan lintas-kasus (A3)
+
+| ID | Pertanyaan | Insight |
+|---|---|---|
+| A3.1 | Apakah semua kasus memakai satuan yang sama (rupiah/persen/bulan)? | Mencegah salah tafsir |
+| A3.2 | Apakah ada kasus yang saling bertentangan? | Deteksi kontradiksi |
+| A3.3 | Apakah boundary IDIR konsisten di semua kasus? | Bug ambang |
+| A3.4 | Apakah EIR di semua kasus memakai metode yang sama? | Konsistensi |
+| A3.5 | Apakah kasus grace memakai definisi kewajiban yang sama? | Salah basis |
+| A3.6 | Apakah DSCR selalu memasukkan SLIK? | DSCR optimistis |
+| A3.7 | Apakah biaya kredit konsisten antar produk? | Dana diterima |
+| A3.8 | Apakah penalti/payoff konsisten? | Top-up |
+| A3.9 | Apakah LTV memakai basis yang sama? | Double haircut |
+| A3.10 | Apakah bobot 5C sama di semua kasus? | Skor drift |
+| A3.11 | Apakah override SLIK punya aturan sama? | Inconsistency |
+| A3.12 | Apakah stress test memakai delta sama? | Skenario |
+| A3.13 | Apakah kasus negatif benar-benar ditolak? | False pass |
+| A3.14 | Apakah nilai “0” dan “null” dibedakan? | Bug data |
+| A3.15 | Apakah pembulatan memengaruhi status? | Boundary |
+| A3.16 | Apakah kasus dengan plafon kecil diuji? | Rounding |
+| A3.17 | Apakah tenor 1/360 diuji? | Edge |
+| A3.18 | Apakah rate 0 diuji? | Division |
+| A3.19 | Apakah hasil bisa direproduksi di mesin lain? | Determinisme |
+| A3.20 | Apakah semua kasus punya pemilik & tanggal? | Accountability |
+
+## 30.5 Status & keputusan
 
 | Status | Arti |
 |---|---|
@@ -247,7 +347,7 @@ Aturan:
 2. Fungsi aplikasi dianggap siap rilis hanya jika B1–B10 tidak ada GAGAL pada item kritis.
 3. `UNKNOWN` pada golden atau backup/UAT berarti status rilis tetap **PARTIAL**.
 
-## 30.5 Bukti yang harus dilampirkan
+## 30.6 Bukti yang harus dilampirkan
 
 - Salinan formula/sel (tanpa PII) atau screenshot yang dianonimkan.
 - Skrip hitung ulang independen + output.
@@ -255,10 +355,21 @@ Aturan:
 - Formulir tanda tangan ahli/reviewer.
 - Daftar konflik/koreksi yang disetujui.
 
-## 30.6 Larangan
+## 30.7 Larangan
 
 - Menjawab “sesuai standar” tanpa pasal/sumber.
 - Mengisi `verified=true` tanpa nama/tanggal/evidence.
 - Memakai 1,81×/0,87×.
 - Mengubah expected agar test hijau.
 - Menyalin PII ke wiki/formulir.
+
+## 30.8 Versi web kuisioner
+
+Formulir ini tersedia sebagai web app mandiri di repo aplikasi:
+
+- File: `public/kuisioner-golden.html`
+- URL lokal: `https://loan-analytic-bpr.test/kuisioner-golden.html`
+- 9 bagian, 72 pertanyaan berkonteks.
+- Opsi A–C sudah dibakukan; opsi D wajib diisi bebas.
+- Progress per bagian, simpan lokal (fallback memori), ekspor JSON, cetak.
+- Tanpa Node/npm/Vite; tidak mengirim data ke server.
