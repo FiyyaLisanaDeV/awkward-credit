@@ -18,7 +18,7 @@
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
 | Jumlah migrasi DB aplikasi | 70 (termasuk snapshot parameter, kolom SLIK, IDIR hard stop) | 2026-11-07 |
 | Jumlah route | 105 (42 API v1 + web/admin) | 2026-11-07 |
-| Jumlah test | **206 test**, 2152 assertions | 2026-11-07 |
+| Jumlah test | **206 test**, 2156 assertions | 2026-11-07 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | OK — 20 baris, rantai utuh | 2026-11-06 |
 | Bukti fase terakhir | `docs/evidence/produksi-20261107/verify-full.txt` | 2026-11-07 |
@@ -96,7 +96,7 @@ NEXT: 1) UAT 3 cabang + berita acara; 2) tanda tangan SOP/manual; 3) Fase 12B im
 
 | Tanggal | Sesi | Fase | Ringkasan | Perintah verifikasi | Hasil | Commit |
 |---|---|---|---|---|---|---|
-| 2026-11-07 | 26 | Gate 1–7 | Snapshot parameter + `forPermohonan`; stage-aware engine + BR-11H; penomoran atomik + backfill; SLIK aggregation + DSCR; workbench MVP `/permohonan/{id}/analisis`; fixture G-TPP-03; ADR-027..030; `DocsCheck`/`StateCheck` | `php artisan migrate`; `db:seed BackfillNomorSequenceSeeder`; `bash scripts/verify.sh --full`; `ledger:verify` | **206 test / 2152 assertions**, verify full OK, hardcode 0, ledger 20 baris; golden verified=29 & input penuh Sheet 4/5/7/8 masih pending [K] | — |
+| 2026-11-07 | 26 | Gate 1–7 | Snapshot parameter + `forPermohonan`; stage-aware engine + BR-11H; penomoran atomik + backfill; SLIK aggregation + DSCR; workbench Sheet 3–9 (neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas 6 skenario, scoring); fixture G-TPP-03; ADR-027..030; `DocsCheck`/`StateCheck` | `php artisan migrate`; `db:seed BackfillNomorSequenceSeeder`; `bash scripts/verify.sh --full`; `ledger:verify` | **206 test / 2156 assertions**, verify full OK, hardcode 0, ledger 20 baris; golden verified=29 masih pending [K] | — |
 | 2026-11-06 | 24 | 16–19 | **Buku Besar Kredit + Buku Agunan (immutable) + Nomor CIF**: 4 migrasi, 2 register append-only ber-hash-chain + trigger, CIF atomik via `nomor_sequence`, hook lifecycle, UI `/buku-besar` & `/buku-agunan`, permission `register.*`; rincian `docs/FITUR-BUKU-BESAR-CIF.md` | `migrate`; `cif:backfill`; `php artisan test tests/Feature/Debitur/CifTest.php tests/Feature/Register`; `verify.sh --full`; `hardcode:audit`; `ledger:verify` | OK — 194 test, 0 hardcode, ledger 20 baris | commit fitur ini |
 | 2026-11-06 | 23 | 16–19 | Go-live pilot: UI pencairan/dokumen/ledger/import, role DB non-superuser, backup/restore drill, masker PII, scheduler ledger:verify, materi UAT, runbook VPS, wiki Bab 25–26; rincian di `STATUS-GOLIVE-20261106.md` | `bash scripts/verify.sh --full`; `php artisan test --compact`; `ledger:verify`; `hardcode:audit`; `docs:check --strict`; `curl /health` | OK — 184 test, 20 baris ledger, 0 hardcode, 0 docs, HTTP 200 | commit catatan ini |
 | 2026-11-05 | perencanaan | — | Menyusun paket dokumen A–G: rencana v2.4, teknis 22 bab, inventaris 60 tabel/23 event/8 adapter, 22 prompt, ADR, protokol verifikasi; baseline lingkungan direkam | `sw_vers`, `php -v`, `pg_isready`, `psql`, `composer -V`, `ls` (lihat evidence) | baseline lengkap, exit 0 | — (workspace belum repo) |

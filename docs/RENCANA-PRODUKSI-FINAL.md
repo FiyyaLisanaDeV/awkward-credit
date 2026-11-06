@@ -13,7 +13,7 @@
 | 3 — Penomoran atomik + backfill | DONE | `tests/Feature/Workflow/AtomicNomorServiceTest.php` |
 | 4 — SLIK & DSCR | DONE | `tests/Feature/Analisis/SlikAggregationTest.php` |
 | 5 — Golden 29 | PARTIAL | `G-TPP-03` diperbaiki; `verified=29` menunggu tanda tangan manusia |
-| 6 — Workbench analisis | PARTIAL (MVP) | Ringkasan, neraca, laba rugi, kapasitas, scoring read-only; input penuh Sheet 4/5/7/8 belum |
+| 6 — Workbench analisis | DONE | Ringkasan, neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas 6 skenario, scoring 5C |
 | 7 — QA & rilis | PARTIAL | `verify.sh --full` OK; backup/restore drill & UAT belum |
 
 Bukti: `docs/evidence/produksi-20261107/`.

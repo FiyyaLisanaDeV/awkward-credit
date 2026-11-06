@@ -27,7 +27,7 @@ final class Scoring5CService
             throw new InvalidArgumentException('Skor Condition harus antara 1 dan 5.');
         }
 
-        $params = $this->parameters->active();
+        $params = $this->parameters->forPermohonan($permohonan);
         $kapasitas = $permohonan->kapasitasBayar;
         $rasio = $permohonan->rasio;
 
