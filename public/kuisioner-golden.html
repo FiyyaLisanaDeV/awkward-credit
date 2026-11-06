@@ -83,6 +83,10 @@
     margin: 0 0 10px; padding: 8px 10px; border-left: 3px solid #d97706;
     background: #fffbeb; border-radius: 6px; color: #7c4a03; font-size: 13px;
   }
+  .q-essay-cue { margin: -4px 0 10px; color: #475569; font-size: 13px; }
+  .essay { margin-top: 12px; }
+  .essay textarea { min-height: 110px; }
+  .essay-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 4px; color: var(--muted); font-size: 12px; }
   .q-text { font-weight: 650; margin: 0 0 12px; }
   .options { display: grid; gap: 8px; }
   .option {
@@ -198,6 +202,8 @@
         Pilih <strong>D</strong> bila jawaban Anda tidak tercakup; kolom teks D wajib diisi.
         Untuk pertanyaan status: <strong>A = LULUS/sesuai</strong>, <strong>B = GAGAL/tidak sesuai</strong>,
         <strong>C = UNKNOWN/perlu bukti</strong>, <strong>D = lainnya</strong>.
+        Setiap pertanyaan juga wajib diuraikan pada kolom <strong>esai</strong>: sebutkan sumber/sel,
+        langkah perhitungan, alasan memilih, dan risiko bila salah.
         Istilah asing/singkatan bisa dibuka lewat tombol <strong>Glosarium</strong>.
       </div>
     </div>
@@ -836,8 +842,8 @@ function saveState() {
 function isAnswered(q) {
   const a = answers[q.id];
   if (!a || !a.choice) return false;
-  if (a.choice === 'D') return (a.text || '').trim().length > 0;
-  return true;
+  if (a.choice === 'D' && !(a.text || '').trim()) return false;
+  return (a.essay || '').trim().length >= 20;
 }
 
 function progress() {
@@ -889,12 +895,17 @@ function render() {
       '<p class="q-narrative">' + escapeHtml(q.context) + '</p>' +
       '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+      '<p class="q-essay-cue">Uraikan secara lengkap: sumber/sel atau dasar angka, langkah perhitungan, alasan memilih jawaban, dan risiko bila jawaban ini salah.</p>' +
       '<div class="options">' + options +
         '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
         '<span><span class="key">D.</span> Lainnya — jelaskan dengan kata sendiri</span></label>' +
       '</div>' +
       '<div class="free"' + (a.choice === 'D' ? '' : ' hidden') + '>' +
         '<label class="field">Jawaban D<textarea data-free="' + q.id + '" placeholder="Tulis jawaban, sumber, atau alasan...">' + freeValue + '</textarea></label>' +
+      '</div>' +
+      '<div class="essay">' +
+        '<label class="field">Uraian esai (wajib)<textarea data-essay="' + q.id + '" placeholder="Sebutkan sumber/sel, langkah hitung, alasan memilih, dan risiko bila salah...">' + escapeHtml(a.essay || '') + '</textarea></label>' +
+        '<div class="essay-meta"><span>Minimal 20 karakter.</span><span data-count="' + q.id + '">' + (a.essay || '').trim().length + ' karakter</span></div>' +
       '</div>';
     host.appendChild(card);
   });
@@ -903,7 +914,7 @@ function render() {
     input.addEventListener('change', (event) => {
       const qid = event.target.name;
       const value = event.target.value;
-      answers[qid] = answers[qid] || { text: '' };
+      answers[qid] = answers[qid] || { text: '', essay: '' };
       answers[qid].choice = value;
       const card = event.target.closest('.question');
       const free = card.querySelector('.free');
@@ -918,8 +929,21 @@ function render() {
   host.querySelectorAll('textarea[data-free]').forEach((textarea) => {
     textarea.addEventListener('input', (event) => {
       const qid = event.target.dataset.free;
-      answers[qid] = answers[qid] || { choice: 'D', text: '' };
+      answers[qid] = answers[qid] || { choice: 'D', text: '', essay: '' };
       answers[qid].text = event.target.value;
+      saveState();
+      updateProgress();
+      renderNav();
+    });
+  });
+
+  host.querySelectorAll('textarea[data-essay]').forEach((textarea) => {
+    textarea.addEventListener('input', (event) => {
+      const qid = event.target.dataset.essay;
+      answers[qid] = answers[qid] || { choice: '', text: '', essay: '' };
+      answers[qid].essay = event.target.value;
+      const counter = host.querySelector('[data-count="' + qid + '"]');
+      if (counter) counter.textContent = event.target.value.trim().length + ' karakter';
       saveState();
       updateProgress();
       renderNav();
@@ -956,6 +980,7 @@ function exportPayload() {
       question: q.text,
       choice: a.choice || '',
       free_text: a.choice === 'D' ? (a.text || '') : '',
+      essay: a.essay || '',
       answered: isAnswered(q)
     };
   });
