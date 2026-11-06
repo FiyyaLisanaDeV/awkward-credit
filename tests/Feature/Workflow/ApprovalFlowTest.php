@@ -27,6 +27,9 @@ it('menyetujui berjenjang sampai APPROVED dan mencatat log, ledger, notifikasi',
 
     $service = app(ApprovalService::class);
 
+    fixtureKapasitas($permohonan);
+    fixtureChecklistLengkap($permohonan);
+
     $service->approve($permohonan, $admin, 'level 1 ok');
     expect($permohonan->fresh()->status)->toBe(StatusPermohonan::RECOMMENDED->value);
 

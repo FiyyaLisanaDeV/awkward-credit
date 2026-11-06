@@ -47,6 +47,7 @@ final class ParameterKebijakanSeeder extends Seeder
             'rasio_balloon_layak' => 1.10,
             'rasio_balloon_perhatian' => 1.00,
             'idir_threshold_tpp' => 0.35,
+            'idir_hard_stop_tpp' => 0.80,
             'plafon_kewajaran_multiplier' => 1.20,
             'biaya_provisi_default' => 0.01,
             'biaya_administrasi_default' => 0.01,

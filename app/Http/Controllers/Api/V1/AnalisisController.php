@@ -5,31 +5,21 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\LedgerEvent;
-use App\Enums\PolicyParameterKey;
-use App\Enums\ProdukTipe;
-use App\Enums\SistemSukuBunga;
-use App\Enums\StatusKelayakan;
 use App\Http\Controllers\Concerns\ScopesByCabang;
 use App\Http\Controllers\Controller;
-use App\Models\AnalisisKapasitasBayar;
 use App\Models\AnalisisLabaRugi;
 use App\Models\AnalisisNeraca;
 use App\Models\AnalisisRekomendasi;
 use App\Models\AnalisisScoring5c;
 use App\Models\PermohonanKredit;
 use App\Models\User;
-use App\Services\Calculation\AngsuranCalculator;
-use App\Services\Calculation\DscrCalculator;
-use App\Services\Calculation\IdirCalculator;
-use App\Services\Calculation\LtvCalculator;
-use App\Services\Calculation\PlafonMaxCalculator;
+use App\Services\Analisis\AnalisisRuleAuditService;
+use App\Services\Analisis\KapasitasService;
 use App\Services\Ledger\LedgerService;
-use App\Services\Policy\PolicyParameterResolver;
 use App\Services\Register\BukuBesarService;
 use App\Services\Scoring\RedFlagEvaluator;
 use App\Services\Scoring\RekomendasiService;
 use App\Services\Scoring\Scoring5CService;
-use App\Support\Rounding;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -38,7 +28,8 @@ final class AnalisisController extends Controller
     use ScopesByCabang;
 
     public function __construct(
-        private readonly PolicyParameterResolver $parameters,
+        private readonly KapasitasService $kapasitas,
+        private readonly AnalisisRuleAuditService $ruleAudit,
         private readonly LedgerService $ledger,
         private readonly BukuBesarService $bukuBesar,
     ) {}
@@ -148,58 +139,9 @@ final class AnalisisController extends Controller
             return response()->json(['message' => 'Laba rugi / surplus belum diisi.'], 422);
         }
 
-        $params = $this->parameters->active();
-        $plafon = (float) ($permohonan->plafon_rekomendasi ?? $permohonan->plafon_diajukan);
-        $rate = (float) $permohonan->suku_bunga_tahunan;
-        $tenor = (int) ($permohonan->tenor_rekomendasi ?? $permohonan->tenor_diajukan);
-        $sistem = SistemSukuBunga::from((string) $permohonan->sistem_suku_bunga);
-
-        $angsuran = (new AngsuranCalculator)->hitung($plafon, $rate, $tenor, $sistem);
-        $surplus = (float) $labaRugi->getAttribute('surplus_per_bulan');
-        $rpc = (new DscrCalculator)->rpc($surplus, $params->float(PolicyParameterKey::MarginKapasitasBayar));
-        $dscr = (new DscrCalculator)->dscr($rpc, $angsuran['total']);
-
-        $nilaiJaminan = (float) $permohonan->debitur->aset()->sum('nilai_diperhitungkan');
-        $ltv = (new LtvCalculator)->hitung($plafon, $nilaiJaminan);
-
-        $idir = $permohonan->produk?->tipe === ProdukTipe::TPP->value
-            ? (new IdirCalculator)->hitung($angsuran['total'], $surplus)
-            : null;
-
-        $plafonMax = (new PlafonMaxCalculator)->semua($rpc, $tenor, $rate);
-
-        $balloonTotal = null;
-        $balloonRatio = null;
-
-        if ($sistem === SistemSukuBunga::GracePeriod) {
-            $balloonTotal = Rounding::money($plafon + $angsuran['bunga']);
-            $perkiraan = (float) ($permohonan->perkiraan_penerimaan_balloon ?? 0);
-            $balloonRatio = $balloonTotal > 0 ? Rounding::ratio($perkiraan / $balloonTotal) : 0.0;
-        }
-
-        $data = [
-            'parameter_kebijakan_id' => $permohonan->parameter_kebijakan_id,
-            'rpc_bulanan' => $rpc,
-            'dscr_diajukan' => $dscr,
-            'status_dscr_diajukan' => $dscr >= $params->float(PolicyParameterKey::MinimumDscr) ? StatusKelayakan::Layak->value : StatusKelayakan::TidakLayak->value,
-            'dscr_rekomendasi' => $dscr,
-            'status_dscr_rekomendasi' => $dscr >= $params->float(PolicyParameterKey::MinimumDscr) ? StatusKelayakan::Layak->value : StatusKelayakan::TidakLayak->value,
-            'plafon_max_flat' => $plafonMax['flat'],
-            'plafon_max_anuitas' => $plafonMax['anuitas'],
-            'plafon_max_grace' => $plafonMax['grace'],
-            'ltv' => $ltv,
-            'idir' => $idir,
-            'total_pembayaran_jatuh_tempo' => $balloonTotal ?? 0.0,
-            'rasio_kecukupan_balloon' => $balloonRatio,
-            'status_kecukupan_balloon' => $balloonRatio === null
-                ? null
-                : ($balloonRatio >= $params->float(PolicyParameterKey::RasioBalloonLayak) ? StatusKelayakan::Layak->value : ($balloonRatio >= $params->float(PolicyParameterKey::RasioBalloonPerhatian) ? StatusKelayakan::Perhatian->value : StatusKelayakan::TidakLayak->value)),
-        ];
-
-        $kapasitas = AnalisisKapasitasBayar::query()->updateOrCreate(
-            ['permohonan_id' => $permohonan->id],
-            $data
-        );
+        $kapasitas = $this->kapasitas->compute($permohonan);
+        $dscr = (float) $kapasitas->dscr_rekomendasi;
+        $this->ruleAudit->evaluate($permohonan, $request->user() instanceof User ? $request->user() : null);
 
         $this->ledger->record(
             LedgerEvent::AnalisisDisimpan,

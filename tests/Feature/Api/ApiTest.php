@@ -124,6 +124,8 @@ it('menyetujui permohonan sesuai level', function () {
     // Band 0–10jt menuntut level 1 lalu level 2 (matriks v1.0).
     $permohonan = fixturePermohonan(['plafon_diajukan' => 5000000]);
     $permohonan->update(['status' => StatusPermohonan::SUBMITTED->value]);
+    fixtureKapasitas($permohonan);
+    fixtureChecklistLengkap($permohonan);
 
     $this->postJson('/api/v1/permohonan/'.$permohonan->id.'/approve')
         ->assertOk();

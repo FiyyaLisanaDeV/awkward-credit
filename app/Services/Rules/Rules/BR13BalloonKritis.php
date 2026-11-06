@@ -29,7 +29,7 @@ final class BR13BalloonKritis extends AbstractRule
             return $this->pass('Rasio balloon belum dihitung.');
         }
 
-        $batas = $this->params()->float(PolicyParameterKey::RasioBalloonPerhatian);
+        $batas = $this->params($permohonan)->float(PolicyParameterKey::RasioBalloonPerhatian);
 
         return (float) $rasio < $batas
             ? $this->fail('Rasio kecukupan balloon di bawah ambang kritis.', ['rasio' => (float) $rasio, 'batas' => $batas])

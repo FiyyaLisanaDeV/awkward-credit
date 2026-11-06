@@ -5,7 +5,7 @@
 | Versi | 2.4 |
 | Tanggal | 2026-11-05 |
 | Berlaku untuk | semua sesi manusia maupun agent pada proyek ini |
-| Dokumen terkait | [TEKNIS.md](TEKNIS.md) §0 · [PROGRESS.md](PROGRESS.md) · [DSH_PROMPTS_SIMPLE.md](DSH_PROMPTS_SIMPLE.md) §P0 |
+| Dokumen terkait | [TEKNIS.md](TEKNIS.md) §0 · [PROGRESS.md](PROGRESS.md) · [RENCANA-PRODUKSI-FINAL.md](RENCANA-PRODUKSI-FINAL.md) |
 
 ---
 

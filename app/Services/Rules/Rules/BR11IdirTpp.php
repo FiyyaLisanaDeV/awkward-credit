@@ -34,7 +34,7 @@ final class BR11IdirTpp extends AbstractRule
             return $this->pass('IDIR belum dihitung.');
         }
 
-        $batas = $this->params()->float(PolicyParameterKey::IdirThresholdTpp);
+        $batas = $this->params($permohonan)->float(PolicyParameterKey::IdirThresholdTpp);
 
         return (float) $idir > $batas
             ? $this->fail('IDIR TPP melebihi ambang.', ['idir' => (float) $idir, 'batas' => $batas])

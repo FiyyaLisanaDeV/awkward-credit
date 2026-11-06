@@ -1,0 +1,1 @@
+ledger:verify OK — 20 baris, rantai utuh

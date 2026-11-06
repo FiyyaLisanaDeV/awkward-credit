@@ -30,7 +30,7 @@ final class BR10KewajaranPlafon extends AbstractRule
         }
 
         $plafon = (float) ($permohonan->plafon_rekomendasi ?? $permohonan->plafon_diajukan);
-        $batas = $this->params()->float(PolicyParameterKey::PlafonKewajaranMultiplier) * (float) $modalKerja->rata_rata_kebutuhan_mk;
+        $batas = $this->params($permohonan)->float(PolicyParameterKey::PlafonKewajaranMultiplier) * (float) $modalKerja->rata_rata_kebutuhan_mk;
 
         return $plafon > $batas
             ? $this->fail('Plafon melebihi kewajaran kebutuhan modal kerja.', ['plafon' => $plafon, 'batas' => $batas])

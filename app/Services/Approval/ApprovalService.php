@@ -8,6 +8,7 @@ use App\Enums\AksiApproval;
 use App\Enums\LedgerEvent;
 use App\Enums\StatusPermohonan;
 use App\Enums\StatusVersi;
+use App\Exceptions\BusinessRuleViolation;
 use App\Models\ApprovalLog;
 use App\Models\PermohonanKredit;
 use App\Models\RefApprovalMatrix;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Services\Ledger\LedgerService;
 use App\Services\Notifikasi\NotifikasiService;
 use App\Services\Register\BukuBesarService;
+use App\Services\Rules\BusinessRuleEngine;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
@@ -24,6 +26,7 @@ final class ApprovalService
         private readonly LedgerService $ledger,
         private readonly NotifikasiService $notifikasi,
         private readonly BukuBesarService $bukuBesar,
+        private readonly BusinessRuleEngine $rules,
     ) {}
 
     /**
@@ -132,6 +135,15 @@ final class ApprovalService
 
         $this->authorize($user, $permohonan, $level);
         $this->assertMakerChecker($user, $permohonan);
+
+        $results = $this->rules->validateStage('approve', $permohonan);
+        $hard = $this->rules->hardViolations($results);
+
+        if ($hard !== []) {
+            $first = $hard[0];
+
+            throw new BusinessRuleViolation($first['kode'], $first['result']->message);
+        }
 
         return DB::transaction(function () use ($permohonan, $user, $level, $alasan): PermohonanKredit {
             $roleName = $this->roleForLevel($permohonan, $level);

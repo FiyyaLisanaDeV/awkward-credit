@@ -47,6 +47,7 @@ class PermohonanSlikDebitur extends Model
         'nilai_jaminan',
         'penjamin',
         'tanggal_data',
+        'is_angsuran_estimated',
         'catatan',
     ];
 
@@ -68,6 +69,7 @@ class PermohonanSlikDebitur extends Model
             'tunggakan_bunga' => 'decimal:2',
             'nilai_jaminan' => 'decimal:2',
             'tanggal_data' => 'date',
+            'is_angsuran_estimated' => 'boolean',
             'deleted_at' => 'datetime',
         ];
     }

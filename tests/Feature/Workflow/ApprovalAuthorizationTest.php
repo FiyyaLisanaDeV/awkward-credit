@@ -16,11 +16,16 @@ beforeEach(fn () => $this->seed());
 
 function workflowPermohonan(User $maker): PermohonanKredit
 {
-    return fixturePermohonan([
+    $permohonan = fixturePermohonan([
         'plafon_diajukan' => 5000000,
         'ao_id' => $maker->id,
         'status' => StatusPermohonan::SUBMITTED->value,
     ]);
+
+    fixtureKapasitas($permohonan);
+    fixtureChecklistLengkap($permohonan);
+
+    return $permohonan;
 }
 
 it('menolak approver dengan role matriks yang salah (403)', function () {

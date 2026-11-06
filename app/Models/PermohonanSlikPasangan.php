@@ -31,9 +31,13 @@ class PermohonanSlikPasangan extends Model
         'no_fasilitas',
         'plafon',
         'baki_debet',
+        'suku_bunga',
+        'jangka_waktu_bulan',
+        'angsuran_bulanan',
         'kolektibilitas_id',
         'kondisi',
         'tanggal_data',
+        'is_angsuran_estimated',
         'catatan',
     ];
 
@@ -44,7 +48,11 @@ class PermohonanSlikPasangan extends Model
             'urutan' => 'integer',
             'plafon' => 'decimal:2',
             'baki_debet' => 'decimal:2',
+            'suku_bunga' => 'decimal:4',
+            'jangka_waktu_bulan' => 'integer',
+            'angsuran_bulanan' => 'decimal:2',
             'tanggal_data' => 'date',
+            'is_angsuran_estimated' => 'boolean',
             'deleted_at' => 'datetime',
         ];
     }

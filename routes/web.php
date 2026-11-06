@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\Web\AnalisisController;
 use App\Http\Controllers\Web\ApprovalController;
 use App\Http\Controllers\Web\BukuAgunanController;
 use App\Http\Controllers\Web\BukuBesarController;
@@ -89,6 +90,7 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/debitur/{debitur}', [DebiturController::class, 'show'])->name('debitur.show');
         Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
         Route::get('/permohonan/{permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
+        Route::get('/permohonan/{permohonan}/analisis', [AnalisisController::class, 'show'])->name('permohonan.analisis');
         Route::get('/approval', [ApprovalController::class, 'index'])->name('approval.inbox');
         Route::get('/approval/{permohonan}', [ApprovalController::class, 'show'])->name('approval.show');
         Route::get('/kredit', [KreditController::class, 'index'])->name('kredit.index');

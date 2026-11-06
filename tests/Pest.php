@@ -3,10 +3,13 @@
 declare(strict_types=1);
 
 use App\Enums\SistemSukuBunga;
+use App\Enums\StatusChecklist;
 use App\Models\AnalisisKapasitasBayar;
+use App\Models\ChecklistStatus;
 use App\Models\Debitur;
 use App\Models\PermohonanKredit;
 use App\Models\Produk;
+use App\Models\RefChecklistDokumen;
 use App\Models\RefParameterKebijakan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -85,6 +88,19 @@ function fixtureKapasitas(PermohonanKredit $permohonan, array $overrides = []): 
         'rasio_kecukupan_balloon' => 1.2,
         'plafon_max_flat' => 90000000,
     ], $overrides));
+}
+
+function fixtureChecklistLengkap(PermohonanKredit $permohonan): void
+{
+    $wajib = RefChecklistDokumen::query()->where('wajib', true)->where('is_active', true)->get();
+
+    foreach ($wajib as $checklist) {
+        ChecklistStatus::query()->create([
+            'permohonan_id' => $permohonan->id,
+            'checklist_id' => $checklist->id,
+            'status' => StatusChecklist::Ada->value,
+        ]);
+    }
 }
 
 function workflowUser(string $role, ?string $username = null, ?string $cabangId = null): User

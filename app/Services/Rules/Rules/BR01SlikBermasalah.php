@@ -29,7 +29,7 @@ final class BR01SlikBermasalah extends AbstractRule
         $kol3 = $slik->filter(static fn ($row): bool => (int) ($row->kolektibilitas->kode ?? 0) >= Kolektibilitas::KurangLancar->value)->count();
         $macet = $slik->filter(static fn ($row): bool => (int) ($row->kolektibilitas->kode ?? 0) === Kolektibilitas::Macet->value)->count();
 
-        $params = $this->params();
+        $params = $this->params($permohonan);
         $bermasalah = $kol3 >= $params->int(PolicyParameterKey::ThresholdSlikKol3)
             || $macet >= $params->int(PolicyParameterKey::ThresholdSlikMacet);
 

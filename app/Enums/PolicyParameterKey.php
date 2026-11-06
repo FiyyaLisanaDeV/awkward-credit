@@ -28,6 +28,7 @@ enum PolicyParameterKey: string
     case RasioBalloonLayak = 'rasio_balloon_layak';
     case RasioBalloonPerhatian = 'rasio_balloon_perhatian';
     case IdirThresholdTpp = 'idir_threshold_tpp';
+    case IdirHardStopTpp = 'idir_hard_stop_tpp';
     case PlafonKewajaranMultiplier = 'plafon_kewajaran_multiplier';
     case BiayaProvisiDefault = 'biaya_provisi_default';
     case BiayaAdministrasiDefault = 'biaya_administrasi_default';

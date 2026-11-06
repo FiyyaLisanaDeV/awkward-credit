@@ -43,6 +43,10 @@ class AnalisisKapasitasBayar extends Model
         'status_kecukupan_balloon',
         'idir',
         'status_idir',
+        'angsuran_slik_debitur',
+        'angsuran_slik_pasangan',
+        'total_angsuran_slik',
+        'jumlah_fasilitas_slik_aktif',
         'biaya_lain_bulanan',
         'catatan',
     ];
@@ -65,6 +69,10 @@ class AnalisisKapasitasBayar extends Model
             'total_pembayaran_jatuh_tempo' => 'decimal:2',
             'rasio_kecukupan_balloon' => 'decimal:4',
             'idir' => 'decimal:4',
+            'angsuran_slik_debitur' => 'decimal:2',
+            'angsuran_slik_pasangan' => 'decimal:2',
+            'total_angsuran_slik' => 'decimal:2',
+            'jumlah_fasilitas_slik_aktif' => 'integer',
             'biaya_lain_bulanan' => 'decimal:2',
         ];
     }

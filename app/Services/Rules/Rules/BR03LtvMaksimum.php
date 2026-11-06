@@ -30,7 +30,7 @@ final class BR03LtvMaksimum extends AbstractRule
         }
 
         $ltv = (float) $kapasitas->ltv;
-        $maksimum = $this->params()->float(PolicyParameterKey::MaksimumLtv);
+        $maksimum = $this->params($permohonan)->float(PolicyParameterKey::MaksimumLtv);
 
         $data = ['ltv' => $ltv, 'maksimum' => $maksimum];
 

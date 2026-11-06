@@ -6,6 +6,7 @@
         <div class="flex gap-1">
             <a class="btn" href="{{ route('permohonan.index') }}">{{ __('form.back') }}</a>
             <a class="btn" href="{{ route('simulasi.create', ['permohonan' => $permohonan->id]) }}">{{ __('simulasi.title') }}</a>
+            <a class="btn" href="{{ route('permohonan.analisis', $permohonan) }}">Analisis</a>
             @can('kredit.cairkan')
                 @if (in_array($permohonan->status, ['APPROVED', 'SIGNED'], true))
                     <a class="btn btn-primary" href="{{ route('kredit.cairkan.create', $permohonan) }}">{{ __('kredit.cairkan') }}</a>

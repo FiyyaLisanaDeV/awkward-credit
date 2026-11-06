@@ -22,6 +22,7 @@ final class PolicyParameterValidator
         'bobot_collateral',
         'bobot_condition',
         'idir_threshold_tpp',
+        'idir_hard_stop_tpp',
         'biaya_provisi_default',
         'biaya_administrasi_default',
         'biaya_survey_default',

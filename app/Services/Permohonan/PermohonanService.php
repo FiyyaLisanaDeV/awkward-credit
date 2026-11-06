@@ -16,8 +16,7 @@ use App\Services\Ledger\LedgerService;
 use App\Services\Policy\PolicyParameterResolver;
 use App\Services\Register\BukuAgunanService;
 use App\Services\Register\BukuBesarService;
-use App\Services\Rules\Rules\BR04BalloonWajib;
-use App\Services\Rules\Rules\BR08ParameterTersimpan;
+use App\Services\Rules\BusinessRuleEngine;
 use App\Services\Workflow\NomorService;
 use Illuminate\Support\Facades\DB;
 
@@ -27,8 +26,7 @@ final class PermohonanService
         private readonly NomorService $nomor,
         private readonly PolicyParameterResolver $parameters,
         private readonly LedgerService $ledger,
-        private readonly BR04BalloonWajib $br04,
-        private readonly BR08ParameterTersimpan $br08,
+        private readonly BusinessRuleEngine $rules,
         private readonly BukuBesarService $bukuBesar,
         private readonly BukuAgunanService $bukuAgunan,
     ) {}
@@ -48,6 +46,7 @@ final class PermohonanService
                 'cabang_id' => $cabang->id,
                 'no_permohonan' => $this->nomor->permohonan($cabang),
                 'parameter_kebijakan_id' => $parameter->id,
+                'parameter_snapshot' => $parameter->toArray(),
                 'ao_id' => $user->id,
                 'status' => StatusPermohonan::DRAFT->value,
                 'prioritas' => $data['prioritas'] ?? 'NORMAL',
@@ -92,16 +91,13 @@ final class PermohonanService
     {
         abort_unless($permohonan->status === StatusPermohonan::DRAFT->value, 409, __('permohonan.not_draft'));
 
-        $balloon = $this->br04->validate($permohonan);
+        $results = $this->rules->validateStage('submit', $permohonan);
+        $hard = $this->rules->hardViolations($results);
 
-        if (! $balloon->passed) {
-            throw new BusinessRuleViolation('BR-04', $balloon->message);
-        }
+        if ($hard !== []) {
+            $first = $hard[0];
 
-        $parameter = $this->br08->validate($permohonan);
-
-        if (! $parameter->passed) {
-            throw new BusinessRuleViolation('BR-08', $parameter->message);
+            throw new BusinessRuleViolation($first['kode'], $first['result']->message);
         }
 
         $permohonan->update(['status' => StatusPermohonan::SUBMITTED->value]);

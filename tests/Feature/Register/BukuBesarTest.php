@@ -74,6 +74,9 @@ it('merekam kronologi inisiasi, pengajuan, persetujuan, dan realisasi', function
     $approval = app(ApprovalService::class);
     $guard = 0;
 
+    fixtureKapasitas($permohonan->fresh());
+    fixtureChecklistLengkap($permohonan->fresh());
+
     while ($approval->nextLevel($permohonan->fresh()) !== null && $guard < 10) {
         $approval->approve($permohonan->fresh(), $admin);
         $guard++;

@@ -1,4 +1,6 @@
-# RENCANA IMPLEMENTASI — Loan Analytic BPR
+# RUANG LINGKUP PRODUK — Loan Analytic BPR
+
+> **Dokumen ruang lingkup, bukan rencana eksekusi.** Rencana eksekusi tunggal ada di [RENCANA-PRODUKSI-FINAL.md](RENCANA-PRODUKSI-FINAL.md). Status hidup ada di [PROGRESS.md](PROGRESS.md).
 
 | Meta | Nilai |
 |---|---|
@@ -10,7 +12,7 @@
 | Sumber v1.0 | `deepseek_markdown_20261104_f6a1db.md` (2.939 baris, 16 fase) — **SUPERSEDED**, tetap disimpan sebagai rujukan |
 | Baseline bukti | [`evidence/00-baseline-2026-11-05.txt`](evidence/00-baseline-2026-11-05.txt) |
 
-> Dokumen ini menjawab **apa & mengapa**. Rincian **bagaimana** ada di [TEKNIS.md](TEKNIS.md); data & kolom di [INVENTARIS_DATA.md](INVENTARIS_DATA.md); aturan bukti di [VERIFIKASI.md](VERIFIKASI.md); status kerja di [PROGRESS.md](PROGRESS.md); keputusan di [DECISIONS.md](DECISIONS.md); prompt eksekusi di [DSH_PROMPTS_SIMPLE.md](DSH_PROMPTS_SIMPLE.md).
+> Dokumen ini menjawab **apa & mengapa**. Rincian **bagaimana** ada di [TEKNIS.md](TEKNIS.md); data & kolom di [INVENTARIS_DATA.md](INVENTARIS_DATA.md); aturan bukti di [VERIFIKASI.md](VERIFIKASI.md); status kerja di [PROGRESS.md](PROGRESS.md); keputusan di [DECISIONS.md](DECISIONS.md); rencana eksekusi di [RENCANA-PRODUKSI-FINAL.md](RENCANA-PRODUKSI-FINAL.md).
 
 ---
 

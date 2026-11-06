@@ -222,7 +222,7 @@ final class SettingSectionRegistry
     public function policyGroups(): array
     {
         return [
-            'Kapasitas & DSCR' => ['margin_kapasitas_bayar', 'minimum_dscr', 'dscr_ideal', 'idir_threshold_tpp'],
+            'Kapasitas & DSCR' => ['margin_kapasitas_bayar', 'minimum_dscr', 'dscr_ideal', 'idir_threshold_tpp', 'idir_hard_stop_tpp'],
             'LTV, Plafon & Balloon' => ['maksimum_ltv', 'plafon_kewajaran_multiplier', 'rasio_balloon_layak', 'rasio_balloon_perhatian'],
             'Bobot 5C & Rating' => [
                 'bobot_character', 'bobot_capacity', 'bobot_capital', 'bobot_collateral', 'bobot_condition',
@@ -265,6 +265,7 @@ final class SettingSectionRegistry
             'rasio_balloon_layak' => 'Rasio balloon layak',
             'rasio_balloon_perhatian' => 'Rasio balloon perhatian',
             'idir_threshold_tpp' => 'Ambang IDIR TPP',
+            'idir_hard_stop_tpp' => 'Ambang Batas Keras IDIR TPP (Hard Stop)',
             'plafon_kewajaran_multiplier' => 'Multiplier plafon kewajaran',
             'biaya_provisi_default' => 'Provisi default',
             'biaya_administrasi_default' => 'Administrasi default',

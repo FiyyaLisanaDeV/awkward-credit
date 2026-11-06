@@ -49,10 +49,10 @@ final class DocsCheck extends Command
     private function checkRequiredDocs(): void
     {
         $docs = [
-            'RENCANA_IMPLEMENTASI.md',
+            'RUANG-LINGKUP-PRODUK.md',
+            'RENCANA-PRODUKSI-FINAL.md',
             'TEKNIS.md',
             'INVENTARIS_DATA.md',
-            'DSH_PROMPTS_SIMPLE.md',
             'PROGRESS.md',
             'DECISIONS.md',
             'VERIFIKASI.md',
@@ -67,11 +67,9 @@ final class DocsCheck extends Command
 
     private function checkCounts(): void
     {
-        $prompts = $this->read('docs/DSH_PROMPTS_SIMPLE.md');
         $progress = $this->read('docs/PROGRESS.md');
         $inventaris = $this->read('docs/INVENTARIS_DATA.md');
 
-        $this->expect('prompt fase (DSH)', preg_match_all('/^## FASE /m', $prompts) ?: 0, 22);
         $this->expect(
             'baris papan (PROGRESS)',
             preg_match_all('/^\| (?:0[0-9]|1[0-8]|06B|08B|12B) \|/m', $progress) ?: 0,
@@ -113,7 +111,7 @@ final class DocsCheck extends Command
 
     private function checkForbiddenTerms(): void
     {
-        $file = base_path('docs/DSH_PROMPTS_SIMPLE.md');
+        $file = base_path('docs/arsip/rencana/DSH_PROMPTS_SIMPLE.md');
         $lines = is_file($file) ? file($file, FILE_IGNORE_NEW_LINES) ?: [] : [];
 
         foreach ($lines as $number => $line) {

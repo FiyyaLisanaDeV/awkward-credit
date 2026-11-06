@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use RuntimeException;
 
 class PermohonanKredit extends Model
 {
@@ -47,6 +48,7 @@ class PermohonanKredit extends Model
         'status',
         'ao_id',
         'parameter_kebijakan_id',
+        'parameter_snapshot',
         'tanggal_permohonan',
         'catatan_ao',
         'kelengkapan_persen',
@@ -67,8 +69,18 @@ class PermohonanKredit extends Model
             'ao_id' => 'integer',
             'tanggal_permohonan' => 'date',
             'kelengkapan_persen' => 'decimal:2',
+            'parameter_snapshot' => 'array',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (self $model): void {
+            if ($model->isDirty('parameter_snapshot')) {
+                throw new RuntimeException('parameter_snapshot immutable');
+            }
+        });
     }
 
     /** @return BelongsTo<User, $this> */

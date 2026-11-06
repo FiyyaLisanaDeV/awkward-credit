@@ -5,7 +5,7 @@
 | Versi dokumen | 2.4 |
 | Tanggal | 2026-11-05 |
 | Status | Acuan implementasi (satu-satunya untuk keputusan teknis) |
-| Pasangan | [RENCANA_IMPLEMENTASI.md](RENCANA_IMPLEMENTASI.md) · [INVENTARIS_DATA.md](INVENTARIS_DATA.md) · [VERIFIKASI.md](VERIFIKASI.md) |
+| Pasangan | [RUANG-LINGKUP-PRODUK.md](RUANG-LINGKUP-PRODUK.md) · [RENCANA-PRODUKSI-FINAL.md](RENCANA-PRODUKSI-FINAL.md) · [INVENTARIS_DATA.md](INVENTARIS_DATA.md) · [VERIFIKASI.md](VERIFIKASI.md) |
 
 ---
 
@@ -15,7 +15,7 @@
 1. [PROGRESS.md](PROGRESS.md) — status, blocker, next action.
 2. Bab ini §3 (stack), §6 (konvensi), §6.5 (zero hardcode), lalu **satu** bab domain yang digarap.
 3. [INVENTARIS_DATA.md](INVENTARIS_DATA.md) — hanya tabel yang disentuh.
-4. Prompt fase terkait di [DSH_PROMPTS_SIMPLE.md](DSH_PROMPTS_SIMPLE.md).
+4. Gate & urutan eksekusi di [RENCANA-PRODUKSI-FINAL.md](RENCANA-PRODUKSI-FINAL.md).
 5. [VERIFIKASI.md](VERIFIKASI.md) bila perlu memutuskan "sudah selesai atau belum".
 
 **Baseline wajib sebelum menyentuh kode:**

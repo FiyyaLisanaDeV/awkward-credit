@@ -83,4 +83,6 @@ final class Konstanta
     public const REGISTER_LOCK_BUKU_BESAR = 2501;
 
     public const REGISTER_LOCK_BUKU_AGUNAN = 2502;
+
+    public const IDIR_HARD_STOP_DEFAULT = 0.80;
 }

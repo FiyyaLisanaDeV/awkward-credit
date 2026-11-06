@@ -7,6 +7,7 @@ namespace App\Services\Policy;
 use App\Domain\Policy\PolicyParameters;
 use App\Enums\StatusVersi;
 use App\Exceptions\MissingPolicyParameter;
+use App\Models\PermohonanKredit;
 use App\Models\RefParameterKebijakan;
 
 final class PolicyParameterResolver
@@ -22,5 +23,24 @@ final class PolicyParameterResolver
         }
 
         return PolicyParameters::fromModel($model);
+    }
+
+    public function forPermohonan(PermohonanKredit $permohonan): PolicyParameters
+    {
+        $snapshot = $permohonan->parameter_snapshot;
+
+        if (is_array($snapshot) && $snapshot !== []) {
+            return PolicyParameters::fromArray($snapshot);
+        }
+
+        if ($permohonan->parameter_kebijakan_id !== null) {
+            $model = RefParameterKebijakan::query()->find($permohonan->parameter_kebijakan_id);
+
+            if ($model instanceof RefParameterKebijakan) {
+                return PolicyParameters::fromModel($model);
+            }
+        }
+
+        throw new MissingPolicyParameter('Permohonan '.$permohonan->id.' tidak memiliki snapshot parameter kebijakan.');
     }
 }

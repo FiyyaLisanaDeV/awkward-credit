@@ -190,6 +190,34 @@
 - Alternatif ditolak: membuat calculator di 08B (melanggar urutan fase); membuat SimulationService tanpa kalkulasi (tidak dapat direplay).
 - Konsekuensi: judul fase 08B di dokumen disesuaikan; tidak ada perubahan skema.
 
+## ADR-027 — Snapshot parameter per permohonan (grandfathering)
+- Status: diterima · 2026-11-07 · Pemilik: IT/Produk
+- Konteks: perubahan parameter ACTIVE tidak boleh mengubah hasil analisis permohonan yang sudah berjalan.
+- Keputusan: `permohonan_kredit.parameter_snapshot` menyimpan `{id, version, params}`; rule memakai `PolicyParameterResolver::forPermohonan()`, bukan `active()`.
+- Alternatif ditolak: hanya FK ke `ref_parameter_kebijakan` (rawan bila baris berubah); fallback ke ACTIVE (melanggar K-10).
+- Konsekuensi: snapshot immutable; permohonan lama tanpa snapshot memakai FK historis; settings baru membuat versi baru.
+
+## ADR-028 — Rule engine bertahap + IDIR hard stop
+- Status: diterima · 2026-11-07 · Pemilik: IT/Produk
+- Konteks: evaluasi semua aturan saat submit memblokir permohonan karena DSCR/IDIR/approval belum ada.
+- Keputusan: `BusinessRuleEngine::validateStage()` dengan tahap submit/analisis/approve; submit hanya BR-04/08/14/15; approve hard gate BR-01/02/03/05/11H/13; BR-06 ditangani ApprovalService. IDIR >35% warning, >80% hard stop.
+- Alternatif ditolak: semua aturan saat submit (pasti gagal); hanya form request (aturan bisnis tidak ditegakkan).
+- Konsekuensi: `idir_hard_stop_tpp` menjadi parameter policy; status_idir disimpan di analisis.
+
+## ADR-029 — Penomoran atomik berbasis `nomor_sequence`
+- Status: diterima · 2026-11-07 · Pemilik: IT
+- Konteks: `count()+lockForUpdate()` rawan duplikasi saat submit bersamaan.
+- Keputusan: SQL `INSERT ... ON CONFLICT (scope) DO UPDATE ... RETURNING last_number`; scope `{jenis}:{cabang}:{tahun}` (+ kode dokumen); backfill `MAX(suffix)` dengan `GREATEST`.
+- Alternatif ditolak: count per prefix (race); nomor global tanpa cabang/tahun (kehilangan makna).
+- Konsekuensi: backfill wajib dijalankan sebelum penomoran baru aktif; scope service dan backfill harus sama (lowercase).
+
+## ADR-030 — DSCR memasukkan fasilitas SLIK aktif
+- Status: diterima · 2026-11-07 · Pemilik: IT/Produk
+- Konteks: DSCR hanya memakai angsuran baru; kewajiban SLIK eksisting terabaikan.
+- Keputusan: `SlikAggregationService` menjumlahkan fasilitas `baki_debet > 0` debitur+pasangan, dedupe `no_fasilitas`, estimasi flat bila angsuran null; total disimpan di `analisis_kapasitas_bayar`.
+- Alternatif ditolak: hanya kredit baru (DSCR terlalu optimistis); query di calculator (melanggar pure engine).
+- Konsekuensi: DSCR approval berubah; `BR-02` HARD harus berjalan di approve; angka estimasi ditandai `is_angsuran_estimated`.
+
 ---
 
 ## Aturan penambahan ADR

@@ -30,7 +30,7 @@ final class BR02DscrMinimum extends AbstractRule
         }
 
         $dscr = (float) $kapasitas->dscr_rekomendasi;
-        $minimum = $this->params()->float(PolicyParameterKey::MinimumDscr);
+        $minimum = $this->params($permohonan)->float(PolicyParameterKey::MinimumDscr);
 
         $data = ['dscr' => $dscr, 'minimum' => $minimum];
 

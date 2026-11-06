@@ -283,6 +283,7 @@ sumber_pembayaran_angsuran varchar(100) null,
 tanggal_target_realisasi date null, prioritas varchar(10) default 'NORMAL',
 status varchar(30) default 'DRAFT', ao_id fk users,
 parameter_kebijakan_id fk ref_parameter_kebijakan,
+parameter_snapshot jsonb null, -- {id, version, params}; immutable setelah create
 tanggal_permohonan date, catatan_ao text null,
 kelengkapan_persen numeric(5,2) default 0
 check br04: (sistem_suku_bunga = 'Grace Period' and sumber_pelunasan_balloon is not null
@@ -314,7 +315,8 @@ kondisi varchar(20) null, tanggal_mulai date null, tanggal_tunggakan date null,
 hari_tunggakan smallint null, frekuensi_tunggakan_12m smallint null,
 tunggakan_pokok numeric(15,2) default 0, tunggakan_bunga numeric(15,2) default 0,
 jenis_jaminan varchar(50) null, nilai_jaminan numeric(15,2) null,
-penjamin varchar(100) null, tanggal_data date null, catatan text null
+penjamin varchar(100) null, tanggal_data date null,
+is_angsuran_estimated boolean default false, catatan text null
 unique (permohonan_id, urutan) where deleted_at is null
 ```
 Anomali `baki > plafon` dicatat sebagai peringatan data-quality, bukan blokir.
@@ -323,7 +325,10 @@ Anomali `baki > plafon` dicatat sebagai peringatan data-quality, bukan blokir.
 ```
 id, permohonan_id fk cascade, slik_permintaan_id fk null, urutan,
 nama_lembaga, jenis_fasilitas, no_fasilitas, plafon, baki_debet,
-kolektibilitas_id, kondisi, tanggal_data, catatan
+suku_bunga numeric(5,4) null, jangka_waktu_bulan smallint null,
+angsuran_bulanan numeric(15,2) null,
+kolektibilitas_id, kondisi, tanggal_data,
+is_angsuran_estimated boolean default false, catatan
 unique (permohonan_id, urutan) where deleted_at is null
 ```
 
@@ -352,7 +357,7 @@ Semua tabel analisis: `permohonan_id UUID UNIQUE FK cascade`, `parameter_kebijak
 `periode_perputaran_hari numeric(10,2), biaya_operasional_tahunan, perputaran_kas_per_tahun numeric(10,4), kebutuhan_mk_cash_turnover, pembelian_bulanan, hari_persediaan numeric(10,2), kebutuhan_mk_wcd, mk_tersedia, rata_rata_kebutuhan_mk, gap_mk, omzet_bulanan, kebutuhan_mk_persen_omzet numeric(10,4), catatan`
 
 ### analisis_kapasitas_bayar
-`rpc_bulanan, dscr_diajukan numeric(10,4), status_dscr_diajukan varchar(20), surplus_setelah_angsuran_diajukan, dscr_rekomendasi numeric(10,4), status_dscr_rekomendasi, surplus_setelah_angsuran_rekomendasi, plafon_max_flat, plafon_max_anuitas, plafon_max_grace, suku_bunga_efektif_diajukan numeric(10,4), suku_bunga_efektif_rekomendasi, ltv numeric(10,4), status_kewajaran_plafon varchar(30), total_pembayaran_jatuh_tempo, rasio_kecukupan_balloon numeric(10,4), status_kecukupan_balloon varchar(50), idir numeric(10,4), status_idir varchar(20), biaya_lain_bulanan numeric(15,2) default 0, catatan`
+`rpc_bulanan, dscr_diajukan numeric(10,4), status_dscr_diajukan varchar(20), surplus_setelah_angsuran_diajukan, dscr_rekomendasi numeric(10,4), status_dscr_rekomendasi, surplus_setelah_angsuran_rekomendasi, plafon_max_flat, plafon_max_anuitas, plafon_max_grace, suku_bunga_efektif_diajukan numeric(10,4), suku_bunga_efektif_rekomendasi, ltv numeric(10,4), status_kewajaran_plafon varchar(30), total_pembayaran_jatuh_tempo, rasio_kecukupan_balloon numeric(10,4), status_kecukupan_balloon varchar(50), idir numeric(10,4), status_idir varchar(20), angsuran_slik_debitur numeric(15,2) default 0, angsuran_slik_pasangan numeric(15,2) default 0, total_angsuran_slik numeric(15,2) default 0, jumlah_fasilitas_slik_aktif integer default 0, biaya_lain_bulanan numeric(15,2) default 0, catatan`
 
 ### analisis_sensitivitas
 `urutan smallint, nama_skenario varchar(100), delta_omzet numeric(5,4) default 0, delta_biaya numeric(5,4) default 0, total_pendapatan, total_pengeluaran_non_angsuran, surplus_baru, rpc_baru, dscr numeric(10,4), status_layak boolean`; `unique(permohonan_id, urutan)`; 3 baris default dari parameter sensitivitas.

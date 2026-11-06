@@ -22,4 +22,17 @@ final class IdirCalculator
     {
         return $idir <= $threshold ? StatusKelayakan::Layak : StatusKelayakan::TidakLayak;
     }
+
+    public function evaluasi(float $idir, float $softThreshold, float $hardThreshold): StatusKelayakan
+    {
+        if ($idir > $hardThreshold) {
+            return StatusKelayakan::TidakLayak;
+        }
+
+        if ($idir > $softThreshold) {
+            return StatusKelayakan::Perhatian;
+        }
+
+        return StatusKelayakan::Layak;
+    }
 }

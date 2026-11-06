@@ -93,10 +93,10 @@ final class StateCheck extends Command
     private function requiredDocs(): array
     {
         return [
-            'docs/RENCANA_IMPLEMENTASI.md',
+            'docs/RUANG-LINGKUP-PRODUK.md',
+            'docs/RENCANA-PRODUKSI-FINAL.md',
             'docs/TEKNIS.md',
             'docs/INVENTARIS_DATA.md',
-            'docs/DSH_PROMPTS_SIMPLE.md',
             'docs/PROGRESS.md',
             'docs/DECISIONS.md',
             'docs/VERIFIKASI.md',

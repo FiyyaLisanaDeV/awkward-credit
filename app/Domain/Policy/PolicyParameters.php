@@ -30,6 +30,34 @@ final class PolicyParameters
         return new self((string) $model->id, (string) $model->version, $params);
     }
 
+    /**
+     * @return array{id: string, version: string, params: array<string, mixed>}
+     */
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'version' => $this->version,
+            'params' => $this->params,
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public static function fromArray(array $data): self
+    {
+        if (! isset($data['id'], $data['version']) || ! isset($data['params']) || ! is_array($data['params'])) {
+            throw new MissingPolicyParameter('Snapshot parameter kebijakan tidak lengkap.');
+        }
+
+        return new self(
+            (string) $data['id'],
+            (string) $data['version'],
+            $data['params'],
+        );
+    }
+
     public function float(PolicyParameterKey $key): float
     {
         return (float) $this->raw($key);

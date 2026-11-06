@@ -69,7 +69,7 @@ it('mengisi sumber pada semua referensi yang memiliki kolom sumber', function ()
     }
 });
 
-it('mengaktifkan parameter kebijakan v1.0 dengan 34 kunci', function () {
+it('mengaktifkan parameter kebijakan v1.0 dengan 35 kunci', function () {
     $this->seed();
 
     $row = DB::table('ref_parameter_kebijakan')->where('status', 'ACTIVE')->first();
@@ -79,7 +79,7 @@ it('mengaktifkan parameter kebijakan v1.0 dengan 34 kunci', function () {
     $params = json_decode($row->params, true);
 
     expect($params)->toBeArray()
-        ->and(count($params))->toBe(34)
+        ->and(count($params))->toBe(35)
         ->and((float) $params['minimum_dscr'])->toBe(1.0)
         ->and($params['skor_band_draft'])->toBeTrue();
 });

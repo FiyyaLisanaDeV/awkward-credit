@@ -16,6 +16,7 @@ use App\Services\Calculation\LtvCalculator;
 use App\Services\Calculation\ModalKerjaCalculator;
 use App\Services\Calculation\PlafonMaxCalculator;
 use App\Services\Calculation\SukuBungaEfektifCalculator;
+use App\Support\Konstanta;
 
 final class SimulationEngine
 {
@@ -64,7 +65,11 @@ final class SimulationEngine
 
         if ($produkTipe === ProdukTipe::TPP && isset($input['penghasilan_bersih'])) {
             $idir = $this->idir->hitung($angsuran['total'], (float) $input['penghasilan_bersih']);
-            $statusIdir = $this->idir->status($idir, $parameters->float(PolicyParameterKey::IdirThresholdTpp));
+            $soft = $parameters->float(PolicyParameterKey::IdirThresholdTpp);
+            $hard = $parameters->has(PolicyParameterKey::IdirHardStopTpp)
+                ? $parameters->float(PolicyParameterKey::IdirHardStopTpp)
+                : Konstanta::IDIR_HARD_STOP_DEFAULT;
+            $statusIdir = $this->idir->evaluasi($idir, $soft, $hard);
         }
 
         $modalKerja = null;

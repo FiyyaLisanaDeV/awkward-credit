@@ -6,10 +6,10 @@ Dokumentasi lengkap ada di [`docs/`](docs/README.md):
 
 | Dokumen | Isi |
 |---|---|
-| [RENCANA_IMPLEMENTASI.md](docs/RENCANA_IMPLEMENTASI.md) | strategi, keputusan, 22 fase, kriteria sukses |
+| [RENCANA-PRODUKSI-FINAL.md](docs/RENCANA-PRODUKSI-FINAL.md) | rencana eksekusi tunggal: gate, urutan, DoD |
+| [RUANG-LINGKUP-PRODUK.md](docs/RUANG-LINGKUP-PRODUK.md) | ruang lingkup, strategi, keputusan, kriteria sukses |
 | [TEKNIS.md](docs/TEKNIS.md) | referensi teknis (arsitektur, formula, BR, ledger, import, runbook) |
 | [INVENTARIS_DATA.md](docs/INVENTARIS_DATA.md) | 60 tabel, enum, event ledger, mapping import |
-| [DSH_PROMPTS_SIMPLE.md](docs/DSH_PROMPTS_SIMPLE.md) | protokol sesi + 22 prompt fase |
 | [PROGRESS.md](docs/PROGRESS.md) | status kerja, blocker, handoff |
 | [DECISIONS.md](docs/DECISIONS.md) | ADR |
 | [VERIFIKASI.md](docs/VERIFIKASI.md) | reality check, anti-halusinasi, zero hardcode |
@@ -53,4 +53,4 @@ bash scripts/verify.sh --full
 
 ## Alur kerja
 
-Ikuti `docs/DSH_PROMPTS_SIMPLE.md`: PART 1 (kontrak) → PART 2 (pre-flight) → prompt fase. Setiap fase berakhir dengan bukti di `docs/evidence/`, pembaruan `docs/PROGRESS.md`, commit, dan tag `phase-XX-done`.
+Ikuti `docs/RENCANA-PRODUKSI-FINAL.md` sebagai satu-satunya rencana eksekusi. Setiap gate berakhir dengan bukti di `docs/evidence/`, pembaruan `docs/PROGRESS.md`, dan commit. Protokol sesi historis ada di `docs/arsip/rencana/DSH_PROMPTS_SIMPLE.md` (read-only).
