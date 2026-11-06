@@ -52,3 +52,6 @@
 | 20:32:00 | P2.3 policy | tinker | 0 | [V] ACTIVE margin0.5/idir0.35/ltv0.7 tidak diubah |
 | 20:33:00 | P2.4 isolasi | test 4 modul lintas cabang | 0 | [V] 20 passed |
 | 20:34:00 | P2 GATE | verify --full | 0 | [V] SELESAI ledger 20 baris |
+| 20:40:00 | P3A role DB | CREATE ROLE loan_bpr_app + GRANT + .env | 0 | [V] NOSUPERUSER; ledger/audit_log SELECT+INSERT |
+| 20:41:00 | P3A smoke | curl https health/dashboard/dokumen | 0 | [V] 200 |
+| 20:42:00 | P3A gate | verify --full | 0 | [V] SELESAI |
