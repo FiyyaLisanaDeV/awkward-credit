@@ -38,6 +38,7 @@
 24. [Workflow, peran & wewenang](chapters/24-workflow-peran-wewenang.md)
 25. [Analisis fungsi: komparasi master Excel vs web](chapters/25-analisis-fungsi-komparasi-excel-web.md)
 26. [Workflow master Excel: breakdown teknis](chapters/26-workflow-master-excel-breakdown.md)
+27. [Buku besar kredit, buku agunan & nomor CIF](chapters/27-buku-besar-kredit-agunan-cif.md)
 
 ## Aset pendukung
 - [MANIFEST.md](MANIFEST.md) — kartu kendali versi manual & snapshot target
