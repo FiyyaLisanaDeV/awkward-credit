@@ -7,9 +7,11 @@
 <style>
   :root {
     --bg:#f5f6f8; --surface:#ffffff; --ink:#17202a; --muted:#5b6673;
-    --line:#d8dde4; --brand:#0f4c5c; --accent:#b45309;
+    --line:#d8dde4; --brand:#0f4c5c; --brand-soft:#e8f1f3;
+    --ok:#16a34a; --ok-bg:#dcfce7; --warn:#b45309; --warn-bg:#fef3c7; --hard:#dc2626; --hard-bg:#fde8e8;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     background:
@@ -17,124 +19,208 @@
       var(--bg);
     color:var(--ink); line-height:1.55;
   }
-  main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 80px; }
-  header { margin-bottom: 20px; }
+  .app { display:grid; grid-template-columns: 250px minmax(0,1fr); min-height:100vh; }
+  aside {
+    background:#0d2f38; color:#e8f1f3; padding:24px 18px;
+    position:sticky; top:0; height:100vh; overflow:auto;
+  }
+  aside .brand { font-size:16px; font-weight:700; }
+  aside .brand small { display:block; font-weight:400; color:#a9c3c9; font-size:12px; margin-top:4px; }
+  aside nav { display:grid; gap:4px; margin-top:20px; }
+  aside nav a {
+    color:#cfe1e5; text-decoration:none; font-size:13px; padding:8px 10px;
+    border-radius:8px; border-left:3px solid transparent;
+  }
+  aside nav a:hover { background:rgba(255,255,255,.08); color:#fff; }
+  aside nav a.active { background:#f0f7f8; color:#0d2f38; border-left-color:#7dd3c7; font-weight:700; }
+  aside nav a small { display:block; font-size:10px; color:#8fb0b7; font-weight:400; }
+  main { padding:28px 32px 80px; max-width:1080px; }
+  header.page { margin-bottom:20px; }
   .eyebrow { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); }
   h1 { margin:4px 0 8px; font-size:28px; letter-spacing:-.02em; }
-  h2 { margin:28px 0 10px; font-size:20px; }
   p.muted { color:var(--muted); }
-  .card {
-    background:var(--surface); border:1px solid var(--line); border-radius:12px;
-    box-shadow:0 1px 2px rgba(16,24,40,.06), 0 8px 24px rgba(16,24,40,.06);
-    padding:18px 20px; margin-bottom:18px; overflow-x:auto;
-  }
   .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
   .chip {
     font-size:12px; font-weight:650; color:#24545f; background:#e7f3f1;
     border:1px solid #cfe5e1; border-radius:999px; padding:5px 10px;
   }
   .note {
-    margin-top:10px; padding:10px 12px; background:#fef3c7; border:1px solid #fcd34d;
+    margin-top:12px; padding:10px 12px; background:var(--warn-bg); border:1px solid #fcd34d;
     border-radius:8px; color:#92400e; font-size:13px;
   }
-  pre.mermaid { background:transparent; text-align:center; }
+  section { margin-top:36px; }
+  h2 { font-size:20px; margin:0 0 4px; letter-spacing:-.01em; }
+  h2 .num { color:var(--brand); font-variant-numeric:tabular-nums; }
+  .lede { color:var(--muted); font-size:14px; margin:0 0 14px; max-width:72ch; }
+  .card {
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    box-shadow:0 1px 2px rgba(16,24,40,.06), 0 8px 24px rgba(16,24,40,.06);
+    padding:18px 20px; margin-bottom:16px; overflow-x:auto;
+  }
+  pre.mermaid { background:transparent; text-align:center; margin:0; }
+  .phases { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .phase {
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px;
+  }
+  .phase .p-num { font-size:11px; font-weight:800; letter-spacing:.08em; color:var(--brand); text-transform:uppercase; }
+  .phase strong { display:block; font-size:14px; margin:2px 0 6px; }
+  .phase p { margin:0; font-size:12px; color:var(--muted); }
+  .phase .artifact {
+    display:inline-block; margin-top:8px; font-size:11px; font-weight:700; color:#0f766e;
+    background:#e7f6f2; border:1px solid #c8e8e1; border-radius:6px; padding:3px 7px;
+  }
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th, td { text-align:left; padding:7px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
-  th { color:var(--brand); white-space:nowrap; }
-  footer { margin-top:28px; font-size:12px; color:var(--muted); }
-  .mermaid-fallback { font-size:12px; color:var(--muted); white-space:pre-wrap; }
+  th { color:var(--brand); }
+  .status {
+    display:inline-block; font-size:11px; font-weight:800; padding:3px 8px; border-radius:999px;
+    white-space:nowrap;
+  }
+  .status.ok { background:var(--ok-bg); color:#14532d; }
+  .status.warn { background:var(--warn-bg); color:#92400e; }
+  .status.hard { background:var(--hard-bg); color:#7f1d1d; }
+  .status.hold { background:#e2e8f0; color:#334155; }
+  .legend { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0 24px; }
+  .legend .item { display:grid; grid-template-columns:110px minmax(0,1fr); gap:8px; padding:7px 0; border-bottom:1px solid var(--line); font-size:13px; }
+  .legend dt { color:var(--brand); font-weight:700; }
+  .legend dd { margin:0; color:var(--muted); }
+  footer { margin-top:32px; font-size:12px; color:var(--muted); }
+  @media (max-width: 860px) {
+    .app { grid-template-columns:1fr; }
+    aside { position:static; height:auto; }
+    aside nav { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    main { padding:18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:.001ms !important; transition-duration:.001ms !important; }
+    html { scroll-behavior:auto; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <span class="eyebrow">PT BPR Bahteramas Kendari</span>
-    <h1>Flow Proses Kredit — End to End</h1>
-    <p class="muted">Dari calon nasabah mendaftar sampai dana kredit masuk rekening, atau permohonan ditolak.</p>
-    <div class="chips">
-      <span class="chip">3 cabang: KDI · BOM · KOL</span>
-      <span class="chip">Laravel 13 + PostgreSQL 16</span>
-      <span class="chip">Stage-aware rules</span>
-      <span class="chip">Ledger hash-chain</span>
-    </div>
-    <div class="note">Semua angka contoh berstatus <strong>klaim/recomputed, belum verified</strong>. Diagram menggambarkan desain, bukan klaim hasil audit.</div>
-  </header>
+<div class="app">
+  <aside>
+    <div class="brand">Flow Proses Kredit<small>PT BPR Bahteramas Kendari</small></div>
+    <nav aria-label="Navigasi bagian">
+      <a href="#overview" class="active">1 · Pipeline 7 fase<small>overview + artefak</small></a>
+      <a href="#gates">2 · Gerbang keputusan<small>IDIR, LTV, SoD, hard gate</small></a>
+      <a href="#scenario">3 · Skenario C-002<small>TPP flat, IDIR 85,93%</small></a>
+      <a href="#table">4 · Tabel keputusan<small>14 gate</small></a>
+      <a href="#legend">5 · Legenda<small>istilah &amp; singkatan</small></a>
+    </nav>
+  </aside>
 
-  <section class="card">
-    <h2>1 · Flowchart end-to-end</h2>
-    <pre class="mermaid">
+  <main>
+    <header class="page">
+      <span class="eyebrow">Sistem Manajemen Kredit · End to End</span>
+      <h1>Dari pendaftaran nasabah sampai dana masuk rekening, atau ditolak.</h1>
+      <p class="muted">Tiga lapis diagram: pipeline keseluruhan, gerbang keputusan yang menentukan, dan skenario angka konkret.</p>
+      <div class="chips">
+        <span class="chip">3 cabang: KDI · BOM · KOL</span>
+        <span class="chip">Laravel 13 + PostgreSQL 16</span>
+        <span class="chip">Stage-aware rules</span>
+        <span class="chip">Ledger hash-chain</span>
+      </div>
+      <div class="note"><strong>Status angka:</strong> semua angka contoh berstatus klaim/recomputed, belum verified. Diagram menggambarkan desain, bukan klaim hasil audit.</div>
+    </header>
+
+    <section id="overview">
+      <h2><span class="num">1</span> · Pipeline 7 fase</h2>
+      <p class="lede">Satu baris proses. Setiap panah membawa artefak yang dihasilkan fase sebelumnya, jadi alurnya bisa diikuti tanpa membaca seluruh dokumen.</p>
+
+      <div class="phases">
+        <div class="phase"><span class="p-num">Fase 1</span><strong>CIF · Pendaftaran</strong><p>AO verifikasi identitas dan cegah nasabah ganda lintas cabang.</p><span class="artifact">CIF-KDI-000001</span></div>
+        <div class="phase"><span class="p-num">Fase 2</span><strong>Permohonan</strong><p>Pilih produk, kunci plafon, tangkap snapshot parameter kebijakan.</p><span class="artifact">KDI/2026/0001</span></div>
+        <div class="phase"><span class="p-num">Fase 3</span><strong>Analisis</strong><p>Neraca, WCD, RPC/DSCR, IDIR, LTV, scoring 5C, 6 skenario.</p><span class="artifact">banner + audit log</span></div>
+        <div class="phase"><span class="p-num">Fase 4</span><strong>Rekomendasi</strong><p>Plafon dibatasi oleh kapasitas dan agunan.</p><span class="artifact">MIN(pengajuan, kapasitas, LTV)</span></div>
+        <div class="phase"><span class="p-num">Fase 5</span><strong>Persetujuan</strong><p>Berjenjang, dengan pemisahan tugas dan hard gate.</p><span class="artifact">approve + hard gate</span></div>
+        <div class="phase"><span class="p-num">Fase 6</span><strong>Pencairan</strong><p>SPK, booking kredit, memo cair, dana dikirim.</p><span class="artifact">SPK/KDI/2026/0001</span></div>
+        <div class="phase"><span class="p-num">Fase 7</span><strong>Pasca-pencairan</strong><p>Buku besar, monitoring, CKPN dan write-off.</p><span class="artifact">buku besar + agunan</span></div>
+      </div>
+
+      <div class="card">
+        <pre class="mermaid">
+flowchart LR
+  classDef phase fill:#e8f1f3,stroke:#0f4c5c,color:#17202a
+  classDef ok fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef hard fill:#fde8e8,stroke:#dc2626,color:#7f1d1d
+
+  P1:::phase -->|"CIF-KDI-000001"| P2:::phase
+  P2:::phase -->|"KDI/2026/0001"| P3:::phase
+  P3:::phase -->|"banner + audit log"| P4:::phase
+  P4:::phase -->|"rekomendasi plafon"| P5:::phase
+  P5:::phase -->|"SPK/KDI/2026/0001"| P6:::phase
+  P6:::phase -->|"dana masuk rekening"| P7:::phase
+
+  P1["<b>Fase 1 · CIF</b><br/>AO · KYC · cek NIK<br/>lintas cabang"]
+  P2["<b>Fase 2 · Permohonan</b><br/>AO · produk/plafon<br/>snapshot policy"]
+  P3["<b>Fase 3 · Analisis</b><br/>AO · neraca, WCD,<br/>RPC/DSCR, IDIR, LTV, 5C"]
+  P4["<b>Fase 4 · Rekomendasi</b><br/>MIN(pengajuan,<br/>kapasitas, LTV)"]
+  P5["<b>Fase 5 · Persetujuan</b><br/>MGR/Komite · SoD<br/>hard gate"]
+  P6["<b>Fase 6 · Pencairan</b><br/>SPK · memo cair<br/>blokir/payoff"]
+  P7["<b>Fase 7 · Pasca</b><br/>buku besar · monitoring<br/>CKPN/write-off"]
+
+  P3 -. "hard stop / tolak" .-> TOLAK:::hard
+  P5 -. "gagal approve" .-> TOLAK
+  P6 --> CAIR:::ok
+  TOLAK(["<b>Permohonan ditolak</b><br/>surat + alasan · semua jejak diaudit"])
+  CAIR(["<b>Dana masuk rekening nasabah</b>"])
+        </pre>
+      </div>
+    </section>
+
+    <section id="gates">
+      <h2><span class="num">2</span> · Gerbang keputusan detail</h2>
+      <p class="lede">Bagian yang menentukan: mana yang lolos, mana yang hanya peringatan, dan mana yang menolak. Kode warna: <span class="status ok">lanjut</span> <span class="status warn">peringatan</span> <span class="status hard">tolak</span></p>
+      <div class="card">
+        <pre class="mermaid">
 flowchart TD
-  Start(["Calon nasabah datang ke cabang (KDI/BOM/KOL)"]) --> CIF
-  subgraph F1["Fase 1 · Pendaftaran Nasabah (CIF)"]
-    CIF["AO input data KYC"] --> Dup{"NIK duplikat lintas cabang?"}
-    Dup -- "Ya" --> TolakDup["Tolak pendaftaran + alasan"] --> EndDup(["Arsip penolakan"])
-    Dup -- "Tidak" --> NewCIF["CIF atomik: CIF-KDI-000001 + hash dokumen"]
-  end
-  NewCIF --> F2Start
-  subgraph F2["Fase 2 · Permohonan Kredit"]
-    F2Start["Pilih produk/metode"] --> Snap["Snapshot parameter kebijakan (grandfathering)"]
-    Snap --> NoPerm["Nomor atomik: KDI/2026/0001"]
-    NoPerm --> Dok{"Dokumen, consent SLIK, agunan lengkap?"}
-    Dok -- "Belum" --> Kembali["Kembali ke nasabah"] --> Dok
-    Dok -- "Lengkap" --> F3Start
-  end
-  subgraph F3["Fase 3 · Analisis (Workbench)"]
-    F3Start["Neraca & laba rugi"] --> Imb{"Selisih > toleransi?"}
-    Imb -- "Ya" --> Warn["Soft warning: banner + audit (tidak blokir)"] --> Ratios
-    Imb -- "Tidak" --> Ratios
-    Ratios["Rasio & modal kerja: WCD, cash turnover"] --> Kap
-    Kap["RPC = surplus × margin; DSCR = RPC ÷ (angsuran baru + SLIK dedupe)"] --> IDIR{"IDIR?"}
-    IDIR -- "≤ 35%" --> Agunan
-    IDIR -- "35–80%" --> BannerIDIR["Banner PERHATIAN (batas internal)"] --> Agunan
-    IDIR -- "> 80%" --> HardIDIR["HARD STOP — tidak layak"] --> Tolak1(["Ditolak + audit"])
-    Agunan["Agunan: PPKA single-basis, LTV tanpa double-haircut"] --> LTV{"LTV > batas maksimum?"}
-    LTV -- "Ya" --> TolakLTV["Tolak / mitigasi agunan"] --> Tolak1
-    LTV -- "Tidak" --> Score["Scoring 5C (bobot 1,00; override SLIK teraudit)"]
-    Score --> Stress["Sensitivitas 6 skenario"]
-  end
-  Stress --> F4Start
-  subgraph F4["Fase 4 · Rekomendasi"]
-    F4Start["MIN(pengajuan, plafon maksimum, batas LTV)"] --> F5Start
-  end
-  subgraph F5["Fase 5 · Persetujuan Berjenjang"]
-    F5Start["AO ajukan persetujuan"] --> Sod{"SoD & cabang terpenuhi?"}
-    Sod -- "Tidak" --> Forbid["403"] --> Tolak2(["Ditolak + audit"])
-    Sod -- "Ya" --> Ladder["MGR Pemasaran → Komite sesuai limit"]
-    Ladder --> Gate{"Hard gate approve lulus?"}
-    Gate -- "Tidak" --> Tolak3(["Tolak approve + alasan"])
-    Gate -- "Ya" --> Approved["Persetujuan final"]
-  end
-  Approved --> F6Start
-  subgraph F6["Fase 6 · Pencairan"]
-    F6Start["SPK: SPK/KDI/2026/0001"] --> NoKredit["Nomor kredit: KDI/2026/K/0001"]
-    NoKredit --> Memo["Memo cair: biaya, payoff + penalti, blokir 2× (TPP)"]
-    Memo --> Cair["Dana masuk rekening nasabah"]
-  end
-  Cair --> F7Start
-  subgraph F7["Fase 7 · Pasca-Pencairan"]
-    F7Start["Buku besar + buku agunan (agunan_key)"] --> Monitor["Monitoring angsuran"]
-    Monitor --> CKPN["CKPN/PPKA; write-off parsial ditolak"]
-  end
-  Tolak1 -.-> EndTolak(["Permohonan ditolak — semua jejak diaudit"])
-  Tolak2 -.-> EndTolak
-  Tolak3 -.-> EndTolak
-    </pre>
-    <p class="mermaid-fallback">Jika diagram tidak muncul, buka docs/FLOW-PROSES-KREDIT.md (Mermaid dirender otomatis di GitHub).</p>
-  </section>
+  classDef warn fill:#fef3c7,stroke:#f59e0b,color:#92400e
+  classDef hard fill:#fde8e8,stroke:#dc2626,color:#7f1d1d
+  classDef ok fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef netral fill:#f8fafc,stroke:#cbd5e1,color:#334155
 
-  <section class="card">
-    <h2>2 · Sequence — skenario C-002 (TPP flat)</h2>
-    <pre class="mermaid">
+  A0["Hasil analisis masuk gerbang"]:::netral --> IDIR{"IDIR vs batas<br/>(BR-11 / BR-11H)"}
+  IDIR -- "≤ 35%" --> LTV{"LTV > batas maksimum?<br/>(G-COL-02)"}
+  IDIR -- "35% – 80%" --> WARN["Banner PERHATIAN<br/>batas internal, bukan OJK<br/>(G-TPP-03-A)"]:::warn --> LTV
+  IDIR -- "> 80%" --> HARDIDIR["HARD STOP<br/>(G-TPP-03-B)"]:::hard --> TOLAK(["<b>Ditolak</b> — audit trail"])
+
+  LTV -- "Tidak" --> S5C["Scoring 5C<br/>bobot total 1,00<br/>override SLIK teraudit<br/>(G-SCR-01/02)"]
+  LTV -- "Ya" --> MITIGASI["Mitigasi agunan<br/>atau tolak"]:::warn --> TOLAK
+
+  S5C --> STRESS["6 skenario sensitivitas<br/>delta dari policy<br/>(G-STR-01/02)"]
+  STRESS --> REK["Rekomendasi plafon<br/>MIN(pengajuan, kapasitas, LTV)<br/>(G-DEC-02)"]:::netral
+  REK --> SOD{"SoD: pembuat ≠ penyetuju<br/>dan cabang sama?"}
+  SOD -- "Tidak" --> FORBID["403"]:::hard --> TOLAK
+  SOD -- "Ya" --> LADDER["MGR Pemasaran → Komite<br/>sesuai limit"]:::netral
+  LADDER --> GATE{"Hard gate approve:<br/>BR-01/02/03/05/11H/13"}
+  GATE -- "Gagal" --> TOLAKAPPROVE["Tolak approve<br/>+ alasan"]:::hard --> TOLAK
+  GATE -- "Lulus" --> APPROVE["Persetujuan final"]:::ok --> CAIR(["<b>Dana masuk rekening</b>"])
+
+  TOLAK:::hard
+  CAIR:::ok
+        </pre>
+      </div>
+    </section>
+
+    <section id="scenario">
+      <h2><span class="num">3</span> · Skenario C-002 — TPP flat</h2>
+      <p class="lede">Skenario konkret: sistem menghitung langkah demi langkah, lalu hard gate menolak karena IDIR di atas 80%.</p>
+      <div class="card">
+        <pre class="mermaid">
 sequenceDiagram
   participant N as Calon Nasabah
   participant AO as AO (KDI)
   participant S as Sistem
   participant M as MGR / Komite
   N->>AO: Mengajukan kredit TPP
-  AO->>S: Plafon Rp80.000.000, 18%/tahun, 60 bulan
-  S->>S: Snapshot + nomor KDI/2026/0001
-  S->>S: Angsuran flat = 80jt/60 + 80jt×18%/12 = Rp2.533.333,33
-  S->>S: IDIR = 2.533.333,33 ÷ 2.948.080 = 85,93%
+  AO->>S: Plafon Rp80.000.000, bunga 18%/tahun, tenor 60 bulan
+  S->>S: (1) Snapshot policy + nomor KDI/2026/0001
+  S->>S: (2) Pokok = 80.000.000 ÷ 60 = Rp1.333.333,33
+  S->>S: (3) Bunga = 80.000.000 × 18% ÷ 12 = Rp1.200.000
+  S->>S: (4) Angsuran flat = Rp2.533.333,33
+  S->>S: (5) IDIR = 2.533.333,33 ÷ 2.948.080 = 85,93%
   S-->>AO: Banner: IDIR > 80% (hard stop)
   AO->>M: Ajukan keputusan
   M->>S: Approve
@@ -142,28 +228,64 @@ sequenceDiagram
   M-->>N: Surat penolakan + alasan (audit)
   Note over S: Angka C-002 = klaim/recomputed, belum verified.
   Note over S: Alternatif: IDIR ≤ 80% → scoring/agunan → komite → SPK → dana cair.
-    </pre>
-  </section>
+        </pre>
+      </div>
+    </section>
 
-  <section class="card">
-    <h2>3 · Keputusan kunci per gate</h2>
-    <table>
-      <tr><th>Gate</th><th>Kondisi</th><th>Keluaran</th></tr>
-      <tr><td>CIF</td><td>NIK duplikat lintas cabang</td><td>Tolak pendaftaran</td></tr>
-      <tr><td>Neraca</td><td>Selisih &gt; toleransi</td><td>Soft warning, tidak blokir</td></tr>
-      <tr><td>IDIR</td><td>≤ 35% / 35–80% / &gt; 80%</td><td>Lanjut / banner / hard stop</td></tr>
-      <tr><td>LTV</td><td>&gt; batas maksimum</td><td>Tolak / mitigasi</td></tr>
-      <tr><td>Persetujuan</td><td>Pembuat = penyetuju / lintas cabang</td><td>403</td></tr>
-      <tr><td>Approve</td><td>Hard gate gagal</td><td>Tolak approve</td></tr>
-      <tr><td>Write-off</td><td>Parsial</td><td>Ditolak</td></tr>
-    </table>
-  </section>
+    <section id="table">
+      <h2><span class="num">4</span> · Tabel keputusan per gate</h2>
+      <div class="card" style="overflow-x:auto">
+        <table>
+          <tr><th>Gate</th><th>Kondisi</th><th>Keluaran</th><th>Status</th></tr>
+          <tr><td>CIF</td><td>NIK duplikat lintas cabang</td><td>Tolak pendaftaran + alasan</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Permohonan</td><td>Dokumen/consent/agunan belum lengkap</td><td>Kembali ke nasabah</td><td><span class="status hold">Tunda</span></td></tr>
+          <tr><td>Neraca</td><td>Selisih &gt; toleransi</td><td>Soft warning, tidak blokir submit</td><td><span class="status warn">Warning</span></td></tr>
+          <tr><td>IDIR</td><td>≤ 35%</td><td>Lanjut</td><td><span class="status ok">Lolos</span></td></tr>
+          <tr><td>IDIR</td><td>35% – 80%</td><td>Banner PERHATIAN (batas internal)</td><td><span class="status warn">Warning</span></td></tr>
+          <tr><td>IDIR</td><td>&gt; 80%</td><td>Hard stop</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>LTV</td><td>&gt; batas maksimum</td><td>Tolak / mitigasi agunan</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Scoring 5C</td><td>Bobot ≠ 1,00</td><td>Validasi konfigurasi gagal</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Override SLIK</td><td>Tanpa alasan/otorisasi/audit</td><td>Ditolak</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Persetujuan</td><td>Pembuat = penyetuju / lintas cabang</td><td>403</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Approve</td><td>Hard gate BR-01/02/03/05/11H/13 gagal</td><td>Tolak approve</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Pencairan</td><td>SPK/booking belum lengkap</td><td>Tunda pencairan</td><td><span class="status hold">Tunda</span></td></tr>
+          <tr><td>Write-off</td><td>Parsial</td><td>Ditolak</td><td><span class="status hard">Tolak</span></td></tr>
+          <tr><td>Write-off</td><td>Full tapi tidak eligible</td><td>Ditolak</td><td><span class="status hard">Tolak</span></td></tr>
+        </table>
+      </div>
+    </section>
 
-  <footer>
-    Sumber: docs/FLOW-PROSES-KREDIT.md · Kasus golden: commandcode bpr/project/tests/golden/cases/ ·
-    Sistem: Laravel 13 + PostgreSQL 16 (SoR) · Livewire + CSS native.
-  </footer>
-</main>
+    <section id="legend">
+      <h2><span class="num">5</span> · Legenda istilah &amp; singkatan</h2>
+      <div class="card">
+        <dl class="legend">
+          <div class="item"><dt>CIF</dt><dd>Catatan identitas nasabah, satu nomor per nasabah lintas cabang.</dd></div>
+          <div class="item"><dt>KYC</dt><dd>Verifikasi identitas dan dokumen nasabah.</dd></div>
+          <div class="item"><dt>SLIK</dt><dd>Informasi riwayat kredit dari OJK; dipakai untuk DSR/IDIR.</dd></div>
+          <div class="item"><dt>IDIR</dt><dd>Angsuran baru ÷ penghasilan bersih.</dd></div>
+          <div class="item"><dt>DSCR</dt><dd>RPC ÷ total kewajiban bulanan (termasuk SLIK aktif).</dd></div>
+          <div class="item"><dt>RPC</dt><dd>Surplus × margin kapasitas bayar.</dd></div>
+          <div class="item"><dt>LTV</dt><dd>Kredit ÷ nilai agunan basis tunggal (tanpa double-haircut).</dd></div>
+          <div class="item"><dt>PPKA</dt><dd>Basis nilai agunan setelah pengurang.</dd></div>
+          <div class="item"><dt>CKPN</dt><dd>Cadangan Kerugian Penurunan Nilai.</dd></div>
+          <div class="item"><dt>BMPK</dt><dd>Batas maksimum pemberian kredit kepada pihak terkait.</dd></div>
+          <div class="item"><dt>SoD</dt><dd>Pembuat tidak boleh menyetujui miliknya sendiri.</dd></div>
+          <div class="item"><dt>Hard stop</dt><dd>Aturan yang menolak transaksi.</dd></div>
+          <div class="item"><dt>Soft warning</dt><dd>Peringatan yang tidak memblokir, tetapi tercatat.</dd></div>
+          <div class="item"><dt>Snapshot</dt><dd>Salinan parameter kebijakan saat permohonan dibuat.</dd></div>
+          <div class="item"><dt>Grandfathering</dt><dd>Permohonan lama tetap memakai snapshot lama.</dd></div>
+          <div class="item"><dt>Ledger</dt><dd>Catatan peristiwa append-only dengan hash chain.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <footer>
+      Sumber: docs/FLOW-PROSES-KREDIT.md · Kasus golden: commandcode bpr/project/tests/golden/cases/ ·
+      Sistem: Laravel 13 + PostgreSQL 16 (SoR) · Livewire + CSS native.
+    </footer>
+  </main>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>
   if (window.mermaid) {
