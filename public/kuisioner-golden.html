@@ -208,6 +208,22 @@
     overflow: auto; max-height: 55vh; font-size: 12px;
   }
   .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 0 20px 18px; }
+  .calc-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 14px; }
+  .calc-tab {
+    appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
+    border-radius: 999px; padding: 7px 12px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 650;
+  }
+  .calc-tab.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .calc-panel[hidden] { display: none; }
+  .calc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .calc-result {
+    margin-top: 12px; padding: 12px 14px; background: #f0faf7; border: 1px solid #b9d7d0;
+    border-radius: 10px; color: #24545f; font-size: 13px; line-height: 1.7;
+  }
+  .calc-result strong { color: var(--brand); }
+  .calc-formula { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+  .btn-small { padding: 6px 10px; font-size: 12px; }
+  .calc-link { margin: 0 0 10px; }
   @media (max-width: 860px) {
     .app { grid-template-columns: 1fr; }
     aside { position: static; height: auto; }
@@ -216,6 +232,7 @@
     .identity, .summary { grid-template-columns: 1fr; }
     header.page { flex-direction: column; }
     .hero-progress { justify-self: start; }
+    .calc-grid { grid-template-columns: 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -261,6 +278,7 @@
     <div class="actions" style="margin:0 0 16px">
       <button class="btn" type="button" id="btnExport">Ekspor JSON</button>
       <button class="btn" type="button" id="btnGlossary">Glosarium</button>
+      <button class="btn" type="button" id="btnCalc">Kalkulator</button>
       <button class="btn" type="button" id="btnNextOpen">Berikutnya belum dijawab</button>
       <button class="btn" type="button" id="btnPrint">Cetak</button>
     </div>
@@ -379,6 +397,74 @@
     <button class="btn" type="button" id="btnCopy">Salin</button>
     <button class="btn" type="button" id="btnDownload">Unduh .json</button>
     <button class="btn primary" type="button" id="btnCloseDialog">Tutup</button>
+  </div>
+</dialog>
+
+<dialog id="calcDialog">
+  <div class="dialog-body">
+    <h3>Alat bantu hitung</h3>
+    <p class="muted small">Nilai awal hanya contoh C-002. Ganti dengan angka kasus yang Anda jawab. Kalkulator membantu menghitung, bukan memilih jawaban.</p>
+
+    <div class="calc-tabs" role="tablist" aria-label="Jenis hitungan">
+      <button class="calc-tab active" type="button" role="tab" aria-selected="true" data-tab="angsuran">Angsuran</button>
+      <button class="calc-tab" type="button" role="tab" aria-selected="false" data-tab="kapasitas">Kapasitas / IDIR / DSCR</button>
+      <button class="calc-tab" type="button" role="tab" aria-selected="false" data-tab="agunan">Agunan / LTV</button>
+      <button class="calc-tab" type="button" role="tab" aria-selected="false" data-tab="modal">Modal kerja</button>
+    </div>
+
+    <section class="calc-panel" data-panel="angsuran">
+      <div class="calc-grid">
+        <label class="field">Plafon (Rp)<input type="number" id="calcPlafon" value="80000000" min="0" step="100000"></label>
+        <label class="field">Bunga per tahun (%)<input type="number" id="calcRate" value="18" min="0" step="0.01"></label>
+        <label class="field">Tenor (bulan)<input type="number" id="calcTenor" value="60" min="1" step="1"></label>
+        <label class="field">Metode
+          <select id="calcMethod">
+            <option value="flat">Flat</option>
+            <option value="anuitas">Anuitas / efektif</option>
+          </select>
+        </label>
+        <label class="field">Grace period (bulan)<input type="number" id="calcGrace" value="0" min="0" step="1"></label>
+      </div>
+      <div class="calc-result" id="calcAngsuranResult" role="status" aria-live="polite"></div>
+      <p class="calc-formula">Flat: pokok = plafon ÷ tenor; bunga = plafon × rate ÷ 12; angsuran = pokok + bunga. Anuitas: A = P × r ÷ (1 − (1+r)<sup>−n</sup>), r = rate ÷ 12.</p>
+    </section>
+
+    <section class="calc-panel" data-panel="kapasitas" hidden>
+      <div class="calc-grid">
+        <label class="field">Penghasilan bersih / bulan (Rp)<input type="number" id="calcIncome" value="2948080" min="0" step="1000"></label>
+        <label class="field">Angsuran baru / bulan (Rp)<input type="number" id="calcNewInstallment" value="2533333.33" min="0" step="0.01"></label>
+        <label class="field">Angsuran SLIK / bulan (Rp)<input type="number" id="calcSlikInstallment" value="0" min="0" step="0.01"></label>
+        <label class="field">RPC / bulan (Rp)<input type="number" id="calcRpc" value="3500000" min="0" step="0.01"></label>
+      </div>
+      <div class="calc-result" id="calcKapasitasResult" role="status" aria-live="polite"></div>
+      <p class="calc-formula">IDIR = angsuran baru ÷ penghasilan bersih. DSCR = RPC ÷ (angsuran baru + angsuran SLIK). Batas IDIR: ≤35% layak, ≤80% perhatian, &gt;80% tidak layak. DSCR: ≥1,10 aman, ≥1,00 perhatian, &lt;1,00 tidak layak.</p>
+    </section>
+
+    <section class="calc-panel" data-panel="agunan" hidden>
+      <div class="calc-grid">
+        <label class="field">Nilai agunan (Rp)<input type="number" id="calcCollateralValue" value="100000000" min="0" step="100000"></label>
+        <label class="field">Plafon kredit (Rp)<input type="number" id="calcLoanAmount" value="80000000" min="0" step="100000"></label>
+        <label class="field">Haircut (%)<input type="number" id="calcHaircut" value="20" min="0" max="100" step="0.01"></label>
+      </div>
+      <div class="calc-result" id="calcAgunanResult" role="status" aria-live="polite"></div>
+      <p class="calc-formula">Basis agunan = nilai agunan × (1 − haircut). LTV = plafon ÷ basis × 100%. Plafon maksimum 80% = basis × 80%.</p>
+    </section>
+
+    <section class="calc-panel" data-panel="modal" hidden>
+      <div class="calc-grid">
+        <label class="field">Persediaan (Rp)<input type="number" id="calcInventory" value="150000000" min="0" step="100000"></label>
+        <label class="field">Piutang (Rp)<input type="number" id="calcReceivable" value="80000000" min="0" step="100000"></label>
+        <label class="field">Kas (Rp)<input type="number" id="calcCash" value="20000000" min="0" step="100000"></label>
+        <label class="field">Hutang dagang (Rp)<input type="number" id="calcPayable" value="50000000" min="0" step="100000"></label>
+        <label class="field">HPP per hari (Rp)<input type="number" id="calcCogsDay" value="5000000" min="0" step="100000"></label>
+      </div>
+      <div class="calc-result" id="calcModalResult" role="status" aria-live="polite"></div>
+      <p class="calc-formula">Kebutuhan modal kerja = persediaan + piutang + kas − hutang dagang. WCD = persediaan ÷ HPP per hari.</p>
+    </section>
+  </div>
+  <div class="dialog-actions">
+    <button class="btn" type="button" id="btnCalcC002">Isi contoh C-002</button>
+    <button class="btn primary" type="button" id="btnCalcClose">Tutup</button>
   </div>
 </dialog>
 
@@ -999,6 +1085,7 @@ function render() {
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
       (fullNote ? '<p class="q-note"><strong>Catatan:</strong> ' + escapeHtml(fullNote) + '</p>' : '') +
       '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
+      (calcSections.has(section.id) ? '<button class="btn btn-small calc-link" type="button" data-calc-section="' + section.id + '">Bantu hitung</button>' : '') +
       (context.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(context.source) + '</p></details>' : '') +
       '<p class="q-essay-cue">Uraikan secara lengkap: sumber/sel atau dasar angka, langkah perhitungan, alasan memilih jawaban, dan risiko bila jawaban ini salah.</p>' +
       '<div class="options">' + options +
@@ -1123,6 +1210,159 @@ const sectionLabel = {
   'app-ui': 'antarmuka, audit, dan rilis'
 };
 
+const calcSections = new Set([
+  'golden-tpp', 'golden-schedule', 'golden-capacity',
+  'golden-collateral', 'golden-negative', 'app-numbering'
+]);
+
+const rupiah = new Intl.NumberFormat('id-ID', {
+  style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 2
+});
+
+function fmtRp(value) {
+  return rupiah.format(Number(value) || 0);
+}
+
+function fmtPct(value) {
+  return ((Number(value) || 0) * 100).toFixed(2).replace('.', ',') + '%';
+}
+
+function fmtX(value) {
+  return (Number(value) || 0).toFixed(2).replace('.', ',') + '×';
+}
+
+function num(id) {
+  const element = document.getElementById(id);
+  return element ? (parseFloat(element.value) || 0) : 0;
+}
+
+function calcAngsuran() {
+  const plafon = num('calcPlafon');
+  const rate = num('calcRate') / 100;
+  const tenor = Math.max(1, Math.floor(num('calcTenor')));
+  const grace = Math.max(0, Math.min(Math.floor(num('calcGrace')), tenor - 1));
+  const monthlyRate = rate / 12;
+  const method = document.getElementById('calcMethod').value;
+  const rows = [];
+  let total;
+
+  if (method === 'flat') {
+    const pokok = plafon / tenor;
+    const bunga = plafon * monthlyRate;
+    if (grace > 0) {
+      const after = tenor - grace;
+      const pokokAfter = plafon / after;
+      rows.push('Selama grace (' + grace + ' bln): bunga ' + fmtRp(bunga) + '/bln; pokok ditunda.');
+      rows.push('Setelah grace (' + after + ' bln): <strong>' + fmtRp(pokokAfter + bunga) + '</strong>/bln (pokok ' + fmtRp(pokokAfter) + ' + bunga ' + fmtRp(bunga) + ').');
+    } else {
+      rows.push('Angsuran/bulan: <strong>' + fmtRp(pokok + bunga) + '</strong>');
+      rows.push('Pokok/bulan: ' + fmtRp(pokok) + '; bunga/bulan: ' + fmtRp(bunga) + '.');
+    }
+    total = plafon + (bunga * tenor);
+    rows.push('Total bunga: ' + fmtRp(bunga * tenor) + '; total bayar: ' + fmtRp(total) + '.');
+  } else {
+    const after = grace > 0 ? tenor - grace : tenor;
+    const annuity = monthlyRate === 0 ? plafon / after : plafon * monthlyRate / (1 - Math.pow(1 + monthlyRate, -after));
+    if (grace > 0) {
+      rows.push('Selama grace (' + grace + ' bln): bunga ' + fmtRp(plafon * monthlyRate) + '/bln; pokok ditunda.');
+      rows.push('Setelah grace (' + after + ' bln): <strong>' + fmtRp(annuity) + '</strong>/bln.');
+    } else {
+      rows.push('Angsuran/bulan: <strong>' + fmtRp(annuity) + '</strong>');
+    }
+    total = annuity * tenor;
+    rows.push('Total bunga (perkiraan): ' + fmtRp(total - plafon) + '; total bayar: ' + fmtRp(total) + '.');
+  }
+
+  document.getElementById('calcAngsuranResult').innerHTML = rows.join('<br>');
+}
+
+function calcKapasitas() {
+  const income = num('calcIncome');
+  const baru = num('calcNewInstallment');
+  const slik = num('calcSlikInstallment');
+  const rpc = num('calcRpc');
+  const idir = income > 0 ? baru / income : 0;
+  const dscr = (baru + slik) > 0 ? rpc / (baru + slik) : 0;
+  const idirStatus = income > 0 ? (idir <= 0.35 ? 'LAYAK' : (idir <= 0.80 ? 'PERHATIAN' : 'TIDAK LAYAK')) : 'ISI PENGHASILAN';
+  const dscrStatus = (baru + slik) > 0 ? (dscr >= 1.10 ? 'AMAN' : (dscr >= 1.00 ? 'PERHATIAN' : 'TIDAK LAYAK')) : 'ISI ANGSURAN/RPC';
+
+  document.getElementById('calcKapasitasResult').innerHTML =
+    'IDIR: <strong>' + fmtPct(idir) + '</strong> — ' + idirStatus + '<br>' +
+    'DSCR: <strong>' + fmtX(dscr) + '</strong> — ' + dscrStatus + '<br>' +
+    '<span class="small">Total kewajiban: ' + fmtRp(baru + slik) + '/bulan.</span>';
+}
+
+function calcAgunan() {
+  const value = num('calcCollateralValue');
+  const loan = num('calcLoanAmount');
+  const haircut = num('calcHaircut') / 100;
+  const basis = value * (1 - haircut);
+  const ltv = basis > 0 ? loan / basis : 0;
+  const maxLoan = basis * 0.8;
+
+  document.getElementById('calcAgunanResult').innerHTML =
+    'Basis agunan: ' + fmtRp(basis) + '<br>' +
+    'LTV: <strong>' + fmtPct(ltv) + '</strong><br>' +
+    'Plafon maksimum 80%: ' + fmtRp(maxLoan) + '.';
+}
+
+function calcModal() {
+  const inventory = num('calcInventory');
+  const receivable = num('calcReceivable');
+  const cash = num('calcCash');
+  const payable = num('calcPayable');
+  const cogsDay = num('calcCogsDay');
+  const workingCapital = inventory + receivable + cash - payable;
+  const wcd = cogsDay > 0 ? inventory / cogsDay : 0;
+
+  document.getElementById('calcModalResult').innerHTML =
+    'Kebutuhan modal kerja: <strong>' + fmtRp(workingCapital) + '</strong><br>' +
+    'WCD: <strong>' + wcd.toFixed(1).replace('.', ',') + ' hari</strong>.';
+}
+
+function calcAll() {
+  calcAngsuran();
+  calcKapasitas();
+  calcAgunan();
+  calcModal();
+}
+
+function setCalcTab(tab) {
+  document.querySelectorAll('.calc-tab').forEach((button) => {
+    const active = button.dataset.tab === tab;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  document.querySelectorAll('.calc-panel').forEach((panel) => {
+    panel.hidden = panel.dataset.panel !== tab;
+  });
+}
+
+function fillC002() {
+  const values = {
+    calcPlafon: 80000000, calcRate: 18, calcTenor: 60, calcGrace: 0,
+    calcIncome: 2948080, calcNewInstallment: 2533333.33, calcSlikInstallment: 0, calcRpc: 3500000,
+    calcCollateralValue: 100000000, calcLoanAmount: 80000000, calcHaircut: 20
+  };
+  Object.entries(values).forEach(([id, value]) => {
+    const element = document.getElementById(id);
+    if (element) element.value = value;
+  });
+  document.getElementById('calcMethod').value = 'flat';
+  calcAll();
+}
+
+function openCalc(sectionId) {
+  if (sectionId) {
+    if (sectionId === 'golden-capacity') setCalcTab('kapasitas');
+    else if (sectionId === 'golden-collateral') setCalcTab('agunan');
+    else setCalcTab('angsuran');
+    if (sectionId.startsWith('golden-')) fillC002();
+  }
+  calcAll();
+  document.getElementById('calcDialog').showModal();
+}
+
 function contextNote(source) {
   if (!source) return '';
   if (source.includes('ILUSTRASI')) return 'Angka ini adalah ilustrasi uji, bukan data nasabah.';
@@ -1211,6 +1451,20 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#btnNextOpen').addEventListener('click', goNextUnanswered);
   $('#btnExport').addEventListener('click', showExport);
   $('#btnGlossary').addEventListener('click', () => $('#glossaryDialog').showModal());
+  $('#btnCalc').addEventListener('click', () => openCalc(''));
+  $('#btnCalcClose').addEventListener('click', () => $('#calcDialog').close());
+  $('#btnCalcC002').addEventListener('click', fillC002);
+  document.querySelectorAll('.calc-tab').forEach((button) => {
+    button.addEventListener('click', () => setCalcTab(button.dataset.tab));
+  });
+  document.querySelectorAll('#calcDialog input, #calcDialog select').forEach((input) => {
+    input.addEventListener('input', calcAll);
+  });
+  $('#sectionHost').addEventListener('click', (event) => {
+    const button = event.target.closest('.calc-link');
+    if (button) openCalc(button.dataset.calcSection);
+  });
+  calcAll();
   $('#btnCloseGlossary').addEventListener('click', () => $('#glossaryDialog').close());
   $('#btnPrint').addEventListener('click', () => window.print());
   $('#btnCloseDialog').addEventListener('click', () => $('#exportDialog').close());
