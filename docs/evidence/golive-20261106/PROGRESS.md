@@ -41,3 +41,9 @@
 | 19:53:00 | P0.16 about | php artisan about --only=environment | 0 | [V] production + debug OFF |
 | 19:53:00 | P0.17 curl redirect | curl -I -L login | 0 | [V] HTTP/2 200 tanpa loop |
 | 19:53:00 | P0 GATE | curl -f https://loan-analytic-bpr.test/health | 0 | [V] SELESAI |
+| 20:10:00 | P1A pencairan UI | verify --full + test PencairanUiTest | 0 | [V] SELESAI commit ee88674 |
+| 20:12:00 | P1B dokumen UI | verify --full + test DokumenUiTest | 0 | [V] SELESAI commit b3bcc85 |
+| 20:14:00 | P1C ledger UI | verify --full + test LedgerUiTest | 0 | [V] SELESAI commit fede060 |
+| 20:20:00 | P1D import UI | verify --full + test ImportUiTest | 0 | [V] SELESAI commit 82707e1 (hanya pembayaran CSV; debitur CSV tidak ada profil) |
+| 20:22:00 | P1E smoke role | curl https per role | 0 | [V] 36/36 PASS sesuai matriks |
+| 20:22:00 | P1 GATE | verify --full | 0 | [V] SELESAI |
