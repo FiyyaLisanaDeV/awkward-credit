@@ -51,6 +51,7 @@ CHAPTERS = [
     ("26-workflow-master-excel-breakdown.md", "Bab-26-Workflow-Master-Excel-Breakdown", "Workflow Master Excel: Breakdown Teknis"),
     ("27-buku-besar-kredit-agunan-cif.md", "Bab-27-Buku-Besar-Kredit-Agunan-CIF", "Buku Besar Kredit, Buku Agunan & Nomor CIF"),
     ("28-catatan-perubahan-produksi-20261107.md", "Bab-28-Catatan-Perubahan-Produksi-20261107", "Catatan Perubahan Produksi (2026-11-07)"),
+    ("29-formulir-wawancara-golden-vectors.md", "Bab-29-Formulir-Wawancara-Golden-Vectors", "Formulir Wawancara Golden Vectors (Grill-Me)"),
 ]
 
 EXTRA = [
@@ -86,6 +87,7 @@ GROUPS = [
     ("Analisis & Kesesuaian", CHAPTERS[24:26]),
     ("Register & Identitas", CHAPTERS[26:27]),
     ("Catatan Rilis", CHAPTERS[27:28]),
+    ("Verifikasi Golden", CHAPTERS[28:29]),
 ]
 
 # target relatif (dari manual/) -> slug wiki
@@ -244,6 +246,12 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-20-Known-Issues-Gap-Rencana", "gap & keputusan terbuka"),
         ("Bab-27-Buku-Besar-Kredit-Agunan-CIF", "register & CIF"),
         ("Bab-12-Ledger-Audit-Integritas", "ledger & bukti audit"),
+    ],
+    "Bab-29-Formulir-Wawancara-Golden-Vectors": [
+        ("Bab-08-Perhitungan-Jadwal-EIR-Simulasi", "jadwal & EIR"),
+        ("Bab-09-Business-Rules-Validasi", "ambang & validasi"),
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap golden & RAT-02"),
+        ("Bab-28-Catatan-Perubahan-Produksi-20261107", "checkpoint produksi"),
     ],
 }
 
