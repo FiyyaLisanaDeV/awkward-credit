@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Data pilot/UAT 1 cabang (KDI). Hanya untuk lingkungan lokal.
- * Tidak boleh dijalankan di produksi dan tidak memakai PII nyata.
+ * Data pilot/UAT 3 cabang (KDI, BOM, KOL). Semua DUMMY, tanpa PII nyata.
+ * Di produksi hanya berjalan bila PILOT_ALLOW_PRODUCTION=true (flag eksplisit).
  */
 final class PilotUatSeeder extends Seeder
 {
@@ -30,24 +30,42 @@ final class PilotUatSeeder extends Seeder
 
     public function run(): void
     {
-        if (app()->isProduction()) {
-            $this->command?->error('PilotUatSeeder ditolak di produksi.');
+        if (app()->isProduction() && ! $this->allowedInProduction()) {
+            $this->command?->error('PilotUatSeeder ditolak di produksi tanpa PILOT_ALLOW_PRODUCTION=true.');
 
             return;
         }
 
         $this->password = (string) (config('loan.security.pilot_initial_password') ?: Str::password(16));
 
-        $cabangId = DB::table('cabang')->where('kode', 'KDI')->value('id');
+        foreach (['KDI', 'BOM', 'KOL'] as $kode) {
+            $this->seedCabang($kode);
+        }
+
+        Cache::flush();
+
+        $this->command?->info('Pilot UAT 3 cabang siap. Password user baru: '.$this->password.' (user lama tidak diubah).');
+    }
+
+    private function allowedInProduction(): bool
+    {
+        return filter_var((string) env('PILOT_ALLOW_PRODUCTION', false), FILTER_VALIDATE_BOOL);
+    }
+
+    private function seedCabang(string $kode): void
+    {
+        $cabangId = DB::table('cabang')->where('kode', $kode)->value('id');
 
         if ($cabangId === null) {
-            $this->command?->error('Cabang KDI belum ada. Jalankan seeder referensi dulu.');
+            $this->command?->warn('Cabang '.$kode.' belum ada, dilewati.');
 
             return;
         }
 
-        $users = $this->seedUsers((string) $cabangId);
-        $debitur = $this->seedDebitur((string) $cabangId);
+        $suffix = $kode === 'KDI' ? '' : '.'.strtolower($kode);
+
+        $users = $this->seedUsers((string) $cabangId, $suffix);
+        $debitur = $this->seedDebitur((string) $cabangId, $suffix);
         $produk = Produk::query()->where('cabang_id', $cabangId)->where('kode', 'TPP')->firstOrFail();
         $parameter = RefParameterKebijakan::query()->where('status', 'ACTIVE')->firstOrFail();
 
@@ -57,7 +75,7 @@ final class PilotUatSeeder extends Seeder
             $produk,
             $parameter,
             $users['ao'],
-            'KDI/PILOT/0001',
+            $kode.'/PILOT/0001',
             StatusPermohonan::SUBMITTED->value,
         );
 
@@ -67,26 +85,19 @@ final class PilotUatSeeder extends Seeder
             $produk,
             $parameter,
             $users['ao2'],
-            'KDI/PILOT/0002',
+            $kode.'/PILOT/0002',
             StatusPermohonan::SUBMITTED->value,
         );
 
         $this->approveAndCash($approved, $users);
 
-        $this->command?->info('Pilot UAT siap. Password user baru: '.$this->password.' (dari PILOT_INITIAL_PASSWORD; user lama tidak diubah).');
-        $this->command?->table(['username', 'role', 'nama'], array_map(
-            static fn (User $user): array => [$user->username, $user->getRoleNames()->implode(','), $user->name],
-            $users,
-        ));
-        $this->command?->info('Permohonan UAT: '.$submitted->no_permohonan.' (SUBMITTED), '.$approved->no_permohonan.' (ACTIVE/berjalan)');
-
-        Cache::flush();
+        $this->command?->info($kode.': '.$submitted->no_permohonan.' (SUBMITTED), '.$approved->no_permohonan.' (ACTIVE/berjalan)');
     }
 
     /**
      * @return array<string, User>
      */
-    private function seedUsers(string $cabangId): array
+    private function seedUsers(string $cabangId, string $suffix): array
     {
         $rows = [
             'ao' => ['AO', 'AO Pilot', 'ao.pilot'],
@@ -102,12 +113,14 @@ final class PilotUatSeeder extends Seeder
 
         $users = [];
 
-        foreach ($rows as $key => [$role, $name, $username]) {
+        foreach ($rows as $key => [$role, $name, $base]) {
+            $username = $base.$suffix;
+
             $user = User::query()->firstOrCreate(
                 ['username' => $username],
                 [
                     'cabang_id' => $cabangId,
-                    'name' => $name,
+                    'name' => $name.' '.strtoupper($suffix),
                     'email' => $username.'@bpr-pilot.local',
                     'password' => $this->password,
                     'jabatan' => $role,
@@ -123,13 +136,15 @@ final class PilotUatSeeder extends Seeder
         return $users;
     }
 
-    private function seedDebitur(string $cabangId): Debitur
+    private function seedDebitur(string $cabangId, string $suffix): Debitur
     {
+        $kode = strtoupper(ltrim($suffix, '.')) ?: 'KDI';
+
         return Debitur::query()->firstOrCreate(
-            ['no_ktp' => '7371000000000001'],
+            ['no_ktp' => '73710000000000'.($kode === 'KDI' ? '01' : ($kode === 'BOM' ? '02' : '03'))],
             [
                 'cabang_id' => $cabangId,
-                'nama_ktp' => 'Debitur Pilot Satu',
+                'nama_ktp' => 'Debitur Pilot '.$kode,
                 'nama_ibu_kandung' => 'Ibu Pilot',
                 'jenis_kelamin' => 'L',
                 'status_perkawinan' => 'MENIKAH',
@@ -139,9 +154,9 @@ final class PilotUatSeeder extends Seeder
                 'alamat_rw' => '002',
                 'kelurahan' => 'Kelurahan Pilot',
                 'kecamatan' => 'Kecamatan Pilot',
-                'kabupaten' => 'Kendari',
+                'kabupaten' => $kode === 'BOM' ? 'Bombana' : ($kode === 'KOL' ? 'Kolaka' : 'Kendari'),
                 'provinsi' => 'Sulawesi Tenggara',
-                'tempat_lahir' => 'Kendari',
+                'tempat_lahir' => 'Kota',
                 'tanggal_lahir' => '1990-01-01',
                 'jumlah_keluarga' => 3,
                 'jumlah_tanggungan' => 2,
@@ -202,7 +217,7 @@ final class PilotUatSeeder extends Seeder
         $kredit = app(KreditService::class)->cairkan($permohonan, $users['admin'], [
             'tanggal_cair' => '2026-11-06',
             'rekening_pencairan' => '1234567890',
-            'no_akad' => 'AKAD/PILOT/0002',
+            'no_akad' => str_replace('/', '-', $permohonan->no_permohonan),
         ]);
 
         if (! $kredit->pembayaran()->where('periode', 1)->exists()) {
@@ -210,7 +225,7 @@ final class PilotUatSeeder extends Seeder
                 'periode' => 1,
                 'tanggal_bayar' => '2026-12-06',
                 'metode' => 'TUNAI',
-                'no_bukti' => 'PILOT-BAYAR-0001',
+                'no_bukti' => 'PILOT-BAYAR-'.str_replace('/', '-', $permohonan->no_permohonan),
             ]);
         }
     }

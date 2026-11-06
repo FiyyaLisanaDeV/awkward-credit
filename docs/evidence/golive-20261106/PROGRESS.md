@@ -47,3 +47,8 @@
 | 20:20:00 | P1D import UI | verify --full + test ImportUiTest | 0 | [V] SELESAI commit 82707e1 (hanya pembayaran CSV; debitur CSV tidak ada profil) |
 | 20:22:00 | P1E smoke role | curl https per role | 0 | [V] 36/36 PASS sesuai matriks |
 | 20:22:00 | P1 GATE | verify --full | 0 | [V] SELESAI |
+| 20:30:00 | P2.1 seeder 3 cabang | PILOT_ALLOW_PRODUCTION=true db:seed PilotUatSeeder | 0 | [V] KDI/BOM/KOL |
+| 20:31:00 | P2.2 setujui template | service setting draft->approve->apply x17 | 0 | [V] 17 APPROVED [K] pilot dummy |
+| 20:32:00 | P2.3 policy | tinker | 0 | [V] ACTIVE margin0.5/idir0.35/ltv0.7 tidak diubah |
+| 20:33:00 | P2.4 isolasi | test 4 modul lintas cabang | 0 | [V] 20 passed |
+| 20:34:00 | P2 GATE | verify --full | 0 | [V] SELESAI ledger 20 baris |

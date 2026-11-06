@@ -1,0 +1,32 @@
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Kredit\PencairanUiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit mencairkan lewat UI dan mengarahkan ke detail kredit[39m[90m             [39m [90m1.20s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pencairan lewat UI bila belum disetujui[39m[90m                  [39m [90m0.30s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pencairan tanpa permission kredit.cairkan[39m[90m                [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak pencairan lintas cabang[39m[90m                                  [39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Document\DokumenUiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menampilkan daftar dokumen untuk admin[39m[90m                           [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menghasilkan dokumen lewat UI setelah template disetujui[39m[90m         [39m [90m0.59s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak generate lewat UI saat template DRAFT (BR-07)[39m[90m            [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menandatangani dokumen lewat UI dan mencatat ledger[39m[90m              [39m [90m0.58s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak sign tanpa permission dokumen.sign[39m[90m                       [39m [90m0.55s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak akses dokumen lintas cabang[39m[90m                              [39m [90m0.36s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Ledger\LedgerUiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit menampilkan daftar dan detail ledger untuk auditor[39m[90m               [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menjalankan verifikasi ledger dari UI dan menampilkan rantai utu[39m[90m…[39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menampilkan kegagalan verifikasi bila ada baris dipalsukan[39m[90m       [39m [90m0.36s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak route tulis pada ledger[39m[90m                                  [39m [90m0.32s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak detail ledger lintas cabang[39m[90m                              [39m [90m0.35s[39m  
+
+  [30;42;1m PASS [39;49;22m[39m Tests\Feature\Import\ImportUiTest[39m
+  [32;1m✓[39;22m[90m [39m[90mit membuat pratinjau impor pembayaran valid[39m[90m                         [39m [90m0.37s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit melaporkan baris tidak valid[39m[90m                                     [39m [90m0.34s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menandai duplikat kredit + periode[39m[90m                               [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak akses import tanpa permission[39m[90m                            [39m [90m0.35s[39m  
+  [32;1m✓[39;22m[90m [39m[90mit menolak detail batch lintas cabang[39m[90m                               [39m [90m0.37s[39m  
+
+  [90mTests:[39m    [32;1m20 passed[39;22m[90m (44 assertions)[39m
+  [90mDuration:[39m [39m8.54s[39m
+
