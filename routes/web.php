@@ -8,6 +8,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Web\ApprovalController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DebiturController;
+use App\Http\Controllers\Web\DokumenController;
 use App\Http\Controllers\Web\KreditController;
 use App\Http\Controllers\Web\PermohonanController;
 use App\Http\Controllers\Web\SettingController;
@@ -41,6 +42,19 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
     Route::middleware('permission:kredit.cairkan')->group(function (): void {
         Route::get('/kredit/cairkan/{permohonan}', [KreditController::class, 'create'])->name('kredit.cairkan.create');
         Route::post('/kredit/cairkan/{permohonan}', [KreditController::class, 'store'])->name('kredit.cairkan.store');
+    });
+
+    Route::middleware('permission:dokumen.view')->group(function (): void {
+        Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
+        Route::get('/dokumen/{dokumen}', [DokumenController::class, 'show'])->name('dokumen.show');
+    });
+
+    Route::middleware('permission:dokumen.generate_draft')->group(function (): void {
+        Route::post('/dokumen/{permohonan}/generate', [DokumenController::class, 'generate'])->name('dokumen.generate');
+    });
+
+    Route::middleware('permission:dokumen.sign')->group(function (): void {
+        Route::post('/dokumen/{dokumen}/sign', [DokumenController::class, 'sign'])->name('dokumen.sign');
     });
 
     Route::middleware('permission:permohonan.view')->group(function (): void {

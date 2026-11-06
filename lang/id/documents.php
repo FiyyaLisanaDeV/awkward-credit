@@ -3,6 +3,21 @@
 declare(strict_types=1);
 
 return [
+    'title' => 'Dokumen',
+    'empty' => 'Belum ada dokumen.',
+    'jenis' => 'Jenis dokumen',
+    'status' => 'Status tanda tangan',
+    'nomor' => 'Nomor dokumen',
+    'tanggal' => 'Tanggal dokumen',
+    'generate' => 'Generate dokumen',
+    'generate_hint' => 'Template harus berstatus APPROVED.',
+    'sign' => 'Tanda tangani',
+    'sign_hint' => 'Tanda tangan dicatat pada audit dan ledger.',
+    'pihak' => 'Pihak',
+    'nama' => 'Nama penandatangan',
+    'jabatan' => 'Jabatan',
+    'sign_button' => 'Tandatangani',
+    'riwayat_ttd' => 'Riwayat tanda tangan',
     'DOC-01' => [
         'judul' => 'Analisis Kredit',
         'isi' => 'Memuat ringkasan analisis kelayakan kredit berdasarkan data permohonan.',

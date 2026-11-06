@@ -71,6 +71,22 @@
         </div>
     </div>
 
+    @can('dokumen.generate_draft')
+        <div class="card">
+            <h3>{{ __('documents.generate') }}</h3>
+            <p class="hint">{{ __('documents.generate_hint') }}</p>
+            <form method="POST" action="{{ route('dokumen.generate', $permohonan) }}" class="inline-form">
+                @csrf
+                <select class="input" name="jenis" required>
+                    @foreach (\App\Enums\JenisDokumen::templateCases() as $jenis)
+                        <option value="{{ $jenis->value }}">{{ $jenis->value }} — {{ __('documents.'.$jenis->value.'.judul') }}</option>
+                    @endforeach
+                </select>
+                <button type="submit" class="btn btn-primary">{{ __('documents.generate') }}</button>
+            </form>
+        </div>
+    @endcan
+
     @if ($permohonan->rekomendasi !== null)
         <div class="card">
             <h3>{{ __('permohonan.rekomendasi') }}</h3>
