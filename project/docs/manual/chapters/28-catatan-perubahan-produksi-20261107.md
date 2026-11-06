@@ -8,14 +8,15 @@
 |---|---|
 | Sebelum | **2026-11-07 01:37 WITA** |
 | Sesudah | **2026-11-07 01:57 WITA** |
-| Commit aplikasi | `3a7d60a` (`APP BPR/loan-analytic-bpr`, branch `main` → remote `app`) |
+| Checkpoint lanjutan | **2026-11-07 02:00–02:10 WITA** |
+| Commit aplikasi | `3a7d60a` (fondasi) · `fb652ad` (workbench Sheet 3–9) |
 | Bukti | `docs/evidence/produksi-20261107/verify-full.txt` |
 
 ## 28.2 Ringkasan sebelum → sesudah
 
 | Aspek | Sebelum | Sesudah |
 |---|---|---|
-| Test | 195 test / 1993 assertions | **206 test / 2152 assertions** |
+| Test | 195 test / 1993 assertions | **206 test / 2156 assertions** |
 | Migrasi | 67 | **70** |
 | Route | 104 | **105** |
 | Snapshot parameter | Belum ada | `parameter_snapshot` JSONB + `forPermohonan()` |
@@ -23,7 +24,7 @@
 | IDIR TPP | Soft 35% saja | Soft >35%, **hard stop >80%** (`BR-11H`) |
 | Penomoran | `count()+lockForUpdate()` | SQL upsert atomik + backfill `GREATEST` |
 | DSCR | Hanya angsuran baru | Angsuran baru + total fasilitas SLIK aktif |
-| Workbench analisis | Belum ada | MVP `/permohonan/{id}/analisis` |
+| Workbench analisis | Belum ada | `/permohonan/{id}/analisis` — neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas 6 skenario, scoring 5C |
 | Golden G-TPP-03 | 80,00% ditandai hard stop | 80,00% lolos; 80,01% hard stop |
 | Golden verified | 0 / 29 | 0 / 29 (fixture diperbaiki; tanda tangan manusia tetap pending) |
 | Ledger | 20 baris | 20 baris, rantai utuh |
@@ -68,9 +69,10 @@
 
 **Gate 6 — Workbench**
 - Route `GET /permohonan/{permohonan}/analisis`.
-- Livewire: ringkasan, neraca, laba rugi, hitung kapasitas, scoring read-only.
+- Livewire: ringkasan, neraca, laba rugi, rasio, modal kerja, kapasitas, sensitivitas, scoring.
 - Banner neraca tidak seimbang; CSS native `public/css/app.css`.
 - Isolasi cabang via `ScopesByCabang`.
+- Checkpoint lanjutan (`fb652ad`): rasio otomatis, modal kerja cash turnover/WCD/gap, 6 skenario sensitivitas dari parameter policy, scoring 5C input + simpan.
 
 **Gate 7 — QA**
 - `verify.sh --full` OK; Pint, PHPStan app/services, 206 test, hardcode 0, docs 0, ledger 20.
@@ -81,7 +83,7 @@
 ```bash
 cd "APP BPR/loan-analytic-bpr"
 bash scripts/verify.sh --full          # VERIFY: OK (--full)
-php artisan test --compact             # 206 passed, 2152 assertions
+php artisan test --compact             # 206 passed, 2156 assertions
 php artisan ledger:verify              # OK — 20 baris, rantai utuh
 php artisan hardcode:audit             # 0 pelanggaran
 php artisan docs:check --strict        # 0 error, 0 peringatan
@@ -92,7 +94,7 @@ curl https://loan-analytic-bpr.test/health  # 200
 ## 28.5 Yang belum selesai
 
 - **Golden `verified=29`**: fixture sudah dikoreksi, tetapi tanda tangan manusia/evidence belum ada.
-- **UI Sheet 4/5/7/8 penuh**: workbench masih MVP; input rinci belum lengkap.
+- **UI penuh Sheet 3–9**: form utama sudah ada; validasi/field rinci masih dapat ditambah.
 - **Backup/restore drill + UAT 3 cabang**: belum dijalankan pada sesi ini.
 - **Token GitHub**: file `Github Fine Grained token.txt` masih ada di direktori spesifikasi; rotasi dan hapus sebelum publikasi.
 
@@ -102,3 +104,13 @@ curl https://loan-analytic-bpr.test/health  # 200
 - Approval TPP dengan IDIR >80% akan ditolak oleh hard gate; 35–80% menjadi perhatian.
 - Nomor baru tidak lagi memakai hitungan baris; backfill wajib dijalankan pada deployment berikutnya.
 - DSCR dapat turun karena kewajiban SLIK eksisting ikut dihitung; dampak ke approval perlu dipantau pada UAT.
+
+## 28.7 Checkpoint lanjutan (02:00–02:10 WITA)
+
+- `fb652ad`: Workbench Sheet 3–9 dilengkapi.
+- Rasio: current/quick/cash, debt-to-asset/equity, equity-to-asset, NPM, ROA, ROE.
+- Modal kerja: perputaran kas, cash turnover, WCD, rata-rata kebutuhan, gap.
+- Sensitivitas: 6 skenario (baseline, omzet ringan/berat, biaya naik, dua kombinasi).
+- Scoring 5C: input Condition + skor tertimbang/rating/override.
+- `Scoring5CService` memakai `forPermohonan()` (grandfathering).
+- Verifikasi ulang: **206 test / 2156 assertions**, `verify.sh --full` OK.
