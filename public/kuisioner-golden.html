@@ -131,6 +131,10 @@
   .q-status.done { background: #dcfce7; color: #166534; }
   .q-status.partial { background: #fef3c7; color: #92400e; }
   .q-narrative { margin: 8px 0 10px; color: #334155; }
+  .q-note {
+    margin: 0 0 10px; padding: 8px 10px; background: #f8fafc;
+    border-left: 3px solid #94a3b8; border-radius: 6px; color: #475569; font-size: 13px;
+  }
   .q-source { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
   .q-source summary { cursor: pointer; color: var(--brand); font-weight: 650; }
   .q-source p {
@@ -986,12 +990,16 @@ function render() {
 
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
     const context = splitContext(q.context);
+    const note = contextNote(context.source);
+    const dummyNote = section.id.startsWith('golden-') ? 'Kasus ini adalah data uji/dummy, bukan nasabah nyata. ' : '';
+    const fullNote = (dummyNote + note).trim();
     card.innerHTML =
       '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="q-status ' + statusClass + '">' + statusText + '</span></div>' +
-      '<p class="q-narrative">' + escapeHtml(context.human) + '</p>' +
-      (context.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(context.source) + '</p></details>' : '') +
-      '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
+      '<p class="q-narrative">Contoh kasus ' + escapeHtml(sectionLabel[section.id] || section.title.toLowerCase()) + '. Bayangkan Anda sedang memeriksa kasus berikut. ' + escapeHtml(context.human) + '</p>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+      (fullNote ? '<p class="q-note"><strong>Catatan:</strong> ' + escapeHtml(fullNote) + '</p>' : '') +
+      '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
+      (context.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(context.source) + '</p></details>' : '') +
       '<p class="q-essay-cue">Uraikan secara lengkap: sumber/sel atau dasar angka, langkah perhitungan, alasan memilih jawaban, dan risiko bila jawaban ini salah.</p>' +
       '<div class="options">' + options +
         '<label class="option' + (a.choice === 'D' ? ' selected' : '') + '"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
@@ -1101,6 +1109,28 @@ function goNextUnanswered() {
     const card = document.querySelector('.question[data-qid="' + q.id + '"]');
     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 80);
+}
+
+const sectionLabel = {
+  'golden-tpp': 'kredit TPP',
+  'golden-schedule': 'jadwal angsuran dan grace period',
+  'golden-capacity': 'kapasitas bayar dan modal kerja',
+  'golden-collateral': 'agunan, scoring 5C, dan keputusan',
+  'golden-negative': 'kasus negatif dan konsistensi data',
+  'app-snapshot': 'snapshot kebijakan pada aplikasi',
+  'app-stage': 'evaluasi aturan bertahap',
+  'app-numbering': 'penomoran dan DSCR',
+  'app-ui': 'antarmuka, audit, dan rilis'
+};
+
+function contextNote(source) {
+  if (!source) return '';
+  if (source.includes('ILUSTRASI')) return 'Angka ini adalah ilustrasi uji, bukan data nasabah.';
+  if (source.includes('[Rencana]')) return 'Prosedur ini belum dijalankan sebagai drill produksi.';
+  if (source.includes('[K]') && source.includes('[E]')) return 'Sebagian sudah terbukti di kode; sebagian masih menunggu verifikasi ahli.';
+  if (source.includes('[K]')) return 'Angka ini masih berupa klaim/recomputed dan belum diverifikasi ahli; jangan menganggapnya final.';
+  if (source.includes('[E]')) return 'Perilaku ini sudah diuji di kode; tetap perlu bukti pada lingkungan Anda.';
+  return '';
 }
 
 function splitContext(context) {
