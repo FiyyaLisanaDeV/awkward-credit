@@ -24,7 +24,9 @@
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: var(--bg);
+    background:
+      radial-gradient(900px 420px at 85% -10%, #e3f2ef 0%, rgba(227, 242, 239, 0) 70%),
+      var(--bg);
     color: var(--ink);
     line-height: 1.55;
   }
@@ -47,16 +49,46 @@
   nav { display: grid; gap: 4px; }
   nav button {
     appearance: none; border: 0; text-align: left; width: 100%;
-    padding: 9px 10px; border-radius: 8px; cursor: pointer;
+    display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 9px; align-items: center;
+    padding: 9px 10px; border-radius: 9px; cursor: pointer;
     background: transparent; color: #cfe1e5; font: inherit; font-size: 13px;
+    transition: background .15s ease, color .15s ease, transform .15s ease;
   }
-  nav button:hover { background: rgba(255,255,255,.08); color: #fff; }
+  nav button:hover { background: rgba(255,255,255,.08); color: #fff; transform: translateX(2px); }
   nav button.active { background: #f0f7f8; color: #0d2f38; font-weight: 700; }
-  nav button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; background: #4b6b72; }
-  nav button.active .dot, nav button.done .dot { background: #0f766e; }
+  .step-no {
+    width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255,255,255,.12); color: #cfe1e5; font-size: 11px; font-weight: 800;
+  }
+  nav button.active .step-no, nav button.done .step-no { background: #7dd3c7; color: #0d2f38; }
+  .step-label { display: grid; line-height: 1.25; }
+  .step-label small { font-size: 10px; font-weight: 400; color: #8fb0b7; margin-top: 2px; }
   main { padding: 28px 32px 64px; max-width: 980px; }
   header.page { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
-  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
+  h1 { font-size: 30px; line-height: 1.15; margin: 0 0 7px; letter-spacing: -.02em; }
+  .hero-copy { max-width: 680px; }
+  .hero-eyebrow {
+    display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--brand); margin-bottom: 8px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 650;
+    color: #24545f; background: #e7f3f1; border: 1px solid #cfe5e1; border-radius: 999px;
+    padding: 5px 10px;
+  }
+  .hero-progress { display: grid; justify-items: center; gap: 6px; flex: 0 0 auto; }
+  .progress-orb {
+    --p: 0; width: 92px; height: 92px; border-radius: 50%;
+    background: conic-gradient(var(--brand) calc(var(--p) * 1%), #dbe7ea 0);
+    display: grid; place-items: center; position: relative;
+    box-shadow: 0 8px 20px rgba(15, 76, 92, .12);
+  }
+  .progress-orb::before {
+    content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--surface);
+  }
+  .progress-orb span { position: relative; z-index: 1; font-weight: 800; font-size: 19px; color: var(--brand); }
+  .hero-progress small { color: var(--muted); font-size: 11px; }
   .muted { color: var(--muted); }
   .small { font-size: 12px; }
   .card {
@@ -73,11 +105,31 @@
   input:focus, textarea:focus, select:focus, button:focus-visible {
     outline: 3px solid #99d5cb; outline-offset: 1px; border-color: #0f766e;
   }
-  .section-head { margin: 22px 0 10px; }
-  .section-head h2 { margin: 0 0 4px; font-size: 21px; }
+  .section-head { margin: 26px 0 12px; }
+  .section-kicker {
+    font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--brand); margin-bottom: 4px;
+  }
+  .section-head h2 { margin: 0 0 4px; font-size: 23px; letter-spacing: -.01em; }
+  .section-progress {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+    font-size: 11px; font-weight: 700; color: #0f766e; background: #e7f6f2;
+    border: 1px solid #c8e8e1; border-radius: 999px; padding: 4px 9px;
+  }
+  .section-anim { animation: sectionIn .26s ease both; }
+  @keyframes sectionIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .question { border-left: 4px solid var(--brand); }
   .q-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
   .q-id { font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--brand); letter-spacing: .06em; }
+  .q-status {
+    font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px; background: #f1f5f9; color: #64748b; white-space: nowrap;
+  }
+  .q-status.done { background: #dcfce7; color: #166534; }
+  .q-status.partial { background: #fef3c7; color: #92400e; }
   .q-narrative { margin: 8px 0 10px; color: #334155; }
   .q-reason {
     margin: 0 0 10px; padding: 8px 10px; border-left: 3px solid #d97706;
@@ -94,7 +146,13 @@
     border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; cursor: pointer;
     background: #fbfcfd;
   }
-  .option:hover { border-color: #8fb8bf; background: #f4fafb; }
+  .option { transition: border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .15s ease; }
+  .option:hover { border-color: #8fb8bf; background: #f4fafb; transform: translateY(-1px); }
+  .option:has(input:checked), .option.selected {
+    border-color: #0f766e; background: #ecfdf5;
+    box-shadow: inset 0 0 0 1px #0f766e, 0 4px 12px rgba(15, 118, 110, .08);
+  }
+  .option:has(input:checked) .key, .option.selected .key { color: #0f766e; }
   .option input { margin-top: 3px; accent-color: #0f766e; }
   .option .key { font-weight: 800; color: var(--brand); }
   .free { margin-top: 10px; }
@@ -104,7 +162,9 @@
     appearance: none; border: 1px solid var(--line); background: #fff; color: var(--ink);
     border-radius: 9px; padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer;
   }
-  .btn:hover { border-color: #8fb8bf; }
+  .btn { transition: border-color .15s ease, background .15s ease, transform .15s ease; }
+  .btn:hover { border-color: #8fb8bf; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
   .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
   .btn.primary:hover { background: #0b3b47; }
   .btn.ghost { background: transparent; }
@@ -145,6 +205,11 @@
     main { padding: 18px; }
     .identity, .summary { grid-template-columns: 1fr; }
     header.page { flex-direction: column; }
+    .hero-progress { justify-self: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    html { scroll-behavior: auto; }
   }
   @media print {
     aside, .actions, .side-progress { display: none; }
@@ -167,16 +232,28 @@
 
   <main>
     <header class="page">
-      <div>
+      <div class="hero-copy">
+        <span class="hero-eyebrow">Verifikasi produksi</span>
         <h1>Kuisioner Verifikasi Golden &amp; Fungsi Aplikasi</h1>
         <div class="muted">Jawaban A–C sudah dibakukan. Pilih <strong>D</strong> bila perlu menjelaskan dengan kata sendiri.</div>
+        <div class="chips">
+          <span class="chip">9 bagian</span>
+          <span class="chip">72 pertanyaan</span>
+          <span class="chip">Esai wajib</span>
+        </div>
       </div>
-      <div class="actions" style="margin:0">
-        <button class="btn" type="button" id="btnExport">Ekspor JSON</button>
-        <button class="btn" type="button" id="btnGlossary">Glosarium</button>
-        <button class="btn" type="button" id="btnPrint">Cetak</button>
+      <div class="hero-progress">
+        <div class="progress-orb" id="progressOrb" aria-hidden="true"><span id="orbText">0%</span></div>
+        <small>progres pengisian</small>
       </div>
     </header>
+
+    <div class="actions" style="margin:0 0 16px">
+      <button class="btn" type="button" id="btnExport">Ekspor JSON</button>
+      <button class="btn" type="button" id="btnGlossary">Glosarium</button>
+      <button class="btn" type="button" id="btnNextOpen">Berikutnya belum dijawab</button>
+      <button class="btn" type="button" id="btnPrint">Cetak</button>
+    </div>
 
     <div id="identityCard" class="card">
       <h2 style="margin:0 0 12px;font-size:18px">Identitas pengisi</h2>
@@ -860,7 +937,8 @@ function renderNav() {
     button.type = 'button';
     const done = section.questions.filter(isAnswered).length;
     button.className = (index === currentSection ? 'active ' : '') + (done === section.questions.length ? 'done' : '');
-    button.innerHTML = '<span class="dot"></span>' + escapeHtml(section.title) + ' (' + done + '/' + section.questions.length + ')';
+    button.innerHTML = '<span class="step-no">' + String(index + 1).padStart(2, '0') + '</span>' +
+      '<span class="step-label">' + escapeHtml(section.title) + '<small>' + done + '/' + section.questions.length + ' terjawab</small></span>';
     button.addEventListener('click', () => { currentSection = index; render(); });
     nav.appendChild(button);
   });
@@ -873,7 +951,13 @@ function render() {
 
   const head = document.createElement('div');
   head.className = 'section-head';
-  head.innerHTML = '<h2>' + escapeHtml(section.title) + '</h2><p class="muted">' + escapeHtml(section.description) + '</p>' +
+  const sectionDone = section.questions.filter(isAnswered).length;
+  host.classList.remove('section-anim');
+  void host.offsetWidth;
+  host.classList.add('section-anim');
+  head.innerHTML = '<div class="section-kicker">Bagian ' + (currentSection + 1) + ' dari ' + sections.length + '</div>' +
+    '<h2>' + escapeHtml(section.title) + '</h2><p class="muted">' + escapeHtml(section.description) + '</p>' +
+    '<div class="section-progress">' + sectionDone + '/' + section.questions.length + ' terjawab</div>' +
     '<div class="intro">' + escapeHtml(section.intro) + '</div>';
   host.appendChild(head);
 
@@ -882,22 +966,27 @@ function render() {
     const card = document.createElement('div');
     card.className = 'card question';
     card.dataset.qid = q.id;
+    const answered = isAnswered(q);
+    const partial = a.choice || (a.essay || '').trim();
+    const statusClass = answered ? 'done' : (partial ? 'partial' : '');
+    const statusText = answered ? 'Terjawab' : (partial ? 'Perlu lengkap' : 'Belum dijawab');
 
     const options = q.options.map(([key, text]) => {
       const checked = a.choice === key ? ' checked' : '';
-      return '<label class="option"><input type="radio" name="' + q.id + '" value="' + key + '"' + checked + '>' +
+      const selected = a.choice === key ? ' selected' : '';
+      return '<label class="option' + selected + '"><input type="radio" name="' + q.id + '" value="' + key + '"' + checked + '>' +
         '<span><span class="key">' + key + '.</span> ' + escapeHtml(text) + '</span></label>';
     }).join('');
 
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
     card.innerHTML =
-      '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="small muted">' + escapeHtml(section.title) + '</span></div>' +
+      '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="q-status ' + statusClass + '">' + statusText + '</span></div>' +
       '<p class="q-narrative">' + escapeHtml(q.context) + '</p>' +
       '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
       '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
       '<p class="q-essay-cue">Uraikan secara lengkap: sumber/sel atau dasar angka, langkah perhitungan, alasan memilih jawaban, dan risiko bila jawaban ini salah.</p>' +
       '<div class="options">' + options +
-        '<label class="option"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
+        '<label class="option' + (a.choice === 'D' ? ' selected' : '') + '"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
         '<span><span class="key">D.</span> Lainnya — jelaskan dengan kata sendiri</span></label>' +
       '</div>' +
       '<div class="free"' + (a.choice === 'D' ? '' : ' hidden') + '>' +
@@ -919,7 +1008,10 @@ function render() {
       const card = event.target.closest('.question');
       const free = card.querySelector('.free');
       free.hidden = value !== 'D';
+      card.querySelectorAll('.option').forEach((option) => option.classList.remove('selected'));
+      event.target.closest('.option').classList.add('selected');
       if (value === 'D') free.querySelector('textarea').focus();
+      updateQuestionStatus(qid);
       saveState();
       updateProgress();
       renderNav();
@@ -931,6 +1023,7 @@ function render() {
       const qid = event.target.dataset.free;
       answers[qid] = answers[qid] || { choice: 'D', text: '', essay: '' };
       answers[qid].text = event.target.value;
+      updateQuestionStatus(qid);
       saveState();
       updateProgress();
       renderNav();
@@ -944,6 +1037,7 @@ function render() {
       answers[qid].essay = event.target.value;
       const counter = host.querySelector('[data-count="' + qid + '"]');
       if (counter) counter.textContent = event.target.value.trim().length + ' karakter';
+      updateQuestionStatus(qid);
       saveState();
       updateProgress();
       renderNav();
@@ -956,6 +1050,19 @@ function render() {
   $('#btnNext').disabled = currentSection === sections.length - 1;
 }
 
+function updateQuestionStatus(qid) {
+  const q = allQuestions().find((item) => item.id === qid);
+  const card = document.querySelector('.question[data-qid="' + qid + '"]');
+  if (!q || !card) return;
+  const a = answers[qid] || {};
+  const answered = isAnswered(q);
+  const partial = a.choice || (a.essay || '').trim();
+  const chip = card.querySelector('.q-status');
+  if (!chip) return;
+  chip.className = 'q-status ' + (answered ? 'done' : (partial ? 'partial' : ''));
+  chip.textContent = answered ? 'Terjawab' : (partial ? 'Perlu lengkap' : 'Belum dijawab');
+}
+
 function updateProgress() {
   const { total, done } = progress();
   const pct = total ? Math.round((done / total) * 100) : 0;
@@ -964,6 +1071,25 @@ function updateProgress() {
   $('#mAnswered').textContent = done;
   $('#mTotal').textContent = total;
   $('#mOpen').textContent = total - done;
+  const orb = $('#progressOrb');
+  if (orb) orb.style.setProperty('--p', pct);
+  const orbText = $('#orbText');
+  if (orbText) orbText.textContent = pct + '%';
+}
+
+function goNextUnanswered() {
+  const q = allQuestions().find((item) => !isAnswered(item));
+  if (!q) {
+    $('#saveStatus').textContent = 'Semua pertanyaan sudah lengkap.';
+    return;
+  }
+  const index = sections.findIndex((section) => section.id === q.section);
+  currentSection = index >= 0 ? index : 0;
+  render();
+  setTimeout(() => {
+    const card = document.querySelector('.question[data-qid="' + q.id + '"]');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 80);
 }
 
 function escapeHtml(value) {
@@ -1032,6 +1158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   $('#btnPrev').addEventListener('click', () => { if (currentSection > 0) { currentSection--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
   $('#btnNext').addEventListener('click', () => { if (currentSection < sections.length - 1) { currentSection++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
+  $('#btnNextOpen').addEventListener('click', goNextUnanswered);
   $('#btnExport').addEventListener('click', showExport);
   $('#btnGlossary').addEventListener('click', () => $('#glossaryDialog').showModal());
   $('#btnCloseGlossary').addEventListener('click', () => $('#glossaryDialog').close());
