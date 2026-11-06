@@ -64,3 +64,5 @@
 | 20:56:00 | P4 materi UAT | buat skenario/berita acara/checklist/lembar K | 0 | [V] kolom hasil/keputusan kosong |
 | 20:56:00 | P4 docs check | docs:check --strict | 0 | [V] |
 | 20:58:00 | P5 runbook | tulis docs/runbook-produksi-vps.md | 0 | [V] dokumen saja |
+| 21:00:00 | K2 pemeriksaan kedua | verify/ledger/hardcode/docs/curl | 0 | [V] semua hijau |
+| 21:01:00 | K2 audit diri | git diff 5048d55..HEAD | 0 | [V] tidak ada tes dilemahkan, policy tidak diubah, tidak ada secret |
