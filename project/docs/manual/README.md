@@ -35,6 +35,8 @@
 21. [Prosedur operasional, backup/restore, dan rilis](chapters/21-operasional-backup-rilis.md)
 22. [Mekanisme update berkala manual book saat fitur final](chapters/22-mekanisme-update-manual-book.md)
 23. [Glosarium & indeks cepat](chapters/23-glosarium-indeks.md)
+24. [Workflow, peran & wewenang](chapters/24-workflow-peran-wewenang.md)
+25. [Analisis fungsi: komparasi master Excel vs web](chapters/25-analisis-fungsi-komparasi-excel-web.md)
 
 ## Aset pendukung
 - [MANIFEST.md](MANIFEST.md) — kartu kendali versi manual & snapshot target
