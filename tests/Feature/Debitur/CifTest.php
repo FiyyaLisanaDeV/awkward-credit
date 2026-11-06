@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Services\Debitur\DebiturService;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
@@ -48,6 +50,14 @@ it('menolak perubahan CIF (immutable)', function () {
 
     expect(fn () => $debitur->update(['cif' => 'CIF-KDI-999999']))
         ->toThrow(RuntimeException::class, 'CIF immutable');
+});
+
+it('menolak perubahan CIF langsung di database', function () {
+    $ao = workflowUser('AO');
+    $debitur = app(DebiturService::class)->create(dataDebiturCif(), $ao);
+
+    expect(fn () => DB::table('debitur')->where('id', $debitur->id)->update(['cif' => 'CIF-KDI-999999']))
+        ->toThrow(QueryException::class);
 });
 
 it('mengisi CIF debitur lama secara idempotent', function () {

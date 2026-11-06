@@ -30,7 +30,7 @@
                             <td class="nowrap">{{ $row->occurred_at?->format('d-m-Y H:i') }}</td>
                             <td>{{ $row->cabang?->nama ?? '—' }}</td>
                             <td class="mono">{{ $row->permohonan?->no_permohonan ?? '—' }}</td>
-                            <td class="mono">{{ $row->kredit?->no_rekening_kredit ?? '—' }}</td>
+                            <td class="mono">{{ $row->kredit?->no_rekening_kredit ?? $row->permohonan?->kredit?->no_rekening_kredit ?? '—' }}</td>
                             <td>{{ $row->aktor_nama ?? '—' }}</td>
                             <td>
                                 <details class="small">

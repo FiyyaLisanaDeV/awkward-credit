@@ -43,7 +43,7 @@
 | Gate | Perintah | Hasil |
 |---|---|---|
 | Verifikasi penuh | `bash scripts/verify.sh --full` | **OK** (exit 0) |
-| Test | `php artisan test --compact` | **194 passed**, 1991 assertions |
+| Test | `php artisan test --compact` | **195 passed**, 1993 assertions |
 | Route | `php artisan route:list --json` | **104 route** |
 | Ledger | `php artisan ledger:verify` | **OK** — 20 baris, rantai utuh |
 | Hardcode | `php artisan hardcode:audit` | **0 pelanggaran** |

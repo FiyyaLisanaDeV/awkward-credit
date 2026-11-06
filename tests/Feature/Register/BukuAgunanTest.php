@@ -134,7 +134,15 @@ it('menampilkan halaman buku agunan', function () {
     $permohonan = app(PermohonanService::class)->create(dataPermohonanAgunan($debitur), $admin);
     app(PermohonanService::class)->submit($permohonan, $admin);
 
-    $this->actingAs($admin)->get(route('buku-agunan.index'))->assertOk();
+    $bomCabang = DB::table('cabang')->where('kode', 'BOM')->value('id');
+    $bomAo = workflowUser('AO', null, $bomCabang);
+    $debiturBom = debiturBomAgunan();
+    buatAsetAgunan($debiturBom, 'SHM-001');
+
+    $permohonanBom = app(PermohonanService::class)->create(dataPermohonanAgunan($debiturBom), $bomAo);
+    app(PermohonanService::class)->submit($permohonanBom, $bomAo);
+
+    $this->actingAs($admin)->get(route('buku-agunan.index'))->assertOk()->assertSee('Lintas cabang');
 
     $key = app(BukuAgunanService::class)->agunanKey($aset);
     $this->actingAs($admin)->get(route('buku-agunan.show', $key))->assertOk();

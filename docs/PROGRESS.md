@@ -18,7 +18,7 @@
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
 | Jumlah migrasi DB aplikasi | 66 (termasuk nomor_sequence, CIF, buku_besar_kredit, buku_agunan) | 2026-11-06 |
 | Jumlah route | 104 (42 API v1 + web/admin) | 2026-11-06 |
-| Jumlah test | **194 test**, 1991 assertions | 2026-11-06 |
+| Jumlah test | **195 test**, 1993 assertions | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | OK — 20 baris, rantai utuh | 2026-11-06 |
 | Bukti fase terakhir | `docs/uat/hasil-pilot-20261106.md` + `docs/evidence/uat-20261106/` | 2026-11-06 |

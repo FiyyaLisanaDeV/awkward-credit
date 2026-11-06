@@ -79,4 +79,8 @@ final class Konstanta
     public const MILI_PER_DETIK = 1000;
 
     public const KILOBYTE = 1024;
+
+    public const REGISTER_LOCK_BUKU_BESAR = 2501;
+
+    public const REGISTER_LOCK_BUKU_AGUNAN = 2502;
 }

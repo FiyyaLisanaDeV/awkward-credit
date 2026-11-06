@@ -78,6 +78,10 @@ final class AnalisisController extends Controller
             array_merge($data, ['parameter_kebijakan_id' => $permohonan->parameter_kebijakan_id])
         );
 
+        $aktor = $request->user();
+        abort_unless($aktor instanceof User, 401);
+        $this->bukuBesar->catat('ANALISIS', $permohonan, $aktor, 'Neraca disimpan', ['bagian' => 'neraca']);
+
         return response()->json($neraca);
     }
 
@@ -119,6 +123,10 @@ final class AnalisisController extends Controller
             ['permohonan_id' => $permohonan->id],
             array_merge($data, ['parameter_kebijakan_id' => $permohonan->parameter_kebijakan_id])
         );
+
+        $aktor = $request->user();
+        abort_unless($aktor instanceof User, 401);
+        $this->bukuBesar->catat('ANALISIS', $permohonan, $aktor, 'Laba rugi disimpan', ['bagian' => 'laba_rugi']);
 
         return response()->json($labaRugi);
     }
@@ -309,6 +317,10 @@ final class AnalisisController extends Controller
             ['permohonan_id' => $permohonan->id],
             array_merge($hasil, ['parameter_kebijakan_id' => $permohonan->parameter_kebijakan_id])
         );
+
+        $aktor = $request->user();
+        abort_unless($aktor instanceof User, 401);
+        $this->bukuBesar->catat('ANALISIS', $permohonan, $aktor, 'Rekomendasi dibuat', ['bagian' => 'rekomendasi']);
 
         return response()->json($rekomendasi);
     }

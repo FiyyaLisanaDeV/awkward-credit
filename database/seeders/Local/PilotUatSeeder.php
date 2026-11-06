@@ -141,13 +141,20 @@ final class PilotUatSeeder extends Seeder
     private function seedDebitur(string $cabangId, string $suffix): Debitur
     {
         $kode = strtoupper(ltrim($suffix, '.')) ?: 'KDI';
+        $nik = '73710000000000'.($kode === 'KDI' ? '01' : ($kode === 'BOM' ? '02' : '03'));
 
-        $debitur = Debitur::query()->firstOrCreate(
-            ['no_ktp' => '73710000000000'.($kode === 'KDI' ? '01' : ($kode === 'BOM' ? '02' : '03'))],
-            [
+        $debitur = Debitur::query()->where('no_ktp', $nik)->first();
+
+        if ($debitur === null) {
+            $cabang = Cabang::query()->find($cabangId);
+            $cif = $cabang === null ? null : app(NomorService::class)->cif($cabang);
+
+            $debitur = Debitur::query()->create([
                 'cabang_id' => $cabangId,
+                'cif' => $cif,
                 'nama_ktp' => 'Debitur Pilot '.$kode,
                 'nama_ibu_kandung' => 'Ibu Pilot',
+                'no_ktp' => $nik,
                 'jenis_kelamin' => 'L',
                 'status_perkawinan' => 'MENIKAH',
                 'no_hp' => '081200000001',
@@ -163,8 +170,8 @@ final class PilotUatSeeder extends Seeder
                 'jumlah_keluarga' => 3,
                 'jumlah_tanggungan' => 2,
                 'sumber_data' => 'MANUAL',
-            ],
-        );
+            ]);
+        }
 
         if ($debitur->cif === null) {
             $cabang = Cabang::query()->find($debitur->cabang_id);

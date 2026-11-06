@@ -10,7 +10,9 @@ use App\Models\Kredit;
 use App\Models\PermohonanKredit;
 use App\Models\User;
 use App\Services\Ledger\ChainHasher;
+use App\Support\Konstanta;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class BukuAgunanService
 {
@@ -21,52 +23,56 @@ final class BukuAgunanService
         ?Kredit $kredit = null,
         string $peristiwa = 'DIPAKAI',
     ): BukuAgunan {
-        $key = $this->agunanKey($aset);
-        $occurred = now();
-        $prev = (string) (BukuAgunan::query()->orderByDesc('seq')->value('hash') ?? ChainHasher::genesis());
+        return DB::transaction(function () use ($aset, $permohonan, $aktor, $kredit, $peristiwa): BukuAgunan {
+            DB::statement('SELECT pg_advisory_xact_lock(?)', [Konstanta::REGISTER_LOCK_BUKU_AGUNAN]);
 
-        $snapshot = [
-            'aset' => $aset->only([
-                'id', 'jenis_aset', 'jenis_dokumen', 'no_dokumen', 'nama_pemilik',
-                'hubungan_pemohon', 'lokasi', 'luas_jumlah', 'satuan',
-                'nilai_taksasi', 'persen_diperhitungkan', 'nilai_diperhitungkan',
-            ]),
-            'permohonan' => $permohonan->only(['id', 'no_permohonan', 'plafon_diajukan', 'tujuan_penggunaan']),
-            'kredit' => $kredit?->only(['id', 'no_rekening_kredit', 'plafon', 'tanggal_cair']),
-        ];
+            $key = $this->agunanKey($aset);
+            $occurred = now();
+            $prev = (string) (BukuAgunan::query()->orderByDesc('seq')->value('hash') ?? ChainHasher::genesis());
 
-        $payload = ['peristiwa' => $peristiwa, 'agunan_key' => $key, 'snapshot' => $snapshot];
+            $snapshot = [
+                'aset' => $aset->only([
+                    'id', 'jenis_aset', 'jenis_dokumen', 'no_dokumen', 'nama_pemilik',
+                    'hubungan_pemohon', 'lokasi', 'luas_jumlah', 'satuan',
+                    'nilai_taksasi', 'persen_diperhitungkan', 'nilai_diperhitungkan',
+                ]),
+                'permohonan' => $permohonan->only(['id', 'no_permohonan', 'plafon_diajukan', 'tujuan_penggunaan']),
+                'kredit' => $kredit?->only(['id', 'no_rekening_kredit', 'plafon', 'tanggal_cair']),
+            ];
 
-        $hash = ChainHasher::hash(
-            $prev,
-            $payload,
-            ChainHasher::time($occurred),
-            $peristiwa,
-            'buku_agunan',
-            (string) $permohonan->id,
-        );
+            $payload = ['peristiwa' => $peristiwa, 'agunan_key' => $key, 'snapshot' => $snapshot];
 
-        return BukuAgunan::query()->create([
-            'agunan_key' => $key,
-            'debitur_id' => $aset->debitur_id,
-            'debitur_aset_id' => $aset->id,
-            'permohonan_id' => $permohonan->id,
-            'kredit_id' => $kredit?->id,
-            'cabang_id' => $permohonan->cabang_id,
-            'jenis_aset' => (string) $aset->jenis_aset,
-            'no_dokumen' => $aset->no_dokumen,
-            'nama_pemilik' => $aset->nama_pemilik,
-            'nilai_taksasi' => $aset->nilai_taksasi,
-            'persen_diperhitungkan' => $aset->persen_diperhitungkan,
-            'nilai_diperhitungkan' => $aset->nilai_diperhitungkan,
-            'peristiwa' => $peristiwa,
-            'aktor_id' => $aktor->id,
-            'aktor_nama' => $aktor->name,
-            'occurred_at' => $occurred,
-            'snapshot' => $snapshot,
-            'prev_hash' => $prev,
-            'hash' => $hash,
-        ]);
+            $hash = ChainHasher::hash(
+                $prev,
+                $payload,
+                ChainHasher::time($occurred),
+                $peristiwa,
+                'buku_agunan',
+                (string) $permohonan->id,
+            );
+
+            return BukuAgunan::query()->create([
+                'agunan_key' => $key,
+                'debitur_id' => $aset->debitur_id,
+                'debitur_aset_id' => $aset->id,
+                'permohonan_id' => $permohonan->id,
+                'kredit_id' => $kredit?->id,
+                'cabang_id' => $permohonan->cabang_id,
+                'jenis_aset' => (string) $aset->jenis_aset,
+                'no_dokumen' => $aset->no_dokumen,
+                'nama_pemilik' => $aset->nama_pemilik,
+                'nilai_taksasi' => $aset->nilai_taksasi,
+                'persen_diperhitungkan' => $aset->persen_diperhitungkan,
+                'nilai_diperhitungkan' => $aset->nilai_diperhitungkan,
+                'peristiwa' => $peristiwa,
+                'aktor_id' => $aktor->id,
+                'aktor_nama' => $aktor->name,
+                'occurred_at' => $occurred,
+                'snapshot' => $snapshot,
+                'prev_hash' => $prev,
+                'hash' => $hash,
+            ]);
+        });
     }
 
     public function agunanKey(DebiturAset $aset): string
@@ -96,7 +102,7 @@ final class BukuAgunanService
     public function riwayat(string $key): Collection
     {
         return BukuAgunan::query()
-            ->with(['cabang', 'permohonan', 'kredit', 'aktor'])
+            ->with(['cabang', 'permohonan.kredit', 'kredit', 'aktor'])
             ->where('agunan_key', $key)
             ->orderBy('seq')
             ->get();

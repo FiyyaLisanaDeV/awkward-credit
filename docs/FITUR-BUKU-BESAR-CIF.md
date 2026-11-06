@@ -68,3 +68,12 @@ php artisan ledger:verify
 - "Manajemen risiko" direpresentasikan oleh level/role approval.
 - Pelepasan agunan (`peristiwa=DILEPAS`) disiapkan skemanya, UI belum.
 - Backfill register untuk data historis belum dilakukan.
+
+## 8. Catatan logic check (2026-11-06)
+Perbaikan setelah review:
+- **Serialisasi hash chain**: `pg_advisory_xact_lock` (konstanta `REGISTER_LOCK_BUKU_BESAR`/`REGISTER_LOCK_BUKU_AGUNAN`) di dalam transaksi, mencegah dua penulis membaca `prev_hash` yang sama.
+- **CIF immutable di DB**: trigger `debitur_cif_immutable_trigger` menolak perubahan `cif` non-null (backfill null→nilai tetap boleh).
+- **Hook analisis lengkap**: neraca, laba-rugi, kapasitas, scoring, dan rekomendasi semua mencatat `ANALISIS`.
+- **Buku agunan ↔ kredit**: detail agunan menampilkan no. kredit lewat relasi `permohonan.kredit` untuk baris yang dicatat saat pengajuan.
+- **Seeder finalize-safe**: `PilotUatSeeder` mengalokasikan CIF saat create (bukan hanya setelahnya), sehingga aman bila `cif` sudah `NOT NULL`.
+- **Smoke app-role**: insert buku besar + buku agunan sebagai `loan_bpr_app` berhasil (transaksi di-rollback), membuktikan grant tabel/sequence cukup.
