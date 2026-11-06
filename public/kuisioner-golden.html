@@ -131,6 +131,17 @@
   .q-status.done { background: #dcfce7; color: #166534; }
   .q-status.partial { background: #fef3c7; color: #92400e; }
   .q-narrative { margin: 8px 0 10px; color: #334155; }
+  .q-principle {
+    margin: 8px 0 10px; padding: 9px 11px; background: #eef7f5;
+    border-left: 3px solid var(--brand); border-radius: 6px; color: #0f4c5c; font-size: 13px;
+  }
+  .q-data { width: 100%; border-collapse: collapse; margin: 0 0 10px; font-size: 13px; }
+  .q-data th, .q-data td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .q-data th { width: 42%; color: var(--brand); font-weight: 650; background: #f8fafc; }
+  .q-rule {
+    margin: 0 0 10px; padding: 8px 10px; background: #f8fafc;
+    border: 1px dashed var(--line); border-radius: 8px; font-size: 12px; color: var(--muted);
+  }
   .q-note {
     margin: 0 0 10px; padding: 8px 10px; background: #f8fafc;
     border-left: 3px solid #94a3b8; border-radius: 6px; color: #475569; font-size: 13px;
@@ -224,6 +235,13 @@
   .calc-formula { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
   .btn-small { padding: 6px 10px; font-size: 12px; }
   .calc-link { margin: 0 0 10px; }
+  .calc-source { margin: 10px 0 0; max-width: 380px; }
+  .calc-preset-note { margin: 8px 0 0; font-size: 12px; color: #7c4a03; }
+  .calc-warn {
+    margin-top: 12px; padding: 8px 10px; background: #fef3c7; border: 1px solid #fcd34d;
+    border-radius: 8px; color: #92400e; font-size: 12px; line-height: 1.5;
+  }
+  .calc-warn:empty { display: none; }
   @media (max-width: 860px) {
     .app { grid-template-columns: 1fr; }
     aside { position: static; height: auto; }
@@ -403,7 +421,15 @@
 <dialog id="calcDialog">
   <div class="dialog-body">
     <h3>Alat bantu hitung</h3>
-    <p class="muted small">Nilai awal hanya contoh C-002. Ganti dengan angka kasus yang Anda jawab. Kalkulator membantu menghitung, bukan memilih jawaban.</p>
+    <p class="muted small">Pilih sumber angka di bawah, lalu lihat langkah perhitungannya. Kalkulator membantu menghitung, bukan memilih jawaban.</p>
+
+    <label class="field calc-source">Sumber angka
+      <select id="calcPreset">
+        <option value="manual">Angka saya sendiri</option>
+        <option value="C002">Contoh C-002 — TPP flat (recomputed, belum verified)</option>
+      </select>
+    </label>
+    <p class="calc-preset-note" id="calcPresetNote" role="status"></p>
 
     <div class="calc-tabs" role="tablist" aria-label="Jenis hitungan">
       <button class="calc-tab active" type="button" role="tab" aria-selected="true" data-tab="angsuran">Angsuran</button>
@@ -414,16 +440,16 @@
 
     <section class="calc-panel" data-panel="angsuran">
       <div class="calc-grid">
-        <label class="field">Plafon (Rp)<input type="number" id="calcPlafon" value="80000000" min="0" step="100000"></label>
-        <label class="field">Bunga per tahun (%)<input type="number" id="calcRate" value="18" min="0" step="0.01"></label>
-        <label class="field">Tenor (bulan)<input type="number" id="calcTenor" value="60" min="1" step="1"></label>
+        <label class="field">Plafon (Rp)<input type="number" id="calcPlafon" value="" placeholder="contoh: 80000000" min="0" step="100000"></label>
+        <label class="field">Bunga per tahun (%)<input type="number" id="calcRate" value="" placeholder="contoh: 18" min="0" step="0.01"></label>
+        <label class="field">Tenor (bulan)<input type="number" id="calcTenor" value="" placeholder="contoh: 60" min="1" step="1"></label>
         <label class="field">Metode
           <select id="calcMethod">
             <option value="flat">Flat</option>
             <option value="anuitas">Anuitas / efektif</option>
           </select>
         </label>
-        <label class="field">Grace period (bulan)<input type="number" id="calcGrace" value="0" min="0" step="1"></label>
+        <label class="field">Grace period (bulan)<input type="number" id="calcGrace" value="" placeholder="contoh: 0" min="0" step="1"></label>
       </div>
       <div class="calc-result" id="calcAngsuranResult" role="status" aria-live="polite"></div>
       <p class="calc-formula">Flat: pokok = plafon ÷ tenor; bunga = plafon × rate ÷ 12; angsuran = pokok + bunga. Anuitas: A = P × r ÷ (1 − (1+r)<sup>−n</sup>), r = rate ÷ 12.</p>
@@ -431,10 +457,10 @@
 
     <section class="calc-panel" data-panel="kapasitas" hidden>
       <div class="calc-grid">
-        <label class="field">Penghasilan bersih / bulan (Rp)<input type="number" id="calcIncome" value="2948080" min="0" step="1000"></label>
-        <label class="field">Angsuran baru / bulan (Rp)<input type="number" id="calcNewInstallment" value="2533333.33" min="0" step="0.01"></label>
-        <label class="field">Angsuran SLIK / bulan (Rp)<input type="number" id="calcSlikInstallment" value="0" min="0" step="0.01"></label>
-        <label class="field">RPC / bulan (Rp)<input type="number" id="calcRpc" value="3500000" min="0" step="0.01"></label>
+        <label class="field">Penghasilan bersih / bulan (Rp)<input type="number" id="calcIncome" value="" placeholder="contoh: 2948080" min="0" step="1000"></label>
+        <label class="field">Angsuran baru / bulan (Rp)<input type="number" id="calcNewInstallment" value="" placeholder="contoh: 2533333.33" min="0" step="0.01"></label>
+        <label class="field">Angsuran SLIK / bulan (Rp)<input type="number" id="calcSlikInstallment" value="" placeholder="kosongkan bila belum ada" min="0" step="0.01"></label>
+        <label class="field">RPC / bulan (Rp)<input type="number" id="calcRpc" value="" placeholder="kosongkan bila belum ada" min="0" step="0.01"></label>
       </div>
       <div class="calc-result" id="calcKapasitasResult" role="status" aria-live="polite"></div>
       <p class="calc-formula">IDIR = angsuran baru ÷ penghasilan bersih. DSCR = RPC ÷ (angsuran baru + angsuran SLIK). Batas IDIR: ≤35% layak, ≤80% perhatian, &gt;80% tidak layak. DSCR: ≥1,10 aman, ≥1,00 perhatian, &lt;1,00 tidak layak.</p>
@@ -442,9 +468,9 @@
 
     <section class="calc-panel" data-panel="agunan" hidden>
       <div class="calc-grid">
-        <label class="field">Nilai agunan (Rp)<input type="number" id="calcCollateralValue" value="100000000" min="0" step="100000"></label>
-        <label class="field">Plafon kredit (Rp)<input type="number" id="calcLoanAmount" value="80000000" min="0" step="100000"></label>
-        <label class="field">Haircut (%)<input type="number" id="calcHaircut" value="20" min="0" max="100" step="0.01"></label>
+        <label class="field">Nilai agunan (Rp)<input type="number" id="calcCollateralValue" value="" placeholder="contoh: 100000000" min="0" step="100000"></label>
+        <label class="field">Plafon kredit (Rp)<input type="number" id="calcLoanAmount" value="" placeholder="contoh: 80000000" min="0" step="100000"></label>
+        <label class="field">Haircut (%)<input type="number" id="calcHaircut" value="" placeholder="contoh: 20" min="0" max="100" step="0.01"></label>
       </div>
       <div class="calc-result" id="calcAgunanResult" role="status" aria-live="polite"></div>
       <p class="calc-formula">Basis agunan = nilai agunan × (1 − haircut). LTV = plafon ÷ basis × 100%. Plafon maksimum 80% = basis × 80%.</p>
@@ -452,15 +478,17 @@
 
     <section class="calc-panel" data-panel="modal" hidden>
       <div class="calc-grid">
-        <label class="field">Persediaan (Rp)<input type="number" id="calcInventory" value="150000000" min="0" step="100000"></label>
-        <label class="field">Piutang (Rp)<input type="number" id="calcReceivable" value="80000000" min="0" step="100000"></label>
-        <label class="field">Kas (Rp)<input type="number" id="calcCash" value="20000000" min="0" step="100000"></label>
-        <label class="field">Hutang dagang (Rp)<input type="number" id="calcPayable" value="50000000" min="0" step="100000"></label>
-        <label class="field">HPP per hari (Rp)<input type="number" id="calcCogsDay" value="5000000" min="0" step="100000"></label>
+        <label class="field">Persediaan (Rp)<input type="number" id="calcInventory" value="" placeholder="contoh: 150000000" min="0" step="100000"></label>
+        <label class="field">Piutang (Rp)<input type="number" id="calcReceivable" value="" placeholder="contoh: 80000000" min="0" step="100000"></label>
+        <label class="field">Kas (Rp)<input type="number" id="calcCash" value="" placeholder="contoh: 20000000" min="0" step="100000"></label>
+        <label class="field">Hutang dagang (Rp)<input type="number" id="calcPayable" value="" placeholder="contoh: 50000000" min="0" step="100000"></label>
+        <label class="field">HPP per hari (Rp)<input type="number" id="calcCogsDay" value="" placeholder="contoh: 5000000" min="0" step="100000"></label>
       </div>
       <div class="calc-result" id="calcModalResult" role="status" aria-live="polite"></div>
       <p class="calc-formula">Kebutuhan modal kerja = persediaan + piutang + kas − hutang dagang. WCD = persediaan ÷ HPP per hari.</p>
     </section>
+
+    <div class="calc-warn" id="calcWarnings" role="status" aria-live="polite"></div>
   </div>
   <div class="dialog-actions">
     <button class="btn" type="button" id="btnCalcC002">Isi contoh C-002</button>
@@ -552,43 +580,114 @@ const sections = [
     intro: 'TPP adalah kredit konsumtif yang angsurannya dipotong dari gaji/TPP. Bagian ini menguji apakah Anda memahami komponen angsuran, IDIR, EIR, dan pengaruh fasilitas SLIK. IDIR = angsuran baru ÷ penghasilan bersih. EIR dihitung dari arus kas (IRR), bukan faktor 1,81×. Blokir tabungan dan payoff memengaruhi dana yang diterima.',
     questions: [
       {
-        id: 'G-TPP-01-A', context: '[Kasus/asal] C-002 dummy, X1 `hitungan`/`analisis kredit`. [Produk/metode] TPP flat. [Asal angka] Plafon 80 jt, rate 18%, tenor 60 dari kasus; angsuran dihitung. [Status] `[K]` klaim C-002. Kasus G-TPP-01 (C-002): plafon Rp80.000.000, bunga flat 18%/tahun, tenor 60 bulan, penghasilan bersih Rp2.948.080.',
-        text: 'Berapa angsuran bulanan flat yang benar?',
+        id: 'G-TPP-01-A',
+        principle: 'Pada kredit flat, angsuran bulanan = pokok per bulan + bunga per bulan. Pokok = plafon ÷ tenor; bunga = plafon × bunga per tahun ÷ 12.',
+        data: [
+          ['Plafon', 'Rp80.000.000'],
+          ['Bunga flat', '18% per tahun'],
+          ['Tenor', '60 bulan'],
+          ['Penghasilan bersih', 'Rp2.948.080 per bulan']
+        ],
+        ask: 'Berapa angsuran bulanan flat yang benar?',
+        why: 'Memastikan angsuran dihitung dari pokok + bunga, bukan angka warisan.',
+        note: 'Angka ini adalah klaim C-002 dan belum diverifikasi ahli.',
+        source: 'C-002 dummy; X1 sheet hitungan/analisis kredit; status [K].',
+        calcCase: 'C002', calcTab: 'angsuran',
         options: [['A', 'Rp2.533.333,33'], ['B', 'Rp2.533.334,00'], ['C', 'Rp2.500.000,00']]
       },
       {
-        id: 'G-TPP-01-B', context: '[Kasus/asal] C-002. [Produk/metode] TPP flat. [Asal angka] Net 2.948.080 klaim C-002; IDIR dihitung. [Status] `[K]`. Pada kasus yang sama, IDIR dihitung dari angsuran baru dibagi penghasilan bersih.',
-        text: 'Berapa IDIR yang benar?',
+        id: 'G-TPP-01-B',
+        principle: 'IDIR = angsuran kredit baru ÷ penghasilan bersih per bulan.',
+        data: [
+          ['Angsuran baru', 'Rp2.533.333,33 (hasil soal G-TPP-01-A)'],
+          ['Penghasilan bersih', 'Rp2.948.080 per bulan'],
+          ['Plafon', 'Rp80.000.000'],
+          ['Tenor', '60 bulan']
+        ],
+        ask: 'Berapa IDIR yang benar?',
+        why: 'Memastikan IDIR memakai angsuran baru dan penghasilan bersih yang benar.',
+        note: 'Angka ini adalah klaim C-002 dan belum diverifikasi ahli.',
+        source: 'C-002; status [K].',
+        calcCase: 'C002', calcTab: 'kapasitas',
         options: [['A', '85,93%'], ['B', '83,11%'], ['C', '80,00%']]
       },
       {
-        id: 'G-TPP-01-C', context: '[Kasus/asal] C-002 / G-TPP-01. [Produk/metode] TPP flat. [Asal angka] 28,88% klaim JSON; EIR recompute; 1,81× dari X1 FLAT-ANN-EFF. [Status] `[K]`. EIR pada kasus C-002 dilaporkan 28,88% per tahun.',
-        text: 'Metode EIR mana yang menghasilkan 28,88%?',
+        id: 'G-TPP-01-C',
+        principle: 'EIR dihitung dari arus kas (RATE/IRR numerik per bulan × 12), bukan dikali faktor 1,81×.',
+        data: [
+          ['Plafon', 'Rp80.000.000'],
+          ['Bunga flat', '18% per tahun'],
+          ['Tenor', '60 bulan'],
+          ['EIR yang dilaporkan', '28,88% per tahun (klaim)']
+        ],
+        ask: 'Metode mana yang menghasilkan EIR 28,88% per tahun?',
+        why: 'Memastikan EIR dihitung numerik, bukan aproksimasi 1,81×.',
+        note: 'Nilai 28,88% adalah klaim C-002 dan belum diverifikasi ahli.',
+        source: 'C-002 / G-TPP-01; X1 FLAT-ANN-EFF; status [K].',
+        calcTab: 'angsuran',
         options: [['A', 'RATE/IRR numerik × 12'], ['B', 'Flat × 1,81'], ['C', 'Flat × 0,87']]
       },
       {
-        id: 'G-TPP-02', context: '[Kasus/asal] G-TPP-02 JSON. [Produk/metode] TPP. [Asal angka] Input SLIK TBD; dedupe/agregasi dari desain. [Status] `[K]` recomputed. Debitur memiliki beberapa fasilitas SLIK aktif, sebagian juga tercatat pada pasangan.',
-        text: 'Fasilitas mana yang masuk perhitungan DSR/IDIR?',
+        id: 'G-TPP-02',
+        principle: 'Semua cicilan aktif debitur masuk perhitungan DSR/IDIR, termasuk fasilitas SLIK. Fasilitas yang sama tidak dihitung dua kali (dedupe).',
+        rule: true,
+        ask: 'Fasilitas mana yang masuk perhitungan DSR/IDIR?',
+        why: 'Memastikan kewajiban SLIK tidak hilang dari perhitungan.',
+        note: 'Angka input SLIK belum tersedia di kasus JSON (TBD).',
+        source: 'G-TPP-02 JSON; status [K] recomputed.',
         options: [['A', 'Semua fasilitas aktif, dideduplikasi'], ['B', 'Hanya fasilitas baru'], ['C', 'Hanya fasilitas dengan kolektibilitas 1']]
       },
       {
-        id: 'G-TPP-03-A', context: '[Kasus/asal] G-TPP-03 + X1 D35. [Produk/metode] TPP flat. [Asal angka] Ambang 80% dari formula Excel; 80,00 boundary sintetis. [Status] `[K]` / boundary. Excel memakai formula IF(D34>80%,"DITOLAK","DITERIMA").',
-        text: 'Berapa status IDIR tepat 80,00%?',
+        id: 'G-TPP-03-A',
+        principle: 'Batas hard stop 80% menolak hanya bila IDIR lebih dari 80%. Tepat 80% masih lolos, tetapi tetap mendapat warning 35%.',
+        data: [
+          ['IDIR', '80,00% (nilai uji)'],
+          ['Batas warning', '35%'],
+          ['Batas hard stop', 'lebih dari 80%']
+        ],
+        ask: 'Berapa status IDIR tepat 80,00%?',
+        why: 'Memastikan batas 80,00% tidak salah diperlakukan sebagai hard stop.',
+        note: '80,00% adalah nilai uji sintetis, bukan data nasabah.',
+        source: 'G-TPP-03; X1 D35 formula IF(D34>80%,"DITOLAK","DITERIMA"); status [K]/boundary.',
         options: [['A', 'Lolos hard stop, tetapi warning 35%'], ['B', 'Hard stop / ditolak'], ['C', 'Tidak dihitung']]
       },
       {
-        id: 'G-TPP-03-B', context: '[Kasus/asal] G-TPP-03. [Produk/metode] TPP flat. [Asal angka] 80,01 sintetis, bukan sel. [Status] `[K]` / boundary. Batas hard stop adalah 80%.',
-        text: 'Berapa status IDIR 80,01%?',
+        id: 'G-TPP-03-B',
+        principle: 'Jika IDIR lebih dari 80%, sistem menolak permohonan.',
+        data: [
+          ['IDIR', '80,01% (nilai uji)'],
+          ['Batas hard stop', 'lebih dari 80%']
+        ],
+        ask: 'Berapa status IDIR 80,01%?',
+        why: 'Memastikan nilai di atas 80% benar-benar ditolak.',
+        note: '80,01% adalah nilai uji sintetis, bukan data nasabah.',
+        source: 'G-TPP-03; status [K]/boundary.',
         options: [['A', 'Hard stop / ditolak'], ['B', 'Lolos'], ['C', 'Hanya warning']]
       },
       {
-        id: 'G-TPP-04', context: '[Kasus/asal] G-TPP-04 JSON / X1 Y17. [Produk/metode] TPP flat. [Asal angka] Penalti 10% dari rumus X1; nilai dummy. [Status] `[K]`. Permohonan top-up melunasi kredit lama dengan penalti 10% dari pokok lama.',
-        text: 'Komponen dana bersih diterima adalah...',
+        id: 'G-TPP-04',
+        principle: 'Dana bersih yang diterima = plafon baru − biaya − blokir − pelunasan kredit lama (termasuk penalti).',
+        data: [
+          ['Penalti pelunasan', '10% dari pokok lama (contoh dummy)'],
+          ['Angka lain', 'belum tersedia di JSON']
+        ],
+        ask: 'Komponen dana bersih diterima adalah...',
+        why: 'Memastikan top-up tidak menghilangkan komponen biaya/penalti.',
+        note: 'Penalti 10% adalah nilai dummy; angka final belum diverifikasi.',
+        source: 'G-TPP-04 JSON; X1 Y17; status [K].',
         options: [['A', 'Plafon − biaya − blokir − payoff'], ['B', 'Plafon − biaya'], ['C', 'Plafon + payoff']]
       },
       {
-        id: 'G-TPP-05', context: '[Kasus/asal] G-TPP-05 JSON / X1 E22. [Produk/metode] TPP flat. [Asal angka] Blokir 2× dari rumus X1; nilai dummy. [Status] `[K]`. Produk TPP memblokir tabungan sebesar 2× angsuran bulanan.',
-        text: 'Dasar perhitungan blokir 2× adalah...',
+        id: 'G-TPP-05',
+        principle: 'Produk TPP memblokir tabungan sebesar 2× angsuran bulanan.',
+        data: [
+          ['Pengali blokir', '2× angsuran bulanan'],
+          ['Angsuran', 'sesuai hasil G-TPP-01-A']
+        ],
+        ask: 'Dasar perhitungan blokir 2× adalah...',
+        why: 'Memastikan blokir dihitung dari angsuran, bukan plafon.',
+        note: 'Nilai blokir adalah dummy; angka final belum diverifikasi.',
+        source: 'G-TPP-05 JSON; X1 E22; status [K].',
         options: [['A', 'Angsuran baru'], ['B', 'Plafon'], ['C', 'Penghasilan bersih']]
       }
     ]
@@ -1075,18 +1174,38 @@ function render() {
     }).join('');
 
     const freeValue = a.choice === 'D' ? escapeHtml(a.text || '') : '';
-    const context = splitContext(q.context);
-    const note = contextNote(context.source);
-    const dummyNote = section.id.startsWith('golden-') ? 'Kasus ini adalah data uji/dummy, bukan nasabah nyata. ' : '';
-    const fullNote = (dummyNote + note).trim();
+    let bodyHtml;
+    if (q.principle) {
+      const dataRows = (q.data || []).map(([label, value]) =>
+        '<tr><th>' + escapeHtml(label) + '</th><td>' + escapeHtml(value) + '</td></tr>'
+      ).join('');
+      const dataBlock = q.rule
+        ? '<p class="q-rule">Pertanyaan aturan — tidak memerlukan angka. Jawab berdasarkan prinsip di atas.</p>'
+        : '<table class="q-data"><tbody>' + dataRows + '</tbody></table>';
+      bodyHtml =
+        '<p class="q-principle"><strong>Prinsip:</strong> ' + escapeHtml(q.principle) + '</p>' +
+        dataBlock +
+        '<p class="q-text">' + escapeHtml(q.ask) + '</p>' +
+        (q.note ? '<p class="q-note"><strong>Catatan:</strong> ' + escapeHtml(q.note) + '</p>' : '') +
+        '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(q.why || '') + '</p>' +
+        (q.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(q.source) + '</p></details>' : '') +
+        (q.calcCase ? '<button class="btn btn-small calc-link" type="button" data-calc-case="' + escapeHtml(q.calcCase) + '" data-calc-tab="' + escapeHtml(q.calcTab || 'angsuran') + '">Bantu hitung</button>' : '');
+    } else {
+      const context = splitContext(q.context);
+      const note = contextNote(context.source);
+      const dummyNote = section.id.startsWith('golden-') ? 'Kasus ini adalah data uji/dummy, bukan nasabah nyata. ' : '';
+      const fullNote = (dummyNote + note).trim();
+      bodyHtml =
+        '<p class="q-narrative">Contoh kasus ' + escapeHtml(sectionLabel[section.id] || section.title.toLowerCase()) + '. Bayangkan Anda sedang memeriksa kasus berikut. ' + escapeHtml(context.human) + '</p>' +
+        '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+        (fullNote ? '<p class="q-note"><strong>Catatan:</strong> ' + escapeHtml(fullNote) + '</p>' : '') +
+        '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
+        (calcSections.has(section.id) ? '<button class="btn btn-small calc-link" type="button" data-calc-section="' + section.id + '">Bantu hitung</button>' : '') +
+        (context.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(context.source) + '</p></details>' : '');
+    }
     card.innerHTML =
       '<div class="q-top"><span class="q-id">' + escapeHtml(q.id) + '</span><span class="q-status ' + statusClass + '">' + statusText + '</span></div>' +
-      '<p class="q-narrative">Contoh kasus ' + escapeHtml(sectionLabel[section.id] || section.title.toLowerCase()) + '. Bayangkan Anda sedang memeriksa kasus berikut. ' + escapeHtml(context.human) + '</p>' +
-      '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
-      (fullNote ? '<p class="q-note"><strong>Catatan:</strong> ' + escapeHtml(fullNote) + '</p>' : '') +
-      '<p class="q-reason"><strong>Alasan ditanyakan:</strong> ' + escapeHtml(questionReason[q.id] || '') + '</p>' +
-      (calcSections.has(section.id) ? '<button class="btn btn-small calc-link" type="button" data-calc-section="' + section.id + '">Bantu hitung</button>' : '') +
-      (context.source ? '<details class="q-source"><summary>Sumber &amp; status</summary><p>' + escapeHtml(context.source) + '</p></details>' : '') +
+      bodyHtml +
       '<p class="q-essay-cue">Uraikan secara lengkap: sumber/sel atau dasar angka, langkah perhitungan, alasan memilih jawaban, dan risiko bila jawaban ini salah.</p>' +
       '<div class="options">' + options +
         '<label class="option' + (a.choice === 'D' ? ' selected' : '') + '"><input type="radio" name="' + q.id + '" value="D"' + (a.choice === 'D' ? ' checked' : '') + '>' +
@@ -1236,6 +1355,37 @@ function num(id) {
   return element ? (parseFloat(element.value) || 0) : 0;
 }
 
+function fmtPlain(value) {
+  return (Number(value) || 0).toLocaleString('id-ID', { maximumFractionDigits: 2 });
+}
+
+const casePresets = {
+  C002: {
+    note: 'Angka C-002 adalah klaim/recomputed (belum verified). Angsuran SLIK dan RPC tidak tersedia di JSON, jadi kolomnya dikosongkan.',
+    fields: {
+      calcPlafon: 80000000, calcRate: 18, calcTenor: 60, calcGrace: 0,
+      calcIncome: 2948080, calcNewInstallment: 2533333.33, calcSlikInstallment: '', calcRpc: ''
+    },
+    method: 'flat'
+  }
+};
+
+function loadPreset(key) {
+  const preset = casePresets[key];
+  const note = $('#calcPresetNote');
+  if (!preset) {
+    if (note) note.textContent = '';
+    return;
+  }
+  Object.entries(preset.fields).forEach(([id, value]) => {
+    const element = document.getElementById(id);
+    if (element) element.value = value;
+  });
+  if (preset.method) document.getElementById('calcMethod').value = preset.method;
+  if (note) note.textContent = preset.note;
+  calcAll();
+}
+
 function calcAngsuran() {
   const plafon = num('calcPlafon');
   const rate = num('calcRate') / 100;
@@ -1244,33 +1394,31 @@ function calcAngsuran() {
   const monthlyRate = rate / 12;
   const method = document.getElementById('calcMethod').value;
   const rows = [];
-  let total;
 
   if (method === 'flat') {
     const pokok = plafon / tenor;
     const bunga = plafon * monthlyRate;
+    rows.push('Bunga/bulan = ' + fmtPlain(plafon) + ' × ' + fmtPlain(num('calcRate')) + '% ÷ 12 = <strong>' + fmtRp(bunga) + '</strong>');
     if (grace > 0) {
       const after = tenor - grace;
       const pokokAfter = plafon / after;
-      rows.push('Selama grace (' + grace + ' bln): bunga ' + fmtRp(bunga) + '/bln; pokok ditunda.');
-      rows.push('Setelah grace (' + after + ' bln): <strong>' + fmtRp(pokokAfter + bunga) + '</strong>/bln (pokok ' + fmtRp(pokokAfter) + ' + bunga ' + fmtRp(bunga) + ').');
+      rows.push('Pokok/bulan (setelah grace, sisa ' + after + ' bln) = ' + fmtPlain(plafon) + ' ÷ ' + after + ' = <strong>' + fmtRp(pokokAfter) + '</strong>');
+      rows.push('Selama grace (' + grace + ' bln): hanya bunga ' + fmtRp(bunga) + '/bln; pokok ditunda.');
+      rows.push('Setelah grace: angsuran = ' + fmtRp(pokokAfter) + ' + ' + fmtRp(bunga) + ' = <strong>' + fmtRp(pokokAfter + bunga) + '</strong>/bln.');
     } else {
-      rows.push('Angsuran/bulan: <strong>' + fmtRp(pokok + bunga) + '</strong>');
-      rows.push('Pokok/bulan: ' + fmtRp(pokok) + '; bunga/bulan: ' + fmtRp(bunga) + '.');
+      rows.push('Pokok/bulan = ' + fmtPlain(plafon) + ' ÷ ' + tenor + ' = <strong>' + fmtRp(pokok) + '</strong>');
+      rows.push('Angsuran/bulan = ' + fmtRp(pokok) + ' + ' + fmtRp(bunga) + ' = <strong>' + fmtRp(pokok + bunga) + '</strong>');
     }
-    total = plafon + (bunga * tenor);
-    rows.push('Total bunga: ' + fmtRp(bunga * tenor) + '; total bayar: ' + fmtRp(total) + '.');
+    rows.push('Total bunga = ' + fmtRp(bunga) + ' × ' + tenor + ' = ' + fmtRp(bunga * tenor) + '; total bayar = ' + fmtRp(plafon + bunga * tenor) + '.');
   } else {
     const after = grace > 0 ? tenor - grace : tenor;
     const annuity = monthlyRate === 0 ? plafon / after : plafon * monthlyRate / (1 - Math.pow(1 + monthlyRate, -after));
+    rows.push('Bunga/bulan = ' + fmtPlain(num('calcRate')) + '% ÷ 12 = ' + fmtPlain(monthlyRate * 100) + '%');
+    rows.push('Angsuran anuitas = ' + fmtPlain(plafon) + ' × ' + fmtPlain(monthlyRate) + ' ÷ (1 − (1 + ' + fmtPlain(monthlyRate) + ')^−' + after + ') = <strong>' + fmtRp(annuity) + '</strong>');
     if (grace > 0) {
-      rows.push('Selama grace (' + grace + ' bln): bunga ' + fmtRp(plafon * monthlyRate) + '/bln; pokok ditunda.');
-      rows.push('Setelah grace (' + after + ' bln): <strong>' + fmtRp(annuity) + '</strong>/bln.');
-    } else {
-      rows.push('Angsuran/bulan: <strong>' + fmtRp(annuity) + '</strong>');
+      rows.push('Selama grace (' + grace + ' bln): hanya bunga ' + fmtRp(plafon * monthlyRate) + '/bln; pokok ditunda.');
     }
-    total = annuity * tenor;
-    rows.push('Total bunga (perkiraan): ' + fmtRp(total - plafon) + '; total bayar: ' + fmtRp(total) + '.');
+    rows.push('Total bayar (perkiraan) = ' + fmtRp(annuity * tenor) + '; total bunga = ' + fmtRp(annuity * tenor - plafon) + '.');
   }
 
   document.getElementById('calcAngsuranResult').innerHTML = rows.join('<br>');
@@ -1285,11 +1433,17 @@ function calcKapasitas() {
   const dscr = (baru + slik) > 0 ? rpc / (baru + slik) : 0;
   const idirStatus = income > 0 ? (idir <= 0.35 ? 'LAYAK' : (idir <= 0.80 ? 'PERHATIAN' : 'TIDAK LAYAK')) : 'ISI PENGHASILAN';
   const dscrStatus = (baru + slik) > 0 ? (dscr >= 1.10 ? 'AMAN' : (dscr >= 1.00 ? 'PERHATIAN' : 'TIDAK LAYAK')) : 'ISI ANGSURAN/RPC';
+  const rows = [];
 
-  document.getElementById('calcKapasitasResult').innerHTML =
-    'IDIR: <strong>' + fmtPct(idir) + '</strong> — ' + idirStatus + '<br>' +
-    'DSCR: <strong>' + fmtX(dscr) + '</strong> — ' + dscrStatus + '<br>' +
-    '<span class="small">Total kewajiban: ' + fmtRp(baru + slik) + '/bulan.</span>';
+  rows.push('IDIR = ' + fmtPlain(baru) + ' ÷ ' + fmtPlain(income) + ' = <strong>' + fmtPct(idir) + '</strong> — ' + idirStatus);
+  if (rpc > 0 && (baru + slik) > 0) {
+    rows.push('DSCR = ' + fmtPlain(rpc) + ' ÷ (' + fmtPlain(baru) + ' + ' + fmtPlain(slik) + ') = <strong>' + fmtX(dscr) + '</strong> — ' + dscrStatus);
+  } else {
+    rows.push('DSCR belum bisa dihitung: isi RPC dan angsuran SLIK.');
+  }
+  rows.push('<span class="small">Total kewajiban = ' + fmtRp(baru + slik) + '/bulan.</span>');
+
+  document.getElementById('calcKapasitasResult').innerHTML = rows.join('<br>');
 }
 
 function calcAgunan() {
@@ -1299,11 +1453,13 @@ function calcAgunan() {
   const basis = value * (1 - haircut);
   const ltv = basis > 0 ? loan / basis : 0;
   const maxLoan = basis * 0.8;
+  const rows = [];
 
-  document.getElementById('calcAgunanResult').innerHTML =
-    'Basis agunan: ' + fmtRp(basis) + '<br>' +
-    'LTV: <strong>' + fmtPct(ltv) + '</strong><br>' +
-    'Plafon maksimum 80%: ' + fmtRp(maxLoan) + '.';
+  rows.push('Basis agunan = ' + fmtPlain(value) + ' × (1 − ' + fmtPlain(haircut * 100) + '%) = <strong>' + fmtRp(basis) + '</strong>');
+  rows.push('LTV = ' + fmtPlain(loan) + ' ÷ ' + fmtPlain(basis) + ' = <strong>' + fmtPct(ltv) + '</strong>');
+  rows.push('Plafon maksimum 80% = ' + fmtPlain(basis) + ' × 80% = ' + fmtRp(maxLoan) + '.');
+
+  document.getElementById('calcAgunanResult').innerHTML = rows.join('<br>');
 }
 
 function calcModal() {
@@ -1314,10 +1470,29 @@ function calcModal() {
   const cogsDay = num('calcCogsDay');
   const workingCapital = inventory + receivable + cash - payable;
   const wcd = cogsDay > 0 ? inventory / cogsDay : 0;
+  const rows = [];
 
-  document.getElementById('calcModalResult').innerHTML =
-    'Kebutuhan modal kerja: <strong>' + fmtRp(workingCapital) + '</strong><br>' +
-    'WCD: <strong>' + wcd.toFixed(1).replace('.', ',') + ' hari</strong>.';
+  rows.push('Kebutuhan = ' + fmtPlain(inventory) + ' + ' + fmtPlain(receivable) + ' + ' + fmtPlain(cash) + ' − ' + fmtPlain(payable) + ' = <strong>' + fmtRp(workingCapital) + '</strong>');
+  rows.push('WCD = ' + fmtPlain(inventory) + ' ÷ ' + fmtPlain(cogsDay) + ' = <strong>' + wcd.toFixed(1).replace('.', ',') + ' hari</strong>.');
+
+  document.getElementById('calcModalResult').innerHTML = rows.join('<br>');
+}
+
+function calcWarnings() {
+  const warns = [];
+  const tenor = Math.max(1, Math.floor(num('calcTenor')));
+  const grace = Math.max(0, Math.floor(num('calcGrace')));
+  if (num('calcPlafon') <= 0) warns.push('Angsuran belum bisa dihitung: plafon belum diisi.');
+  if (num('calcTenor') < 1) warns.push('Angsuran belum bisa dihitung: tenor belum diisi.');
+  if (grace >= tenor) warns.push('Grace period harus lebih kecil dari tenor; hasil “setelah grace” tidak valid.');
+  if (num('calcRate') > 100) warns.push('Bunga lebih dari 100% — periksa satuan (harus persen per tahun).');
+  if (num('calcIncome') <= 0) warns.push('IDIR belum bisa dihitung: penghasilan bersih belum diisi.');
+  if (num('calcNewInstallment') <= 0) warns.push('IDIR/DSCR belum bisa dihitung: angsuran baru belum diisi.');
+  if (num('calcRpc') <= 0) warns.push('DSCR belum bisa dihitung: RPC belum diisi.');
+  if (num('calcCollateralValue') <= 0) warns.push('LTV belum bisa dihitung: nilai agunan belum diisi.');
+  if (num('calcInventory') <= 0 && num('calcCogsDay') <= 0) warns.push('Modal kerja/WCD belum bisa dihitung: isi komponen modal kerja.');
+  const element = $('#calcWarnings');
+  if (element) element.innerHTML = warns.map((warning) => '• ' + escapeHtml(warning)).join('<br>');
 }
 
 function calcAll() {
@@ -1325,6 +1500,7 @@ function calcAll() {
   calcKapasitas();
   calcAgunan();
   calcModal();
+  calcWarnings();
 }
 
 function setCalcTab(tab) {
@@ -1339,25 +1515,29 @@ function setCalcTab(tab) {
 }
 
 function fillC002() {
-  const values = {
-    calcPlafon: 80000000, calcRate: 18, calcTenor: 60, calcGrace: 0,
-    calcIncome: 2948080, calcNewInstallment: 2533333.33, calcSlikInstallment: 0, calcRpc: 3500000,
-    calcCollateralValue: 100000000, calcLoanAmount: 80000000, calcHaircut: 20
-  };
-  Object.entries(values).forEach(([id, value]) => {
-    const element = document.getElementById(id);
-    if (element) element.value = value;
-  });
-  document.getElementById('calcMethod').value = 'flat';
-  calcAll();
+  const select = $('#calcPreset');
+  if (select) select.value = 'C002';
+  loadPreset('C002');
 }
 
-function openCalc(sectionId) {
-  if (sectionId) {
-    if (sectionId === 'golden-capacity') setCalcTab('kapasitas');
-    else if (sectionId === 'golden-collateral') setCalcTab('agunan');
-    else setCalcTab('angsuran');
-    if (sectionId.startsWith('golden-')) fillC002();
+function openCalc(caseKey, tab) {
+  if (tab) {
+    setCalcTab(tab);
+  }
+  if (caseKey) {
+    if (casePresets[caseKey]) {
+      const select = $('#calcPreset');
+      if (select) select.value = caseKey;
+      loadPreset(caseKey);
+    } else if (caseKey === 'golden-capacity') {
+      setCalcTab('kapasitas');
+    } else if (caseKey === 'golden-collateral') {
+      setCalcTab('agunan');
+    } else {
+      setCalcTab('angsuran');
+    }
+  } else if (!tab) {
+    setCalcTab('angsuran');
   }
   calcAll();
   document.getElementById('calcDialog').showModal();
@@ -1392,8 +1572,8 @@ function exportPayload() {
     return {
       id: q.id,
       section: q.sectionTitle,
-      context: q.context,
-      question: q.text,
+      context: q.context || q.source || q.principle || '',
+      question: q.text || q.ask || '',
       choice: a.choice || '',
       free_text: a.choice === 'D' ? (a.text || '') : '',
       essay: a.essay || '',
@@ -1451,9 +1631,12 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#btnNextOpen').addEventListener('click', goNextUnanswered);
   $('#btnExport').addEventListener('click', showExport);
   $('#btnGlossary').addEventListener('click', () => $('#glossaryDialog').showModal());
-  $('#btnCalc').addEventListener('click', () => openCalc(''));
+  $('#btnCalc').addEventListener('click', () => openCalc('', ''));
   $('#btnCalcClose').addEventListener('click', () => $('#calcDialog').close());
   $('#btnCalcC002').addEventListener('click', fillC002);
+  $('#calcPreset').addEventListener('change', (event) => {
+    loadPreset(event.target.value);
+  });
   document.querySelectorAll('.calc-tab').forEach((button) => {
     button.addEventListener('click', () => setCalcTab(button.dataset.tab));
   });
@@ -1462,7 +1645,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   $('#sectionHost').addEventListener('click', (event) => {
     const button = event.target.closest('.calc-link');
-    if (button) openCalc(button.dataset.calcSection);
+    if (!button) return;
+    if (button.dataset.calcCase) {
+      openCalc(button.dataset.calcCase, button.dataset.calcTab || 'angsuran');
+    } else {
+      openCalc(button.dataset.calcSection, '');
+    }
   });
   calcAll();
   $('#btnCloseGlossary').addEventListener('click', () => $('#glossaryDialog').close());
