@@ -88,5 +88,5 @@
 - `[Rencana]` belum terimplementasi.
 
 ## 23.5 Rujukan silang dokumen kunci
-- Repo app: `README.md`, `docs/{RENCANA_IMPLEMENTASI,TEKNIS,INVENTARIS_DATA,PROGRESS,DECISIONS,VERIFIKASI}.md`.
+- Repo app: `README.md`, `docs/{RUANG-LINGKUP-PRODUK,RENCANA-PRODUKSI-FINAL,TEKNIS,INVENTARIS_DATA,PROGRESS,DECISIONS,VERIFIKASI}.md`.
 - Workspace planning: `commandcode bpr/research/*`, `commandcode bpr/project/docs/{decisions.md,questions.md,claims.md,spec/*}`, `commandcode bpr/project/tests/golden/*`.

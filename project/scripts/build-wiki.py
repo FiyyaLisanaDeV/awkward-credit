@@ -50,6 +50,7 @@ CHAPTERS = [
     ("25-analisis-fungsi-komparasi-excel-web.md", "Bab-25-Analisis-Fungsi-Komparasi-Excel-Web", "Analisis Fungsi: Komparasi Excel–Web"),
     ("26-workflow-master-excel-breakdown.md", "Bab-26-Workflow-Master-Excel-Breakdown", "Workflow Master Excel: Breakdown Teknis"),
     ("27-buku-besar-kredit-agunan-cif.md", "Bab-27-Buku-Besar-Kredit-Agunan-CIF", "Buku Besar Kredit, Buku Agunan & Nomor CIF"),
+    ("28-catatan-perubahan-produksi-20261107.md", "Bab-28-Catatan-Perubahan-Produksi-20261107", "Catatan Perubahan Produksi (2026-11-07)"),
 ]
 
 EXTRA = [
@@ -84,6 +85,7 @@ GROUPS = [
     ("Tata Kelola & Peran", CHAPTERS[23:24]),
     ("Analisis & Kesesuaian", CHAPTERS[24:26]),
     ("Register & Identitas", CHAPTERS[26:27]),
+    ("Catatan Rilis", CHAPTERS[27:28]),
 ]
 
 # target relatif (dari manual/) -> slug wiki
@@ -237,6 +239,11 @@ RELATED: dict[str, list[tuple[str, str]]] = {
         ("Bab-12-Ledger-Audit-Integritas", "ledger & audit"),
         ("Bab-19-Struktur-Data-Model-Migrasi", "model & migrasi"),
         ("Bab-24-Workflow-Peran-Wewenang", "aktor & wewenang"),
+    ],
+    "Bab-28-Catatan-Perubahan-Produksi-20261107": [
+        ("Bab-20-Known-Issues-Gap-Rencana", "gap & keputusan terbuka"),
+        ("Bab-27-Buku-Besar-Kredit-Agunan-CIF", "register & CIF"),
+        ("Bab-12-Ledger-Audit-Integritas", "ledger & bukti audit"),
     ],
 }
 

@@ -1,7 +1,7 @@
 {
   "id": "G-TPP-03",
   "group": "TPP",
-  "status": "K_PLACEHOLDER",
+  "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
   "dummy_data": true,
   "pii": false,
   "negative_test": false,
@@ -72,5 +72,28 @@
     "evidence": null
   },
   "notes": [],
-  "generated_at": "2026-11-05T00:00:00+08:00"
+  "generated_at": "2026-11-05T00:00:00+08:00",
+  "recomputed": {
+    "status": "RECOMPUTED_DRAFT_NOT_VERIFIED",
+    "engine": "reference-calculator-v1",
+    "method": "decimal-integer-rupiah; bisection IRR; policy DRAFT best-judgment",
+    "values": {
+      "threshold_idir": 0.8,
+      "scenarios": [
+        {
+          "case": "at_threshold",
+          "idir": 0.8,
+          "expected_hard_stop": false
+        },
+        {
+          "case": "above_threshold",
+          "idir": 0.81,
+          "expected_hard_stop": true
+        }
+      ],
+      "hard_stop_triggered": true,
+      "decision_layer": "HARD_STOP",
+      "reason": "IDIR > threshold (80,00% tidak hard-stop; sesuai Excel IF(D34>80%))"
+    }
+  }
 }

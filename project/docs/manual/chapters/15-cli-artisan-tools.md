@@ -11,7 +11,7 @@
 | `golden:extract` | `golden:extract {--path= --check}` | Ekstraksi nilai golden dari workbook XLSX ke fixture |
 
 ## 15.2 Detail `state:check` `[E]`
-Menampilkan tabel item/​nilai/status: `php` (≥8.3), `laravel`, `timezone`, `database`, `migrasi` (jumlah), `rute` (jumlah), `file test`, `composer.lock` (12 char hash), `git` (HEAD), dan 7 dokumen wajib (`RENCANA_IMPLEMENTASI.md`, `TEKNIS.md`, `INVENTARIS_DATA.md`, `DSH_PROMPTS_SIMPLE.md`, `PROGRESS.md`, `DECISIONS.md`, `VERIFIKASI.md`) → GAGAL bila ada yang hilang.
+Menampilkan tabel item/​nilai/status: `php` (≥8.3), `laravel`, `timezone`, `database`, `migrasi` (jumlah), `rute` (jumlah), `file test`, `composer.lock` (12 char hash), `git` (HEAD), dan 7 dokumen wajib (`RUANG-LINGKUP-PRODUK.md`, `RENCANA-PRODUKSI-FINAL.md`, `TEKNIS.md`, `INVENTARIS_DATA.md`, `PROGRESS.md`, `DECISIONS.md`, `VERIFIKASI.md`) → GAGAL bila ada yang hilang.
 
 ## 15.3 Detail `hardcode:audit` `[E]`
 - **AST** (nikic/php-parser) memindai default: `app/Services`, `app/Http`, `app/Livewire`, `app/Support`, `app/Domain` (atau `--path`).

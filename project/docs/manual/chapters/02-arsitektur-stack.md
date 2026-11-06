@@ -60,7 +60,7 @@ routes/                  # web.php, api.php, console.php
 resources/views/         # Blade (auth, dashboard, debitur, permohonan, simulasi, livewire, components, layouts)
 scripts/                 # setup.sh, verify.sh, backup.sh, restore.sh, reset-db.sh
 tests/                   # Feature/* , Unit/* (termasuk Guard/*), Fixtures/golden/tpp.json
-docs/                    # RENCANA_IMPLEMENTASI, TEKNIS, INVENTARIS_DATA, PROGRESS, DECISIONS, VERIFIKASI, ...
+docs/                    # RUANG-LINGKUP-PRODUK, RENCANA-PRODUKSI-FINAL, TEKNIS, INVENTARIS_DATA, PROGRESS, DECISIONS, VERIFIKASI, ...
 ```
 
 ## 2.3 Bootstrap & middleware `[E]`

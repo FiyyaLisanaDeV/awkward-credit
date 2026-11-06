@@ -1,7 +1,7 @@
 # Rencana Research — Menyelesaikan Bloker Tersisa
 
-Status: **DRAFT (rencana kerja)** | Tanggal baseline: **2026-11-05** (Asia/Makassar)  
-**Kemajuan live:** lapisan golden `RECOMPUTED_DRAFT_NOT_VERIFIED` telah diisi (29/29) oleh `project/scripts/compute-golden-recomputed.py` + diverifikasi struktural `project/scripts/verify-golden.py` (29 ok, 0 fail); parameter best-judgment tercatat di `docs/policy-draft-best-judgment.md` (NON-ACTIVE). Nilai tetap **belum verified** `[H]`.  
+Status: **DRAFT (rencana kerja)** | Tanggal baseline: **2026-11-05** (Asia/Makassar)
+**Kemajuan live:** lapisan golden `RECOMPUTED_DRAFT_NOT_VERIFIED` telah diisi (29/29) oleh `project/scripts/compute-golden-recomputed.py` + diverifikasi struktural `project/scripts/verify-golden.py` (29 ok, 0 fail); parameter best-judgment tercatat di `docs/policy-draft-best-judgment.md` (NON-ACTIVE). Nilai tetap **belum verified** `[H]`.
 Label: `[E]` bukti teramati, `[A]` usulan, `[K]` perlu konfirmasi/keputusan/pemutus, `[H]` keputusan/nilai terverifikasi bertanda tangan/sumber primer. Dokumen ini **bukan** keputusan dan **bukan** hasil verifikasi regulasi/angka.
 
 **Acuan data (aman):** workbook master hanya dirujuk pada level **struktur/nama sheet/alur** (tanpa isi sel, tanpa rumus, tanpa PII/data nasabah). Data Excel adalah **dummy** `[E user]`. Larangan: menyalin PII/isi sel ke repo/prompt/log; menandai kasus golden/angka sebagai terverifikasi atau keputusan sebagai `[H]` tanpa bukti; memakai faktor konversi flat→efektif 1,81x / 0,87x (EIR/IRR = numerik) `[K]`.

@@ -3,7 +3,7 @@
 ## 1.1 Apa aplikasi ini
 **Loan Analytic BPR** adalah sistem analisis kredit untuk **PT BPR Bahteramas Kendari** (cabang Bombana & Kolaka) yang menangani tiga produk: **TPP** (kredit pegawai/pensiun), **Modal Kerja** (produktif), dan **Grace Period** (dengan balloon). Aplikasi mencakup siklus: pendaftaran debitur → permohonan kredit → SLIK → analisis (neraca, laba-rugi, rasio, modal kerja, kapasitas bayar, 5C, red flag, rekomendasi) → persetujuan berjenjang → dokumen & tanda tangan → akad/pencairan → kredit aktif, jadwal angsuran, dan pembayaran → **ledger append-only** ber-hash chain sebagai jejak audit.
 
-Sumber utama (`[E]`): `README.md`, `docs/TEKNIS.md`, `docs/INVENTARIS_DATA.md`, `docs/RENCANA_IMPLEMENTASI.md` pada repo `loan-analytic-bpr`.
+Sumber utama (`[E]`): `README.md`, `docs/TEKNIS.md`, `docs/INVENTARIS_DATA.md`, `docs/RUANG-LINGKUP-PRODUK.md`, `docs/RENCANA-PRODUKSI-FINAL.md` pada repo `loan-analytic-bpr`.
 
 ## 1.2 Ruang lingkup manual ini
 Manual ini mendokumentasikan **seluruh fungsi yang terimplementasi** (fase 00–11 `[E]`) secara rinci: arsitektur, konfigurasi, autentikasi/RBAC, seluruh modul domain, mesin perhitungan, business rules, API, UI, CLI, data master/policy, import, keamanan, struktur data, serta **gap dan rencana lapis risiko L1–L9** `[K/Rencana]`.
