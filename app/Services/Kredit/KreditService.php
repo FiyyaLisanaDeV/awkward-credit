@@ -9,6 +9,7 @@ use App\Enums\SistemSukuBunga;
 use App\Enums\StatusKredit;
 use App\Enums\StatusPermohonan;
 use App\Models\Cabang;
+use App\Models\DebiturAset;
 use App\Models\JadwalAngsuran;
 use App\Models\Kredit;
 use App\Models\MemoPencairan;
@@ -17,6 +18,7 @@ use App\Models\User;
 use App\Services\Calculation\AngsuranCalculator;
 use App\Services\Ledger\LedgerService;
 use App\Services\Notifikasi\NotifikasiService;
+use App\Services\Register\BukuBesarService;
 use App\Services\Workflow\NomorService;
 use App\Support\Terbilang;
 use Illuminate\Support\Carbon;
@@ -30,6 +32,7 @@ final class KreditService
         private readonly NotifikasiService $notifikasi,
         private readonly AngsuranCalculator $angsuran,
         private readonly Terbilang $terbilang,
+        private readonly BukuBesarService $bukuBesar,
     ) {}
 
     /**
@@ -120,6 +123,21 @@ final class KreditService
                 ['dana_bersih' => $plafon, 'rekening' => $rekening],
                 $user,
             );
+
+            $this->bukuBesar->catat('REALISASI', $permohonan, $user, 'Kredit dicairkan', [
+                'kredit' => $kredit->only([
+                    'id', 'no_rekening_kredit', 'tanggal_cair', 'plafon', 'rate',
+                    'tenor', 'sistem_suku_bunga', 'angsuran_bulanan', 'status',
+                ]),
+                'agunan' => DebiturAset::query()
+                    ->where('debitur_id', $permohonan->debitur_id)
+                    ->get()
+                    ->map(static fn (DebiturAset $aset): array => $aset->only([
+                        'id', 'jenis_aset', 'no_dokumen', 'nama_pemilik',
+                        'nilai_taksasi', 'persen_diperhitungkan', 'nilai_diperhitungkan',
+                    ]))
+                    ->all(),
+            ], $kredit);
 
             $this->notifikasi->kirim(
                 (int) $permohonan->ao_id,

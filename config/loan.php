@@ -59,6 +59,8 @@ return [
         'permohonan' => '{cabang}/{tahun}/{urut}',
         'kredit' => '{cabang}/{tahun}/K/{urut}',
         'dokumen' => '{kode}/{cabang}/{tahun}/{urut}',
+        'cif' => 'CIF-{cabang}-{urut}',
+        'cif_padding' => 6,
         'urut_padding' => 4,
     ],
 

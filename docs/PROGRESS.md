@@ -8,17 +8,17 @@
 | Item | Nilai | Diperbarui |
 |---|---|---|
 | Versi dokumen | 3.3 | 2026-11-06 |
-| `updated_at` | 2026-11-06T21:15+08:00 | 2026-11-06 |
-| Fase aktif | **P0–P5 go-live pilot selesai (dengan catatan)**; **B1 UI analisa Sheet 3–9** dan **B3 import debitur** pending; lihat `STATUS-GOLIVE-20261106.md` | 2026-11-06 |
+| `updated_at` | 2026-11-06T21:40+08:00 | 2026-11-06 |
+| Fase aktif | **P0–P5 go-live pilot selesai**; **Buku Besar Kredit + Buku Agunan + CIF DONE**; **B1 UI analisa Sheet 3–9** dan **B3 import debitur** pending | 2026-11-06 |
 | Repo | `loan-analytic-bpr` (git, branch main) | 2026-11-06 |
 | Remote | `origin` → `awkward-credit`, branch **`app`** (remote `4de551b`; commit settings/pilot **belum dipush**); `main` remote tetap milik `commandcode bpr` | 2026-11-06 |
 | Branch / last commit | main / `38b2364`; catatan status `STATUS-GOLIVE-20261106.md` | 2026-11-06 |
 | PHP | 8.3.7 (Herd) | 2026-11-06 |
 | Laravel | 13.40.0 | 2026-11-06 |
 | PostgreSQL | 16.15, running, role `fiyyalisanna` | 2026-11-06 |
-| Jumlah migrasi DB aplikasi | 62 (53 + 7 ledger/simulasi/import + Sanctum + setting_revisions) | 2026-11-06 |
-| Jumlah route | 100 (42 API v1 + web/admin) | 2026-11-06 |
-| Jumlah test | **184 test**, 1917 assertions | 2026-11-06 |
+| Jumlah migrasi DB aplikasi | 66 (termasuk nomor_sequence, CIF, buku_besar_kredit, buku_agunan) | 2026-11-06 |
+| Jumlah route | 104 (42 API v1 + web/admin) | 2026-11-06 |
+| Jumlah test | **194 test**, 1991 assertions | 2026-11-06 |
 | `composer.lock` hash | `76cd829130f7` | 2026-11-06 |
 | `ledger:verify` | OK — 20 baris, rantai utuh | 2026-11-06 |
 | Bukti fase terakhir | `docs/uat/hasil-pilot-20261106.md` + `docs/evidence/uat-20261106/` | 2026-11-06 |
@@ -96,6 +96,7 @@ NEXT: 1) UAT 3 cabang + berita acara; 2) tanda tangan SOP/manual; 3) Fase 12B im
 
 | Tanggal | Sesi | Fase | Ringkasan | Perintah verifikasi | Hasil | Commit |
 |---|---|---|---|---|---|---|
+| 2026-11-06 | 24 | 16–19 | **Buku Besar Kredit + Buku Agunan (immutable) + Nomor CIF**: 4 migrasi, 2 register append-only ber-hash-chain + trigger, CIF atomik via `nomor_sequence`, hook lifecycle, UI `/buku-besar` & `/buku-agunan`, permission `register.*`; rincian `docs/FITUR-BUKU-BESAR-CIF.md` | `migrate`; `cif:backfill`; `php artisan test tests/Feature/Debitur/CifTest.php tests/Feature/Register`; `verify.sh --full`; `hardcode:audit`; `ledger:verify` | OK — 194 test, 0 hardcode, ledger 20 baris | commit fitur ini |
 | 2026-11-06 | 23 | 16–19 | Go-live pilot: UI pencairan/dokumen/ledger/import, role DB non-superuser, backup/restore drill, masker PII, scheduler ledger:verify, materi UAT, runbook VPS, wiki Bab 25–26; rincian di `STATUS-GOLIVE-20261106.md` | `bash scripts/verify.sh --full`; `php artisan test --compact`; `ledger:verify`; `hardcode:audit`; `docs:check --strict`; `curl /health` | OK — 184 test, 20 baris ledger, 0 hardcode, 0 docs, HTTP 200 | commit catatan ini |
 | 2026-11-05 | perencanaan | — | Menyusun paket dokumen A–G: rencana v2.4, teknis 22 bab, inventaris 60 tabel/23 event/8 adapter, 22 prompt, ADR, protokol verifikasi; baseline lingkungan direkam | `sw_vers`, `php -v`, `pg_isready`, `psql`, `composer -V`, `ls` (lihat evidence) | baseline lengkap, exit 0 | — (workspace belum repo) |
 | 2026-11-05 | 2 | 00 | Recon read-only: health matrix, tripwire, target path, risiko | `php -m`, `pg_isready`, `command -v` (lihat evidence) | exit 0 | — |

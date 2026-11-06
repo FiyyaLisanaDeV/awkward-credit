@@ -11,6 +11,8 @@ return [
     'dokumen' => 'Dokumen',
     'kredit' => 'Kredit',
     'ledger' => 'Ledger',
+    'buku_besar' => 'Buku Besar',
+    'buku_agunan' => 'Buku Agunan',
     'import' => 'Import',
     'admin' => 'Administrasi',
 ];

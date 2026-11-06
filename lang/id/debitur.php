@@ -10,6 +10,7 @@ return [
     'search' => 'Cari nama atau NIK',
     'empty' => 'Belum ada debitur.',
     'identitas' => 'Identitas',
+    'cif' => 'Nomor CIF',
     'kontak_alamat' => 'Kontak & alamat',
     'permohonan' => 'Riwayat permohonan',
     'permohonan_count' => 'Permohonan',

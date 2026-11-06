@@ -24,6 +24,25 @@ final class NomorService
         return $this->berikutnya('dokumen', 'nomor_dokumen', $kode.'/'.$cabang->kode.'/'.now()->format('Y').'/');
     }
 
+    public function cif(Cabang $cabang): string
+    {
+        $scope = 'CIF-'.$cabang->kode;
+
+        $row = DB::selectOne(
+            'INSERT INTO nomor_sequence (scope, last_number, updated_at)
+             VALUES (?, 1, now())
+             ON CONFLICT (scope) DO UPDATE
+             SET last_number = nomor_sequence.last_number + 1, updated_at = now()
+             RETURNING last_number',
+            [$scope],
+        );
+
+        $padding = (int) config('loan.nomor.cif_padding');
+        $nomor = (int) ($row->last_number ?? 1);
+
+        return 'CIF-'.$cabang->kode.'-'.str_pad((string) $nomor, $padding, '0', STR_PAD_LEFT);
+    }
+
     private function berikutnya(string $table, string $column, string $prefix): string
     {
         /** @phpstan-ignore larastan.noUnnecessaryCollectionCall (PostgreSQL: FOR UPDATE not allowed with aggregate count; rows locked then counted) */

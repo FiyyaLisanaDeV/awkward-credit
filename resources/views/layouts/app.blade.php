@@ -19,6 +19,8 @@
             ['dokumen.index', 'nav.dokumen'],
             ['kredit.index', 'nav.kredit'],
             ['ledger.index', 'nav.ledger'],
+            ['buku-besar.index', 'nav.buku_besar'],
+            ['buku-agunan.index', 'nav.buku_agunan'],
             ['import.index', 'nav.import'],
             ['admin.index', 'nav.admin'],
         ];

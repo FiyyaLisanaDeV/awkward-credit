@@ -23,9 +23,19 @@ class Debitur extends Model
 
     protected $keyType = 'string';
 
+    protected static function booted(): void
+    {
+        static::updating(function (Debitur $debitur): void {
+            if ($debitur->isDirty('cif')) {
+                throw new \RuntimeException('CIF immutable');
+            }
+        });
+    }
+
     /** @var list<string> */
     protected $fillable = [
         'cabang_id',
+        'cif',
         'nama_ktp',
         'nama_ibu_kandung',
         'no_ktp',

@@ -24,6 +24,7 @@ final class RolePermissionSeeder extends Seeder
             'audit.view', 'ledger.view', 'report.view',
             'parameter.activate', 'user.manage',
             'kredit.cairkan',
+            'register.view', 'register.agunan.view',
             'setting.view', 'setting.edit', 'setting.approve', 'setting.apply',
             'simulasi.create', 'import.slik', 'import.debitur', 'import.dokumen', 'import.pembayaran',
         ];
@@ -38,28 +39,35 @@ final class RolePermissionSeeder extends Seeder
                 'permohonan.approve_level_1',
                 'dokumen.view', 'dokumen.generate_draft', 'dokumen.upload',
                 'simulasi.create', 'import.slik', 'import.debitur', 'import.dokumen',
+                'register.view', 'register.agunan.view',
             ],
             'MGR_PEMASARAN' => [
                 'permohonan.view', 'permohonan.approve_level_2', 'permohonan.return',
                 'dokumen.view', 'report.view',
+                'register.view', 'register.agunan.view',
             ],
             'KOORDINATOR' => [
                 'permohonan.view', 'permohonan.approve_level_3', 'permohonan.return', 'report.view',
+                'register.view', 'register.agunan.view',
             ],
             'DIRUT' => [
                 'permohonan.view', 'permohonan.approve_level_4', 'permohonan.reject', 'report.view',
                 'setting.view', 'setting.approve',
+                'register.view', 'register.agunan.view',
             ],
             'KOMITE' => [
                 'permohonan.view', 'permohonan.approve_level_5', 'report.view',
                 'setting.view', 'setting.approve',
+                'register.view', 'register.agunan.view',
             ],
             'ADMIN' => $permissions,
             'LEGAL' => [
                 'dokumen.view', 'template.review', 'template.approve', 'setting.view',
+                'register.view',
             ],
             'AUDITOR' => [
                 'audit.view', 'ledger.view', 'report.view', 'permohonan.view', 'setting.view',
+                'register.view', 'register.agunan.view',
             ],
         ];
 

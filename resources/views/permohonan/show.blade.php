@@ -34,6 +34,7 @@
             <h3>{{ __('permohonan.detail') }}</h3>
             <dl class="review-list">
                 <dt>{{ __('permohonan.debitur') }}</dt><dd>{{ $permohonan->debitur?->nama_ktp }}</dd>
+                <dt>{{ __('debitur.cif') }}</dt><dd class="mono">{{ $permohonan->debitur?->cif ?? '—' }}</dd>
                 <dt>{{ __('permohonan.produk') }}</dt><dd>{{ $permohonan->produk?->nama }}</dd>
                 <dt>{{ __('permohonan.suku_bunga') }}</dt><dd>{{ $permohonan->suku_bunga_tahunan }}</dd>
                 <dt>{{ __('permohonan.sistem') }}</dt><dd>{{ $permohonan->sistem_suku_bunga }}</dd>

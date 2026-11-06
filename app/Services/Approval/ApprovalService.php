@@ -14,6 +14,7 @@ use App\Models\RefApprovalMatrix;
 use App\Models\User;
 use App\Services\Ledger\LedgerService;
 use App\Services\Notifikasi\NotifikasiService;
+use App\Services\Register\BukuBesarService;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
@@ -22,6 +23,7 @@ final class ApprovalService
     public function __construct(
         private readonly LedgerService $ledger,
         private readonly NotifikasiService $notifikasi,
+        private readonly BukuBesarService $bukuBesar,
     ) {}
 
     /**
@@ -158,6 +160,13 @@ final class ApprovalService
                 $user,
             );
 
+            $this->bukuBesar->catat('PERSETUJUAN', $permohonan, $user, 'Persetujuan level '.$level.' ('.$roleName.')', [
+                'level' => $level,
+                'role' => $roleName,
+                'final' => $final,
+                'alasan' => $alasan,
+            ]);
+
             $this->notifikasi->kirim(
                 (int) $permohonan->ao_id,
                 'APPROVAL',
@@ -216,6 +225,12 @@ final class ApprovalService
                 ['alasan' => $alasan],
                 $user,
             );
+
+            $this->bukuBesar->catat('PERUBAHAN', $permohonan, $user, $aksi->value.': '.$alasan, [
+                'aksi' => $aksi->value,
+                'status' => $status->value,
+                'alasan' => $alasan,
+            ]);
 
             $this->notifikasi->kirim(
                 (int) $permohonan->ao_id,

@@ -6,6 +6,7 @@ namespace Database\Seeders\Local;
 
 use App\Enums\SistemSukuBunga;
 use App\Enums\StatusPermohonan;
+use App\Models\Cabang;
 use App\Models\Debitur;
 use App\Models\Kredit;
 use App\Models\PermohonanKredit;
@@ -15,6 +16,7 @@ use App\Models\User;
 use App\Services\Approval\ApprovalService;
 use App\Services\Kredit\KreditService;
 use App\Services\Kredit\PembayaranService;
+use App\Services\Workflow\NomorService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +142,7 @@ final class PilotUatSeeder extends Seeder
     {
         $kode = strtoupper(ltrim($suffix, '.')) ?: 'KDI';
 
-        return Debitur::query()->firstOrCreate(
+        $debitur = Debitur::query()->firstOrCreate(
             ['no_ktp' => '73710000000000'.($kode === 'KDI' ? '01' : ($kode === 'BOM' ? '02' : '03'))],
             [
                 'cabang_id' => $cabangId,
@@ -163,6 +165,16 @@ final class PilotUatSeeder extends Seeder
                 'sumber_data' => 'MANUAL',
             ],
         );
+
+        if ($debitur->cif === null) {
+            $cabang = Cabang::query()->find($debitur->cabang_id);
+
+            if ($cabang !== null) {
+                $debitur->forceFill(['cif' => app(NomorService::class)->cif($cabang)])->saveQuietly();
+            }
+        }
+
+        return $debitur;
     }
 
     private function seedPermohonan(

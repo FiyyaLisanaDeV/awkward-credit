@@ -17,6 +17,7 @@ use App\Models\AnalisisNeraca;
 use App\Models\AnalisisRekomendasi;
 use App\Models\AnalisisScoring5c;
 use App\Models\PermohonanKredit;
+use App\Models\User;
 use App\Services\Calculation\AngsuranCalculator;
 use App\Services\Calculation\DscrCalculator;
 use App\Services\Calculation\IdirCalculator;
@@ -24,6 +25,7 @@ use App\Services\Calculation\LtvCalculator;
 use App\Services\Calculation\PlafonMaxCalculator;
 use App\Services\Ledger\LedgerService;
 use App\Services\Policy\PolicyParameterResolver;
+use App\Services\Register\BukuBesarService;
 use App\Services\Scoring\RedFlagEvaluator;
 use App\Services\Scoring\RekomendasiService;
 use App\Services\Scoring\Scoring5CService;
@@ -38,6 +40,7 @@ final class AnalisisController extends Controller
     public function __construct(
         private readonly PolicyParameterResolver $parameters,
         private readonly LedgerService $ledger,
+        private readonly BukuBesarService $bukuBesar,
     ) {}
 
     public function neracaShow(Request $request, PermohonanKredit $permohonan): JsonResponse
@@ -198,6 +201,13 @@ final class AnalisisController extends Controller
             $request->user(),
         );
 
+        $aktor = $request->user();
+        abort_unless($aktor instanceof User, 401);
+        $this->bukuBesar->catat('ANALISIS', $permohonan, $aktor, 'Analisis kapasitas disimpan', [
+            'bagian' => 'kapasitas',
+            'dscr' => $dscr,
+        ]);
+
         return response()->json($kapasitas);
     }
 
@@ -257,6 +267,14 @@ final class AnalisisController extends Controller
             ['bagian' => 'scoring', 'skor_total' => $hasil['skor_total'], 'rating' => $hasil['rating']],
             $request->user(),
         );
+
+        $aktor = $request->user();
+        abort_unless($aktor instanceof User, 401);
+        $this->bukuBesar->catat('ANALISIS', $permohonan, $aktor, 'Penilaian 5C disimpan', [
+            'bagian' => 'scoring',
+            'skor_total' => $hasil['skor_total'],
+            'rating' => $hasil['rating'],
+        ]);
 
         return response()->json($scoring);
     }

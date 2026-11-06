@@ -20,7 +20,8 @@ final class DebiturController extends Controller
         if ($keyword = $request->string('q')->toString()) {
             $query->where(static function ($sub) use ($keyword): void {
                 $sub->where('nama_ktp', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('no_ktp', 'like', '%'.$keyword.'%');
+                    ->orWhere('no_ktp', 'like', '%'.$keyword.'%')
+                    ->orWhere('cif', 'ilike', '%'.$keyword.'%');
             });
         }
 

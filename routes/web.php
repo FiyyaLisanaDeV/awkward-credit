@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Web\ApprovalController;
+use App\Http\Controllers\Web\BukuAgunanController;
+use App\Http\Controllers\Web\BukuBesarController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DebiturController;
 use App\Http\Controllers\Web\DokumenController;
@@ -63,6 +65,16 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger.index');
         Route::get('/ledger/verify', [LedgerController::class, 'verify'])->name('ledger.verify');
         Route::get('/ledger/{ledger}', [LedgerController::class, 'show'])->name('ledger.show');
+    });
+
+    Route::middleware('permission:register.view')->group(function (): void {
+        Route::get('/buku-besar', [BukuBesarController::class, 'index'])->name('buku-besar.index');
+        Route::get('/buku-besar/{permohonan}', [BukuBesarController::class, 'show'])->name('buku-besar.show');
+    });
+
+    Route::middleware('permission:register.agunan.view')->group(function (): void {
+        Route::get('/buku-agunan', [BukuAgunanController::class, 'index'])->name('buku-agunan.index');
+        Route::get('/buku-agunan/{key}', [BukuAgunanController::class, 'show'])->name('buku-agunan.show');
     });
 
     Route::middleware('permission:import.pembayaran')->group(function (): void {

@@ -9,10 +9,13 @@ use App\Enums\StatusPermohonan;
 use App\Exceptions\BusinessRuleViolation;
 use App\Models\Cabang;
 use App\Models\Debitur;
+use App\Models\DebiturAset;
 use App\Models\PermohonanKredit;
 use App\Models\User;
 use App\Services\Ledger\LedgerService;
 use App\Services\Policy\PolicyParameterResolver;
+use App\Services\Register\BukuAgunanService;
+use App\Services\Register\BukuBesarService;
 use App\Services\Rules\Rules\BR04BalloonWajib;
 use App\Services\Rules\Rules\BR08ParameterTersimpan;
 use App\Services\Workflow\NomorService;
@@ -26,6 +29,8 @@ final class PermohonanService
         private readonly LedgerService $ledger,
         private readonly BR04BalloonWajib $br04,
         private readonly BR08ParameterTersimpan $br08,
+        private readonly BukuBesarService $bukuBesar,
+        private readonly BukuAgunanService $bukuAgunan,
     ) {}
 
     /**
@@ -38,7 +43,7 @@ final class PermohonanService
         $cabang = Cabang::query()->findOrFail($debitur->cabang_id);
         $parameter = $this->parameters->active();
 
-        return DB::transaction(function () use ($data, $cabang, $parameter, $user): PermohonanKredit {
+        return DB::transaction(function () use ($data, $cabang, $parameter, $user, $debitur): PermohonanKredit {
             $permohonan = PermohonanKredit::query()->create(array_merge($data, [
                 'cabang_id' => $cabang->id,
                 'no_permohonan' => $this->nomor->permohonan($cabang),
@@ -61,6 +66,11 @@ final class PermohonanService
                 ],
                 $user,
             );
+
+            $this->bukuBesar->catat('INISIASI', $permohonan, $user, 'Permohonan dibuat', [
+                'debitur' => $this->ringkasDebitur($debitur),
+                'permohonan' => $this->ringkasPermohonan($permohonan),
+            ]);
 
             return $permohonan;
         });
@@ -104,6 +114,41 @@ final class PermohonanService
             $user,
         );
 
+        $debitur = $permohonan->debitur;
+
+        $this->bukuBesar->catat('PENGAJUAN', $permohonan, $user, 'Permohonan diajukan', [
+            'debitur' => $debitur === null ? null : $this->ringkasDebitur($debitur),
+            'permohonan' => $this->ringkasPermohonan($permohonan),
+        ]);
+
+        DebiturAset::query()
+            ->where('debitur_id', $permohonan->debitur_id)
+            ->get()
+            ->each(fn (DebiturAset $aset) => $this->bukuAgunan->catatPenggunaan($aset, $permohonan, $user));
+
         return $permohonan->fresh() ?? $permohonan;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function ringkasDebitur(Debitur $debitur): array
+    {
+        return $debitur->only([
+            'id', 'cif', 'nama_ktp', 'no_ktp', 'no_hp', 'alamat_jalan',
+            'kelurahan', 'kecamatan', 'kabupaten', 'provinsi',
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function ringkasPermohonan(PermohonanKredit $permohonan): array
+    {
+        return $permohonan->only([
+            'id', 'no_permohonan', 'plafon_diajukan', 'tenor_diajukan',
+            'suku_bunga_tahunan', 'sistem_suku_bunga', 'tujuan_penggunaan',
+            'sektor', 'status', 'tanggal_permohonan',
+        ]);
     }
 }

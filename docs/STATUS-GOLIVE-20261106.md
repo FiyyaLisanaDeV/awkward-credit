@@ -32,6 +32,8 @@
 | P3C masker PII + scheduler | DONE | commit `4c9fb08`; `MaskerPiiTest` 2 passed |
 | P4 materi UAT & lembar keputusan | DONE | commit `3bd5efc`; kolom tanda tangan kosong |
 | P5 runbook produksi VPS | DONE (dokumen) | commit `08c8009` |
+| Buku Besar Kredit + Buku Agunan (immutable) | DONE | `docs/FITUR-BUKU-BESAR-CIF.md`; test `tests/Feature/Register` |
+| Nomor CIF nasabah (unik, immutable) | DONE | `debitur.cif` + `nomor_sequence`; `CifTest` |
 | Wiki Bab 25 (komparasi Excel–web) | DONE | `commandcode bpr` commit `de4038c`, wiki 200 |
 | Wiki Bab 26 (breakdown workflow Excel) | DONE | `commandcode bpr` commit `af3da2b`, wiki 200 |
 | Verifikasi login & halaman peran | DONE | admin KDI/BOM/KOL dashboard 200; matriks peran sesuai |
@@ -41,8 +43,8 @@
 | Gate | Perintah | Hasil |
 |---|---|---|
 | Verifikasi penuh | `bash scripts/verify.sh --full` | **OK** (exit 0) |
-| Test | `php artisan test --compact` | **184 passed**, 1917 assertions |
-| Route | `php artisan route:list --json` | **100 route** |
+| Test | `php artisan test --compact` | **194 passed**, 1991 assertions |
+| Route | `php artisan route:list --json` | **104 route** |
 | Ledger | `php artisan ledger:verify` | **OK** — 20 baris, rantai utuh |
 | Hardcode | `php artisan hardcode:audit` | **0 pelanggaran** |
 | Dokumentasi | `php artisan docs:check --strict` | **0 error, 0 peringatan** |
@@ -66,6 +68,7 @@ Artefak: `docs/evidence/golive-20261106/build-status-final.txt`.
 | B10 | Varian Grace Period & TPP belum diverifikasi field-by-field | paritas varian produk belum pasti | Dev + Produk | `[?]` |
 | B11 | Runbook VPS belum dieksekusi (production diblokir) | go-live produksi belum | IT | `[Rencana]` |
 | B12 | `herd.yml` (hasil `herd init`) masih untracked, di luar scope | potensi noise repo | IT | `[?]` |
+| B13 | Backfill register historis (permohonan lama sebelum fitur aktif) belum dilakukan | buku besar hanya berisi event baru | Dev | `[Rencana]` |
 
 ## 5. Langkah berikutnya
 

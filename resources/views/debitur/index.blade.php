@@ -17,6 +17,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>{{ __('debitur.cif') }}</th>
                     <th>{{ __('debitur.nama_ktp') }}</th>
                     <th>{{ __('debitur.no_ktp') }}</th>
                     <th>{{ __('debitur.no_hp') }}</th>
@@ -27,6 +28,7 @@
             <tbody>
                 @forelse ($debitur as $row)
                     <tr>
+                        <td class="mono">{{ $row->cif ?? '—' }}</td>
                         <td>{{ $row->nama_ktp }}</td>
                         <td class="mono">{{ $row->no_ktp }}</td>
                         <td>{{ $row->no_hp }}</td>
@@ -34,7 +36,7 @@
                         <td><a href="{{ route('debitur.show', $row) }}">{{ __('form.detail') }}</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="muted">{{ __('debitur.empty') }}</td></tr>
+                    <tr><td colspan="6" class="muted">{{ __('debitur.empty') }}</td></tr>
                 @endforelse
             </tbody>
         </table>

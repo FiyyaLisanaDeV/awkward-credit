@@ -10,6 +10,7 @@
         <div class="card">
             <h3>{{ __('debitur.identitas') }}</h3>
             <dl class="review-list">
+                <dt>{{ __('debitur.cif') }}</dt><dd class="mono">{{ $debitur->cif ?? '—' }}</dd>
                 <dt>{{ __('debitur.no_ktp') }}</dt><dd class="mono">{{ $debitur->no_ktp }}</dd>
                 <dt>{{ __('debitur.jenis_kelamin') }}</dt><dd>{{ __('enums.jenis_kelamin.'.$debitur->jenis_kelamin) }}</dd>
                 <dt>{{ __('debitur.status_perkawinan') }}</dt><dd>{{ __('enums.status_perkawinan.'.$debitur->status_perkawinan) }}</dd>
