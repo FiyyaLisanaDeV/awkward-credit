@@ -63,3 +63,4 @@
 | 20:55:00 | P3 GATE | verify --full | 0 | [V] SELESAI |
 | 20:56:00 | P4 materi UAT | buat skenario/berita acara/checklist/lembar K | 0 | [V] kolom hasil/keputusan kosong |
 | 20:56:00 | P4 docs check | docs:check --strict | 0 | [V] |
+| 20:58:00 | P5 runbook | tulis docs/runbook-produksi-vps.md | 0 | [V] dokumen saja |
